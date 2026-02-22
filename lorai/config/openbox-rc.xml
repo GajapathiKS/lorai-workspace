@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_config xmlns="http://openbox.org/3.4/rc">
+  <resistance>
+    <strength>10</strength>
+    <screen_edge_strength>20</screen_edge_strength>
+  </resistance>
+  <focus>
+    <focusNew>yes</focusNew>
+    <followMouse>no</followMouse>
+  </focus>
+  <theme>
+    <name>Clearlooks</name>
+    <titleLayout>NLIMC</titleLayout>
+    <font place="ActiveWindow">
+      <name>Noto Sans</name>
+      <size>10</size>
+      <weight>Bold</weight>
+    </font>
+    <font place="InactiveWindow">
+      <name>Noto Sans</name>
+      <size>10</size>
+    </font>
+  </theme>
+  <desktops>
+    <number>1</number>
+    <names>
+      <name>LorAI</name>
+    </names>
+  </desktops>
+  <keyboard>
+    <!-- Super key opens LorAI Terminal -->
+    <keybind key="Super_L">
+      <action name="Execute">
+        <command>xterm -fa 'Monospace' -fs 12 -title "LorAI Terminal" -e "python3 /opt/lorai/src/ai-shell/lorai_terminal.py"</command>
+      </action>
+    </keybind>
+    <!-- Ctrl+Alt+T also opens terminal -->
+    <keybind key="C-A-t">
+      <action name="Execute">
+        <command>xterm -fa 'Monospace' -fs 12 -title "LorAI Terminal" -e "python3 /opt/lorai/src/ai-shell/lorai_terminal.py"</command>
+      </action>
+    </keybind>
+    <!-- Alt+F4 close window -->
+    <keybind key="A-F4">
+      <action name="Close"/>
+    </keybind>
+  </keyboard>
+  <menu>
+    <file>/opt/lorai/config/openbox-menu.xml</file>
+  </menu>
+  <applications>
+    <application name="*">
+      <decor>yes</decor>
+    </application>
+  </applications>
+</openbox_config>
