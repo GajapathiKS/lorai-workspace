@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lorai"
+version = "0.1.0"
+description = "All of AI. One Command. Port 1842."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "LorAI Team", email = "hello@getlorai.com"},
+]
+keywords = ["ai", "llm", "openai", "ollama", "docker", "lora"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "openai>=1.30.0",
+    "httpx>=0.27.0",
+]
+
+[project.urls]
+Homepage = "https://getlorai.com"
+Repository = "https://github.com/getlorai/lorai-sdk"
+
+[project.scripts]
+lorai = "lorai.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["lorai*"]
