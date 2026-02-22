@@ -17,6 +17,10 @@ RUN apk add --no-cache \
     xterm \
     python3 \
     py3-pip \
+    ffmpeg \
+    nodejs \
+    make \
+    g++ \
     && rm -rf /var/cache/apk/*
 
 # noVNC + websockify
@@ -29,10 +33,29 @@ RUN apk add --no-cache novnc py3-websockify \
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Python dependencies
+# Whisper.cpp — Speech to Text
+RUN git clone https://github.com/ggerganov/whisper.cpp /opt/whisper.cpp && \
+    cd /opt/whisper.cpp && make -j$(nproc) && \
+    bash models/download-ggml-model.sh base.en
+
+# Piper TTS — Text to Speech
+RUN pip3 install --break-system-packages piper-tts && \
+    mkdir -p /data/voices && cd /data/voices && \
+    curl -L -o en_US-amy-medium.onnx \
+      "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx" && \
+    curl -L -o en_US-amy-medium.onnx.json \
+      "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx.json"
+
+# Python dependencies (core)
 COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --break-system-packages --no-cache-dir -r /tmp/requirements.txt \
     && rm /tmp/requirements.txt
+
+# Image generation dependencies (loaded lazily on first GPU request)
+# Installed separately so CPU-only builds can skip/ignore failures
+RUN pip3 install --break-system-packages --no-cache-dir \
+    diffusers torch torchvision accelerate safetensors \
+    || echo "GPU dependencies skipped (CPU-only build)"
 
 # Create lorai user
 RUN adduser -D -s /bin/bash lorai \
@@ -46,6 +69,7 @@ RUN mkdir -p \
     /data/vectors \
     /data/models \
     /data/config \
+    /data/loras \
     && chown -R lorai:lorai /home/lorai /data
 
 # Copy application files

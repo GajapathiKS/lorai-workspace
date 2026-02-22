@@ -16,6 +16,12 @@ echo "$BANNER"
 echo "  Starting LorAI..."
 echo ""
 
+# Add src to PYTHONPATH for service imports
+export PYTHONPATH="/opt/lorai:${PYTHONPATH}"
+
+# Ensure data directories exist
+mkdir -p /data/vectors /data/models /data/config /data/loras /data/voices
+
 # 1. Start Xvfb (virtual display)
 echo "[1/8] Starting virtual display..."
 Xvfb :1 -screen 0 1280x720x24 &
@@ -89,6 +95,22 @@ xterm -fa 'Monospace' -fs 12 -title "LorAI Terminal" \
 # Start file manager daemon
 python3 /opt/lorai/src/file-manager/lorai_fs.py &
 
+# Detect hardware profile
+HW_PROFILE="cpu"
+if command -v nvidia-smi &> /dev/null; then
+    VRAM=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null | head -1)
+    if [ -n "$VRAM" ]; then
+        VRAM_GB=$((VRAM / 1024))
+        if [ "$VRAM_GB" -ge 24 ]; then
+            HW_PROFILE="power"
+        elif [ "$VRAM_GB" -ge 8 ]; then
+            HW_PROFILE="standard"
+        else
+            HW_PROFILE="lite"
+        fi
+    fi
+fi
+
 echo ""
 echo "  ╔══════════════════════════════════════════╗"
 echo "  ║           LorAI is Ready!                ║"
@@ -96,7 +118,11 @@ echo "  ║                                          ║"
 echo "  ║  API:     http://localhost:${LORAI_PORT}         ║"
 echo "  ║  Desktop: http://localhost:6080          ║"
 echo "  ║  Health:  http://localhost:${LORAI_PORT}/api/health ║"
+echo "  ║  Profile: ${HW_PROFILE}                           ║"
 echo "  ╚══════════════════════════════════════════╝"
+echo ""
+echo "  Services: chat, code, voice, knowledge, agents, vision"
+echo "  GPU services: image, video, music (requires --gpu)"
 echo ""
 
 # Keep container alive
