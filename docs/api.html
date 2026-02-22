@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Reference — LorAI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">Lor<span>AI</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="sdk.html">SDK</a>
+      <a href="api.html" class="active">API</a>
+      <a href="https://github.com/getlorai">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<div class="docs-layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <ul>
+    <li class="section-label">Core</li>
+    <li><a href="#health">Health Check</a></li>
+    <li class="section-label">OpenAI-Compatible</li>
+    <li><a href="#chat">Chat Completions</a></li>
+    <li><a href="#completions">Completions</a></li>
+    <li><a href="#embeddings">Embeddings</a></li>
+    <li><a href="#models">List Models</a></li>
+    <li><a href="#images">Image Generation</a></li>
+    <li><a href="#image-edit">Image Editing</a></li>
+    <li><a href="#transcriptions">Transcriptions</a></li>
+    <li><a href="#speech">Speech</a></li>
+    <li class="section-label">LorAI Native</li>
+    <li><a href="#hub-status">Hub Status</a></li>
+    <li><a href="#hub-models">Hub Models</a></li>
+    <li><a href="#hub-pull">Hub Pull</a></li>
+    <li><a href="#hub-remove">Hub Remove</a></li>
+    <li><a href="#hub-bench">Hub Bench</a></li>
+    <li><a href="#video">Video</a></li>
+    <li><a href="#knowledge-ingest">Knowledge Ingest</a></li>
+    <li><a href="#knowledge-search">Knowledge Search</a></li>
+    <li><a href="#knowledge-ask">Knowledge Ask</a></li>
+    <li><a href="#agents-run">Agents Run</a></li>
+    <li><a href="#agents-list">Agents List</a></li>
+    <li><a href="#agents-tools">Agents Tools</a></li>
+    <li><a href="#code-execute">Code Execute</a></li>
+    <li><a href="#vision">Vision</a></li>
+    <li><a href="#lora-list">LoRA List</a></li>
+    <li><a href="#lora-load">LoRA Load</a></li>
+    <li><a href="#lora-unload">LoRA Unload</a></li>
+    <li><a href="#music">Music</a></li>
+  </ul>
+</aside>
+
+<!-- Content -->
+<div>
+
+<h2>API Reference</h2>
+<p>
+  All endpoints are served from <code>http://localhost:1842</code>.
+  The <code>/v1/*</code> routes are OpenAI-compatible (proxied to Ollama).
+  The <code>/lorai/*</code> routes are LorAI-native endpoints.
+  CORS is enabled for all origins.
+</p>
+
+<pre><code>http://localhost:1842/
+├── api/health                   <span class="cmt"># GET  — Health check</span>
+├── v1/                          <span class="cmt"># OpenAI-compatible</span>
+│   ├── chat/completions         <span class="cmt"># POST — Chat (streaming supported)</span>
+│   ├── completions              <span class="cmt"># POST — Text completion</span>
+│   ├── embeddings               <span class="cmt"># POST — Embeddings</span>
+│   ├── models                   <span class="cmt"># GET  — List models</span>
+│   ├── images/generations       <span class="cmt"># POST — Image generation (GPU)</span>
+│   ├── images/edits             <span class="cmt"># POST — Image editing (GPU)</span>
+│   ├── audio/transcriptions     <span class="cmt"># POST — Speech-to-text</span>
+│   └── audio/speech             <span class="cmt"># POST — Text-to-speech</span>
+└── lorai/                       <span class="cmt"># LorAI-native</span>
+    ├── hub/{status,models,pull,remove,bench}
+    ├── video/generate
+    ├── knowledge/{ingest,search,ask}
+    ├── agents/{run,list,tools}
+    ├── code/execute
+    ├── vision/analyze
+    ├── lora/{list,load,unload}
+    └── audio/music</code></pre>
+
+<!-- ============================================================ -->
+<!-- Health Check -->
+<!-- ============================================================ -->
+
+<h3 id="health">Health Check</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <code>/api/health</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Returns service health, version, port, and detected hardware profile.</p>
+    <h4>Response</h4>
+<pre><code>{
+  <span class="str">"status"</span>: <span class="str">"ok"</span>,
+  <span class="str">"version"</span>: <span class="str">"0.1.0"</span>,
+  <span class="str">"port"</span>: <span class="num">1842</span>,
+  <span class="str">"hardware_profile"</span>: <span class="str">"cpu"</span>   <span class="cmt">// "power" | "standard" | "lite" | "cpu"</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Chat Completions -->
+<!-- ============================================================ -->
+
+<h3 id="chat">Chat Completions</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/v1/chat/completions</code>
+  </div>
+  <div class="endpoint-body">
+    <p>OpenAI-compatible chat completions. Proxied to Ollama. Supports streaming via <code>stream: true</code>.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"model"</span>: <span class="str">"phi3:mini"</span>,
+  <span class="str">"messages"</span>: [
+    {<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Hello!"</span>}
+  ],
+  <span class="str">"temperature"</span>: <span class="num">0.7</span>,
+  <span class="str">"max_tokens"</span>: <span class="num">500</span>,
+  <span class="str">"stream"</span>: <span class="kw">false</span>
+}</code></pre>
+    <h4>Response (non-streaming)</h4>
+<pre><code>{
+  <span class="str">"id"</span>: <span class="str">"chatcmpl-..."</span>,
+  <span class="str">"choices"</span>: [{
+    <span class="str">"message"</span>: {<span class="str">"role"</span>: <span class="str">"assistant"</span>, <span class="str">"content"</span>: <span class="str">"Hello! How can I help?"</span>},
+    <span class="str">"finish_reason"</span>: <span class="str">"stop"</span>
+  }],
+  <span class="str">"usage"</span>: {<span class="str">"prompt_tokens"</span>: <span class="num">5</span>, <span class="str">"completion_tokens"</span>: <span class="num">8</span>, <span class="str">"total_tokens"</span>: <span class="num">13</span>}
+}</code></pre>
+    <h4>cURL Example</h4>
+<pre><code>curl http://localhost:1842/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "phi3:mini",
+    "messages": [{"role": "user", "content": "Say hello"}]
+  }'</code></pre>
+    <h4>Streaming</h4>
+    <p>Set <code>"stream": true</code> to receive Server-Sent Events. Each chunk contains a <code>delta</code> with partial content.</p>
+<pre><code>curl http://localhost:1842/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "phi3:mini",
+    "messages": [{"role": "user", "content": "Count to 5"}],
+    "stream": true
+  }'</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Completions -->
+<!-- ============================================================ -->
+
+<h3 id="completions">Text Completions</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/v1/completions</code>
+  </div>
+  <div class="endpoint-body">
+    <p>OpenAI-compatible text completions. Proxied to Ollama.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"model"</span>: <span class="str">"phi3:mini"</span>,
+  <span class="str">"prompt"</span>: <span class="str">"The meaning of life is"</span>,
+  <span class="str">"max_tokens"</span>: <span class="num">100</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Embeddings -->
+<!-- ============================================================ -->
+
+<h3 id="embeddings">Embeddings</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/v1/embeddings</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Generate vector embeddings. Proxied to Ollama.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"model"</span>: <span class="str">"nomic-embed-text"</span>,
+  <span class="str">"input"</span>: <span class="str">"The quick brown fox"</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- List Models -->
+<!-- ============================================================ -->
+
+<h3 id="models">List Models</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <code>/v1/models</code>
+  </div>
+  <div class="endpoint-body">
+    <p>List all available models. Proxied to Ollama's OpenAI-compatible model listing.</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Image Generation -->
+<!-- ============================================================ -->
+
+<h3 id="images">Image Generation</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/v1/images/generations</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Generate images using SDXL Turbo. <strong>Requires GPU with 8GB+ VRAM.</strong></p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"prompt"</span>: <span class="str">"A sunset over mountains, digital art"</span>,
+  <span class="str">"n"</span>: <span class="num">1</span>,
+  <span class="str">"size"</span>: <span class="str">"1024x1024"</span>,
+  <span class="str">"response_format"</span>: <span class="str">"url"</span>,       <span class="cmt">// "url" or "b64_json"</span>
+  <span class="str">"lorai_negative_prompt"</span>: <span class="str">""</span>,     <span class="cmt">// optional</span>
+  <span class="str">"lorai_steps"</span>: <span class="num">4</span>                 <span class="cmt">// inference steps (default 4)</span>
+}</code></pre>
+    <h4>Response</h4>
+<pre><code>{
+  <span class="str">"created"</span>: <span class="num">1700000000</span>,
+  <span class="str">"data"</span>: [{<span class="str">"url"</span>: <span class="str">"http://localhost:1842/files/lorai_img_abc12345.png"</span>}]
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Image Editing -->
+<!-- ============================================================ -->
+
+<h3 id="image-edit">Image Editing</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/v1/images/edits</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Edit images using SDXL img2img. <strong>Requires GPU with 8GB+ VRAM.</strong> Multipart form upload.</p>
+    <h4>Form Fields</h4>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+      <tr><td><code>image</code></td><td>File</td><td>Source image file</td></tr>
+      <tr><td><code>prompt</code></td><td>String</td><td>Edit instruction</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Transcriptions -->
+<!-- ============================================================ -->
+
+<h3 id="transcriptions">Audio Transcriptions (STT)</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/v1/audio/transcriptions</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Speech-to-text using Whisper.cpp. Multipart form upload. Audio is automatically converted to 16kHz mono WAV via ffmpeg.</p>
+    <h4>Form Fields</h4>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+      <tr><td><code>file</code></td><td>File</td><td>Audio file (any format ffmpeg supports)</td></tr>
+      <tr><td><code>model</code></td><td>String</td><td>Model name (default: <code>whisper-1</code>)</td></tr>
+      <tr><td><code>language</code></td><td>String</td><td>Optional language code</td></tr>
+    </table>
+    <h4>Response</h4>
+<pre><code>{<span class="str">"text"</span>: <span class="str">"The transcribed text from the audio file."</span>}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Speech -->
+<!-- ============================================================ -->
+
+<h3 id="speech">Text-to-Speech</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/v1/audio/speech</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Text-to-speech using Piper TTS. Returns WAV audio bytes.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"input"</span>: <span class="str">"Hello, welcome to LorAI!"</span>,
+  <span class="str">"voice"</span>: <span class="str">"nova"</span>,       <span class="cmt">// nova, alloy, echo, fable, onyx, shimmer</span>
+  <span class="str">"speed"</span>: <span class="num">1.0</span>
+}</code></pre>
+    <h4>Response</h4>
+    <p>Binary <code>audio/wav</code> content.</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Hub Status -->
+<!-- ============================================================ -->
+
+<h3 id="hub-status">Hub Status</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <code>/lorai/hub/status</code>
+  </div>
+  <div class="endpoint-body">
+    <p>System information including CPU, RAM, GPU, loaded models, and uptime.</p>
+    <h4>Response</h4>
+<pre><code>{
+  <span class="str">"status"</span>: <span class="str">"ok"</span>,
+  <span class="str">"version"</span>: <span class="str">"0.1.0"</span>,
+  <span class="str">"uptime_seconds"</span>: <span class="num">3600</span>,
+  <span class="str">"hardware_profile"</span>: <span class="str">"cpu"</span>,
+  <span class="str">"platform"</span>: <span class="str">"Linux-6.1.0-x86_64"</span>,
+  <span class="str">"cpu"</span>: <span class="str">"x86_64"</span>,
+  <span class="str">"ram_total_gb"</span>: <span class="num">16.0</span>,
+  <span class="str">"disk_free_gb"</span>: <span class="num">50.2</span>,
+  <span class="str">"gpu"</span>: <span class="str">"none"</span>,
+  <span class="str">"loaded_models"</span>: [<span class="str">"phi3:mini"</span>]
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Hub Models -->
+<!-- ============================================================ -->
+
+<h3 id="hub-models">Hub Models</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <code>/lorai/hub/models</code>
+  </div>
+  <div class="endpoint-body">
+    <p>List all downloaded Ollama models with details (size, modified date, etc.).</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Hub Pull -->
+<!-- ============================================================ -->
+
+<h3 id="hub-pull">Hub Pull</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/hub/pull</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Download an Ollama model. This may take several minutes for large models.</p>
+    <h4>Request Body</h4>
+<pre><code>{<span class="str">"name"</span>: <span class="str">"llama3"</span>}</code></pre>
+    <h4>cURL Example</h4>
+<pre><code>curl -X POST http://localhost:1842/lorai/hub/pull \
+  -H "Content-Type: application/json" \
+  -d '{"name": "llama3"}'</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Hub Remove -->
+<!-- ============================================================ -->
+
+<h3 id="hub-remove">Hub Remove</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/hub/remove</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Delete a downloaded Ollama model.</p>
+    <h4>Request Body</h4>
+<pre><code>{<span class="str">"name"</span>: <span class="str">"llama3"</span>}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Hub Bench -->
+<!-- ============================================================ -->
+
+<h3 id="hub-bench">Hub Benchmark</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/hub/bench</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Run a basic inference benchmark using the default model. Measures tokens/second.</p>
+    <h4>Response</h4>
+<pre><code>{
+  <span class="str">"model"</span>: <span class="str">"phi3:mini"</span>,
+  <span class="str">"elapsed_seconds"</span>: <span class="num">2.45</span>,
+  <span class="str">"total_tokens"</span>: <span class="num">42</span>,
+  <span class="str">"tokens_per_second"</span>: <span class="num">17.1</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Video -->
+<!-- ============================================================ -->
+
+<h3 id="video">Video Generation</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/video/generate</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Generate video using CogVideoX. <strong>Requires GPU with 12GB+ VRAM.</strong></p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"prompt"</span>: <span class="str">"A timelapse of clouds over a city"</span>,
+  <span class="str">"duration"</span>: <span class="num">4</span>,
+  <span class="str">"model"</span>: <span class="str">"auto"</span>
+}</code></pre>
+    <h4>Response</h4>
+<pre><code>{
+  <span class="str">"filepath"</span>: <span class="str">"/home/lorai/Desktop/lorai_video_abc12345.mp4"</span>,
+  <span class="str">"url"</span>: <span class="str">"http://localhost:1842/files/lorai_video_abc12345.mp4"</span>,
+  <span class="str">"duration"</span>: <span class="num">4</span>,
+  <span class="str">"model"</span>: <span class="str">"cogvideo"</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Knowledge Ingest -->
+<!-- ============================================================ -->
+
+<h3 id="knowledge-ingest">Knowledge Ingest</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/knowledge/ingest</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Ingest documents into the ChromaDB-backed knowledge base for RAG.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"sources"</span>: [<span class="str">"/path/to/document.txt"</span>, <span class="str">"/path/to/dir/"</span>],
+  <span class="str">"collection"</span>: <span class="str">"default"</span>,
+  <span class="str">"chunk_size"</span>: <span class="num">1000</span>,
+  <span class="str">"chunk_overlap"</span>: <span class="num">200</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Knowledge Search -->
+<!-- ============================================================ -->
+
+<h3 id="knowledge-search">Knowledge Search</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/knowledge/search</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Semantic search across ingested documents.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"query"</span>: <span class="str">"How does authentication work?"</span>,
+  <span class="str">"collection"</span>: <span class="str">"default"</span>,
+  <span class="str">"top_k"</span>: <span class="num">5</span>,
+  <span class="str">"threshold"</span>: <span class="num">0.7</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Knowledge Ask -->
+<!-- ============================================================ -->
+
+<h3 id="knowledge-ask">Knowledge Ask (RAG)</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/knowledge/ask</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Ask a question using RAG. Retrieves relevant context from the knowledge base and generates an answer.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"question"</span>: <span class="str">"What is the return policy?"</span>,
+  <span class="str">"collection"</span>: <span class="str">"default"</span>,
+  <span class="str">"model"</span>: <span class="str">"auto"</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Agents Run -->
+<!-- ============================================================ -->
+
+<h3 id="agents-run">Agents Run</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/agents/run</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Run a ReAct agent workflow. The agent iterates through think &rarr; act &rarr; observe loops using available tools.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"task"</span>: <span class="str">"Find all Python files and count the total lines of code"</span>,
+  <span class="str">"agents"</span>: [],
+  <span class="str">"tools"</span>: [],
+  <span class="str">"model"</span>: <span class="str">"auto"</span>,
+  <span class="str">"max_steps"</span>: <span class="num">10</span>,
+  <span class="str">"verbose"</span>: <span class="kw">false</span>
+}</code></pre>
+    <h4>Built-in Tools</h4>
+    <table>
+      <tr><th>Tool</th><th>Description</th></tr>
+      <tr><td><code>search</code></td><td>Search the knowledge base</td></tr>
+      <tr><td><code>read</code></td><td>Read a file from the filesystem</td></tr>
+      <tr><td><code>write</code></td><td>Write content to a file</td></tr>
+      <tr><td><code>run</code></td><td>Execute a shell command</td></tr>
+      <tr><td><code>knowledge</code></td><td>Query the RAG knowledge base</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Agents List -->
+<!-- ============================================================ -->
+
+<h3 id="agents-list">Agents List</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <code>/lorai/agents/list</code>
+  </div>
+  <div class="endpoint-body">
+    <p>List available agent profiles.</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Agents Tools -->
+<!-- ============================================================ -->
+
+<h3 id="agents-tools">Agents Tools</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <code>/lorai/agents/tools</code>
+  </div>
+  <div class="endpoint-body">
+    <p>List all available tools that agents can use.</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Code Execute -->
+<!-- ============================================================ -->
+
+<h3 id="code-execute">Code Execution</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/code/execute</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Execute code in a sandboxed subprocess. Supports Python, Bash, and JavaScript. Max timeout: 60 seconds.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"code"</span>: <span class="str">"print('Hello from LorAI!')"</span>,
+  <span class="str">"language"</span>: <span class="str">"python"</span>,     <span class="cmt">// "python" | "bash" | "javascript"</span>
+  <span class="str">"timeout"</span>: <span class="num">30</span>
+}</code></pre>
+    <h4>Response</h4>
+<pre><code>{
+  <span class="str">"output"</span>: <span class="str">"Hello from LorAI!\n"</span>,
+  <span class="str">"error"</span>: <span class="str">""</span>,
+  <span class="str">"exit_code"</span>: <span class="num">0</span>,
+  <span class="str">"language"</span>: <span class="str">"python"</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Vision -->
+<!-- ============================================================ -->
+
+<h3 id="vision">Vision Analysis</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/vision/analyze</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Analyze an image using LLaVA or other multimodal Ollama models.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"image_base64"</span>: <span class="str">"iVBORw0KGgo..."</span>,
+  <span class="str">"prompt"</span>: <span class="str">"Describe this image in detail."</span>,
+  <span class="str">"model"</span>: <span class="str">"llava:7b"</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- LoRA List -->
+<!-- ============================================================ -->
+
+<h3 id="lora-list">LoRA List</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <code>/lorai/lora/list</code>
+  </div>
+  <div class="endpoint-body">
+    <p>List available LoRA adapters from <code>/data/loras/</code>. Scans for <code>.gguf</code> files.</p>
+    <h4>Response</h4>
+<pre><code>{
+  <span class="str">"loras"</span>: [
+    {<span class="str">"name"</span>: <span class="str">"my-adapter"</span>, <span class="str">"path"</span>: <span class="str">"/data/loras/my-adapter.gguf"</span>, <span class="str">"size_mb"</span>: <span class="num">45.2</span>}
+  ]
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- LoRA Load -->
+<!-- ============================================================ -->
+
+<h3 id="lora-load">LoRA Load</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/lora/load</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Load a LoRA adapter onto a base model. Creates an Ollama Modelfile with the ADAPTER directive.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"name"</span>: <span class="str">"my-adapter"</span>,
+  <span class="str">"base_model"</span>: <span class="str">"llama3.2"</span>
+}</code></pre>
+    <h4>Response</h4>
+<pre><code>{
+  <span class="str">"model"</span>: <span class="str">"llama3.2-my-adapter"</span>,
+  <span class="str">"base"</span>: <span class="str">"llama3.2"</span>,
+  <span class="str">"lora"</span>: <span class="str">"my-adapter"</span>,
+  <span class="str">"status"</span>: <span class="str">"loaded"</span>
+}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- LoRA Unload -->
+<!-- ============================================================ -->
+
+<h3 id="lora-unload">LoRA Unload</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/lora/unload</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Unload/remove a LoRA-augmented model from Ollama.</p>
+    <h4>Request Body</h4>
+<pre><code>{<span class="str">"name"</span>: <span class="str">"llama3.2-my-adapter"</span>}</code></pre>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- Music -->
+<!-- ============================================================ -->
+
+<h3 id="music">Music Generation</h3>
+
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <code>/lorai/audio/music</code>
+  </div>
+  <div class="endpoint-body">
+    <p>Generate music using MusicGen. <strong>Requires GPU with 4GB+ VRAM.</strong> Max duration: 30 seconds.</p>
+    <h4>Request Body</h4>
+<pre><code>{
+  <span class="str">"prompt"</span>: <span class="str">"upbeat electronic music"</span>,
+  <span class="str">"duration"</span>: <span class="num">10</span>
+}</code></pre>
+    <h4>Response</h4>
+<pre><code>{
+  <span class="str">"filepath"</span>: <span class="str">"/home/lorai/Desktop/lorai_music_abc12345.wav"</span>,
+  <span class="str">"url"</span>: <span class="str">"http://localhost:1842/files/lorai_music_abc12345.wav"</span>,
+  <span class="str">"duration"</span>: <span class="num">10</span>,
+  <span class="str">"prompt"</span>: <span class="str">"upbeat electronic music"</span>
+}</code></pre>
+  </div>
+</div>
+
+</div>
+</div>
+</main>
+
+<footer>
+  LorAI &mdash; MIT License &mdash; <a href="https://github.com/getlorai">GitHub</a>
+</footer>
+
+</body>
+</html>
