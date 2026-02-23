@@ -21,6 +21,7 @@ RUN apk add --no-cache \
     nodejs \
     make \
     g++ \
+    zstd \
     && rm -rf /var/cache/apk/*
 
 # noVNC + websockify
