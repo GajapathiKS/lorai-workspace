@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SDK Reference — LorAI</title>
+  <meta name="description" content="LorAI Python SDK reference — LorAI(OpenAI) client with 9 AI services, Docker auto-management, and CLI. Drop-in replacement for the OpenAI SDK.">
+  <meta name="keywords" content="LorAI SDK, Python SDK, OpenAI SDK, AI client, LorAI Python, Docker AI, local AI SDK">
+  <meta name="author" content="LorAI Team">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/sdk.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://gajapathiks.github.io/lorai-workspace/sdk.html">
+  <meta property="og:title" content="SDK Reference — LorAI">
+  <meta property="og:description" content="LorAI Python SDK — extends OpenAI with 9 AI services, Docker auto-management, and CLI. Drop-in replacement for the OpenAI SDK.">
+  <meta property="og:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="LorAI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SDK Reference — LorAI">
+  <meta name="twitter:description" content="LorAI Python SDK — extends OpenAI with 9 AI services, Docker auto-management, and CLI. Drop-in replacement for the OpenAI SDK.">
+  <meta name="twitter:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0d1117">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">Lor<span>AI</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="sdk.html" class="active">SDK</a>
+      <a href="api.html">API</a>
+      <a href="https://github.com/getlorai">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<div class="docs-layout">
+
+<aside class="sidebar">
+  <ul>
+    <li class="section-label">SDK</li>
+    <li><a href="#lorai-class">LorAI</a></li>
+    <li><a href="#docker">Docker Management</a></li>
+    <li class="section-label">Services</li>
+    <li><a href="#image-service">ImageService</a></li>
+    <li><a href="#video-service">VideoService</a></li>
+    <li><a href="#voice-service">VoiceService</a></li>
+    <li><a href="#knowledge-service">KnowledgeService</a></li>
+    <li><a href="#agents-service">AgentsService</a></li>
+    <li><a href="#code-service">CodeService</a></li>
+    <li><a href="#vision-service">VisionService</a></li>
+    <li><a href="#lora-service">LoRAService</a></li>
+    <li><a href="#hub-service">HubService</a></li>
+    <li class="section-label">CLI</li>
+    <li><a href="#cli">Commands</a></li>
+  </ul>
+</aside>
+
+<div>
+
+<h2>SDK Reference</h2>
+<p>
+  The LorAI SDK (<code>pip install lorai</code>) provides a Python client that extends the
+  <a href="https://github.com/openai/openai-python">OpenAI Python SDK</a>.
+  Any code that works with <code>OpenAI()</code> works with <code>LorAI()</code>.
+</p>
+
+<pre><code><span class="kw">import</span> lorai
+
+lorai.__version__   <span class="cmt"># "0.1.0"</span>
+lorai.PORT          <span class="cmt"># 1842</span></code></pre>
+
+<!-- ============================================================ -->
+<!-- LorAI Class -->
+<!-- ============================================================ -->
+
+<h3 id="lorai-class">LorAI</h3>
+<p><code>lorai.client.LorAI</code> &mdash; extends <code>openai.OpenAI</code></p>
+
+<h4>Constructor</h4>
+<pre><code>LorAI(
+    *,
+    base_url: str | None = <span class="kw">None</span>,       <span class="cmt"># default: http://localhost:{port}/v1</span>
+    api_key: str | None = <span class="kw">None</span>,        <span class="cmt"># default: "not-needed"</span>
+    port: int = <span class="num">1842</span>,                   <span class="cmt"># API gateway port</span>
+    auto_start: bool = <span class="kw">True</span>,           <span class="cmt"># auto-pull and start Docker container</span>
+    gpu: bool = <span class="kw">False</span>,                  <span class="cmt"># enable GPU passthrough</span>
+    default_model: str = <span class="str">"auto"</span>,       <span class="cmt"># default model for chat()</span>
+)</code></pre>
+
+<p>When <code>auto_start=True</code> (default), the constructor calls <code>ensure_running()</code> which will:</p>
+<ol>
+  <li>Check if Docker is installed</li>
+  <li>Pull the <code>getlorai/desktop</code> image if not present</li>
+  <li>Start the container if not running</li>
+  <li>Wait for the health check</li>
+</ol>
+
+<h4>Methods</h4>
+
+<table>
+  <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+  <tr>
+    <td><code>chat(message, **kwargs)</code></td>
+    <td><code>str</code></td>
+    <td>Simple one-shot chat convenience method</td>
+  </tr>
+  <tr>
+    <td><code>stop()</code></td>
+    <td><code>None</code></td>
+    <td>Stop the Docker container</td>
+  </tr>
+</table>
+
+<h4><code>chat()</code> Parameters</h4>
+<table>
+  <tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  <tr><td><code>message</code></td><td><code>str</code></td><td>&mdash;</td><td>User message</td></tr>
+  <tr><td><code>model</code></td><td><code>str | None</code></td><td><code>None</code></td><td>Model override (uses <code>default_model</code> if None)</td></tr>
+  <tr><td><code>system</code></td><td><code>str | None</code></td><td><code>None</code></td><td>System prompt</td></tr>
+  <tr><td><code>lora</code></td><td><code>str | None</code></td><td><code>None</code></td><td>LoRA adapter name (sent via <code>X-LorAI-LoRA</code> header)</td></tr>
+  <tr><td><code>temperature</code></td><td><code>float</code></td><td><code>0.7</code></td><td>Sampling temperature</td></tr>
+  <tr><td><code>max_tokens</code></td><td><code>int | None</code></td><td><code>None</code></td><td>Max tokens in response</td></tr>
+  <tr><td><code>stream</code></td><td><code>bool</code></td><td><code>False</code></td><td>Collect streaming response (still returns full string)</td></tr>
+  <tr><td><code>json_mode</code></td><td><code>bool</code></td><td><code>False</code></td><td>Force JSON output format</td></tr>
+</table>
+
+<h4>Service Attributes</h4>
+<p>After construction, the following service objects are available:</p>
+<table>
+  <tr><th>Attribute</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>ai.image</code></td><td><code>_ImageService</code></td><td>Image generation &amp; editing</td></tr>
+  <tr><td><code>ai.video</code></td><td><code>_VideoService</code></td><td>Video generation</td></tr>
+  <tr><td><code>ai.voice</code></td><td><code>_VoiceService</code></td><td>Speech-to-text, text-to-speech</td></tr>
+  <tr><td><code>ai.knowledge</code></td><td><code>_KnowledgeService</code></td><td>RAG knowledge base</td></tr>
+  <tr><td><code>ai.agents</code></td><td><code>_AgentsService</code></td><td>Agent workflows</td></tr>
+  <tr><td><code>ai.code</code></td><td><code>_CodeService</code></td><td>Code generation &amp; execution</td></tr>
+  <tr><td><code>ai.vision</code></td><td><code>_VisionService</code></td><td>Image analysis &amp; OCR</td></tr>
+  <tr><td><code>ai.lora</code></td><td><code>_LoRAService</code></td><td>LoRA adapter management</td></tr>
+  <tr><td><code>ai.hub</code></td><td><code>_HubService</code></td><td>Model hub management</td></tr>
+</table>
+
+<p>Plus all standard OpenAI attributes: <code>ai.chat</code>, <code>ai.completions</code>, <code>ai.embeddings</code>, <code>ai.images</code>, <code>ai.audio</code>, etc.</p>
+
+<!-- ============================================================ -->
+<!-- Docker Management -->
+<!-- ============================================================ -->
+
+<h3 id="docker">Docker Management</h3>
+<p><code>lorai.docker</code> &mdash; functions for managing the Docker container.</p>
+
+<table>
+  <tr><th>Function</th><th>Returns</th><th>Description</th></tr>
+  <tr><td><code>is_docker_installed()</code></td><td><code>bool</code></td><td>Check if Docker CLI exists</td></tr>
+  <tr><td><code>is_image_pulled()</code></td><td><code>bool</code></td><td>Check if <code>getlorai/desktop</code> image exists locally</td></tr>
+  <tr><td><code>is_container_running()</code></td><td><code>bool</code></td><td>Check if container named <code>lorai</code> is running</td></tr>
+  <tr><td><code>is_lorai_healthy()</code></td><td><code>bool</code></td><td>GET <code>http://localhost:1842/api/health</code></td></tr>
+  <tr><td><code>pull_image()</code></td><td><code>None</code></td><td>Run <code>docker pull getlorai/desktop:latest</code></td></tr>
+  <tr>
+    <td><code>start_container(port=1842, vnc_port=6080, gpu=False)</code></td>
+    <td><code>None</code></td>
+    <td>Run <code>docker run</code> with proper flags</td>
+  </tr>
+  <tr><td><code>stop_container()</code></td><td><code>None</code></td><td>Stop and remove the container</td></tr>
+  <tr>
+    <td><code>ensure_running(port=1842, gpu=False)</code></td>
+    <td><code>None</code></td>
+    <td>Orchestrate: check &rarr; pull &rarr; start &rarr; health check</td>
+  </tr>
+  <tr><td><code>status()</code></td><td><code>dict</code></td><td>Return dict with all states</td></tr>
+</table>
+
+<h4>Container Configuration</h4>
+<p>The container is started with these settings:</p>
+<pre><code>docker run -d --name lorai \
+  -p {port}:1842 \
+  -p {vnc_port}:6080 \
+  -v ~/.lorai/data:/data \
+  -e LORAI_MODE=hybrid \
+  -e LORAI_MODEL=phi3:mini \
+  getlorai/desktop:latest</code></pre>
+
+<p>With <code>gpu=True</code>, adds <code>--gpus all</code>.</p>
+
+<!-- ============================================================ -->
+<!-- ImageService -->
+<!-- ============================================================ -->
+
+<h3 id="image-service">ImageService</h3>
+<p><code>ai.image</code> &mdash; Image generation and editing via OpenAI <code>/v1/images</code> endpoints.</p>
+
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr>
+    <td><code>generate(prompt, *, model="dall-e-3", size="1024x1024", lora=None, save_to=None)</code></td>
+    <td>Generate image from text prompt. If <code>save_to</code> is set, saves the base64 result to disk.</td>
+  </tr>
+  <tr>
+    <td><code>edit(image_path, prompt, **kwargs)</code></td>
+    <td>Edit an existing image with a text prompt.</td>
+  </tr>
+</table>
+
+<pre><code><span class="cmt"># Generate and save</span>
+ai.image.generate(<span class="str">"A cat in space"</span>, save_to=<span class="str">"cat.png"</span>)
+
+<span class="cmt"># With LoRA style</span>
+ai.image.generate(<span class="str">"A portrait"</span>, lora=<span class="str">"my-style"</span>)</code></pre>
+
+<!-- ============================================================ -->
+<!-- VideoService -->
+<!-- ============================================================ -->
+
+<h3 id="video-service">VideoService</h3>
+<p><code>ai.video</code> &mdash; Video generation via native <code>/lorai/video</code> endpoint.</p>
+
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr>
+    <td><code>generate(prompt, *, model="auto", duration=4.0, fps=24, image_path=None, save_to=None)</code></td>
+    <td>Generate video from text (or image + text). GPU 12GB+ required.</td>
+  </tr>
+</table>
+
+<pre><code>result = ai.video.generate(<span class="str">"Ocean waves at sunset"</span>, duration=<span class="num">4</span>)
+<span class="fn">print</span>(result[<span class="str">"url"</span>])</code></pre>
+
+<!-- ============================================================ -->
+<!-- VoiceService -->
+<!-- ============================================================ -->
+
+<h3 id="voice-service">VoiceService</h3>
+<p><code>ai.voice</code> &mdash; Speech-to-text and text-to-speech via OpenAI <code>/v1/audio</code> endpoints.</p>
+
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr>
+    <td><code>transcribe(audio_path, *, model="whisper-1")</code></td>
+    <td>Transcribe audio file to text (Whisper.cpp).</td>
+  </tr>
+  <tr>
+    <td><code>speak(text, *, voice="alloy", save_to=None)</code></td>
+    <td>Convert text to speech (Piper TTS). Voices: nova, alloy, echo, fable, onyx, shimmer.</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- KnowledgeService -->
+<!-- ============================================================ -->
+
+<h3 id="knowledge-service">KnowledgeService</h3>
+<p><code>ai.knowledge</code> &mdash; RAG knowledge base via native <code>/lorai/knowledge</code> endpoints. Backed by ChromaDB.</p>
+
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr>
+    <td><code>ingest(source, *, collection="default")</code></td>
+    <td>Ingest documents (file path or directory) into a collection.</td>
+  </tr>
+  <tr>
+    <td><code>search(query, *, top_k=5)</code></td>
+    <td>Semantic search across ingested documents.</td>
+  </tr>
+  <tr>
+    <td><code>ask(question)</code></td>
+    <td>RAG Q&amp;A: retrieve context + generate answer.</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- AgentsService -->
+<!-- ============================================================ -->
+
+<h3 id="agents-service">AgentsService</h3>
+<p><code>ai.agents</code> &mdash; Agent workflows via native <code>/lorai/agents</code> endpoints.</p>
+
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr>
+    <td><code>run(task, *, agents=None, tools=None, max_steps=10)</code></td>
+    <td>Run a ReAct agent that thinks, acts, and observes in a loop.</td>
+  </tr>
+  <tr>
+    <td><code>list_agents()</code></td>
+    <td>List available agent profiles.</td>
+  </tr>
+  <tr>
+    <td><code>list_tools()</code></td>
+    <td>List available agent tools.</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- CodeService -->
+<!-- ============================================================ -->
+
+<h3 id="code-service">CodeService</h3>
+<p><code>ai.code</code> &mdash; Code generation and execution.</p>
+
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr>
+    <td><code>generate(prompt, *, language="python", execute=False)</code></td>
+    <td>Generate code, optionally execute it in a sandboxed subprocess.</td>
+  </tr>
+  <tr>
+    <td><code>review(code)</code></td>
+    <td>Review code using the LLM and return feedback.</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- VisionService -->
+<!-- ============================================================ -->
+
+<h3 id="vision-service">VisionService</h3>
+<p><code>ai.vision</code> &mdash; Image analysis via OpenAI multimodal endpoints (LLaVA through Ollama).</p>
+
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr>
+    <td><code>analyze(image_path, prompt="Describe this image.")</code></td>
+    <td>Analyze an image with a text prompt using a multimodal model.</td>
+  </tr>
+  <tr>
+    <td><code>ocr(image_path)</code></td>
+    <td>Extract all text from an image (calls <code>analyze</code> with an OCR prompt).</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- LoRAService -->
+<!-- ============================================================ -->
+
+<h3 id="lora-service">LoRAService</h3>
+<p><code>ai.lora</code> &mdash; LoRA adapter management via native <code>/lorai/lora</code> endpoints.</p>
+
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr>
+    <td><code>list()</code></td>
+    <td>List available <code>.gguf</code> LoRA adapters from <code>/data/loras/</code>.</td>
+  </tr>
+  <tr>
+    <td><code>load(name, *, base_model="auto")</code></td>
+    <td>Create an Ollama model with the LoRA adapter applied.</td>
+  </tr>
+  <tr>
+    <td><code>unload(name)</code></td>
+    <td>Remove the LoRA-augmented model from Ollama.</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- HubService -->
+<!-- ============================================================ -->
+
+<h3 id="hub-service">HubService</h3>
+<p><code>ai.hub</code> &mdash; Model hub management via native <code>/lorai/hub</code> endpoints.</p>
+
+<table>
+  <tr><th>Method</th><th>Description</th></tr>
+  <tr>
+    <td><code>models()</code></td>
+    <td>List all downloaded Ollama models with details.</td>
+  </tr>
+  <tr>
+    <td><code>pull(model)</code></td>
+    <td>Download an Ollama model (e.g., <code>"llama3"</code>, <code>"phi3:mini"</code>).</td>
+  </tr>
+  <tr>
+    <td><code>remove(model)</code></td>
+    <td>Delete a downloaded model.</td>
+  </tr>
+  <tr>
+    <td><code>status()</code></td>
+    <td>System status: CPU, RAM, GPU, loaded models, uptime.</td>
+  </tr>
+  <tr>
+    <td><code>bench()</code></td>
+    <td>Run an inference benchmark and return tokens/second.</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- CLI -->
+<!-- ============================================================ -->
+
+<h3 id="cli">CLI Commands</h3>
+<p>Installed as the <code>lorai</code> entry point. Defined in <code>lorai.cli</code>.</p>
+
+<table>
+  <tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>lorai start [--gpu] [--port N]</code></td><td>Start the Docker container. Pulls image if needed.</td></tr>
+  <tr><td><code>lorai stop</code></td><td>Stop and remove the container.</td></tr>
+  <tr><td><code>lorai status</code></td><td>Show Docker, image, container, and API status.</td></tr>
+  <tr><td><code>lorai chat "message" [--model M]</code></td><td>Send a chat message and print the response.</td></tr>
+  <tr><td><code>lorai desktop</code></td><td>Open the noVNC desktop at <code>http://localhost:6080</code>.</td></tr>
+  <tr><td><code>lorai pull &lt;model&gt;</code></td><td>Download an Ollama model.</td></tr>
+  <tr><td><code>lorai bench</code></td><td>Benchmark inference speed.</td></tr>
+  <tr><td><code>lorai logs</code></td><td>Tail the container logs (<code>docker logs --tail 50 -f lorai</code>).</td></tr>
+  <tr><td><code>lorai version</code></td><td>Show version, port, and URLs.</td></tr>
+  <tr><td><code>lorai help</code></td><td>Show the ASCII banner and command reference.</td></tr>
+</table>
+
+</div>
+</div>
+</main>
+
+<footer>
+  LorAI &mdash; MIT License &mdash; <a href="https://github.com/getlorai">GitHub</a>
+</footer>
+
+</body>
+</html>

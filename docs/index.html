@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LorAI — All of AI. One Command.</title>
+  <meta name="description" content="Local, free, OpenAI-compatible AI platform. LLMs, image gen, voice, video, RAG, agents, vision — all from one pip install. Port 1842.">
+  <meta name="keywords" content="LorAI, AI platform, local AI, OpenAI compatible, LLM, image generation, voice, RAG, agents, Docker, Ollama, self-hosted AI">
+  <meta name="author" content="LorAI Team">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/">
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gajapathiks.github.io/lorai-workspace/">
+  <meta property="og:title" content="LorAI — All of AI. One Command.">
+  <meta property="og:description" content="Local, free, OpenAI-compatible AI platform with 50+ tools — LLMs, image gen, voice, video, RAG, agents — running on port 1842.">
+  <meta property="og:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LorAI — All of AI. One Command. pip install lorai. Port 1842.">
+  <meta property="og:site_name" content="LorAI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LorAI — All of AI. One Command.">
+  <meta name="twitter:description" content="Local, free, OpenAI-compatible AI platform with 50+ tools — LLMs, image gen, voice, video, RAG, agents — running on port 1842.">
+  <meta name="twitter:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+  <meta name="twitter:image:alt" content="LorAI — All of AI. One Command. pip install lorai. Port 1842.">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0d1117">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">Lor<span>AI</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="sdk.html">SDK</a>
+      <a href="api.html">API</a>
+      <a href="https://github.com/getlorai">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- Hero -->
+<section class="hero">
+<pre class="banner">  ██╗      ██████╗  ██████╗  █████╗ ██╗
+  ██║     ██╔═══██╗██╔══██╗██╔══██╗██║
+  ██║     ██║   ██║██████╔╝███████║██║
+  ██║     ██║   ██║██╔══██╗██╔══██║██║
+  ███████╗╚██████╔╝██║  ██║██║  ██║██║
+  ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝</pre>
+  <h1>All of AI. One Command.</h1>
+  <p class="tagline">Local, free, OpenAI-compatible AI platform. LLMs, image gen, voice, video, RAG, agents &mdash; port <span class="port-badge">1842</span></p>
+
+  <div class="install-box">
+    <span class="prompt">$</span> pip install lorai
+  </div>
+
+  <div class="cta-links">
+    <a href="guide.html" class="primary">Get Started</a>
+    <a href="api.html" class="secondary">API Reference</a>
+    <a href="https://github.com/getlorai/lorai-sdk" class="secondary">GitHub</a>
+  </div>
+</section>
+
+<!-- What is LorAI -->
+<h2>What is LorAI?</h2>
+<p>
+  <strong>LorAI</strong> ("Lore" + "AI" + "LoRA") is a self-hosted AI platform that runs inside a Docker container on your machine.
+  One <code>pip install lorai</code> gives you an OpenAI-compatible API with 50+ tools &mdash; LLMs, image generation, video,
+  voice, code execution, agents, RAG, and vision &mdash; all on <code>localhost:1842</code>.
+</p>
+<p>
+  It extends the official <a href="https://github.com/openai/openai-python">OpenAI Python SDK</a>, so any existing OpenAI code works
+  unchanged &mdash; just swap <code>OpenAI()</code> for <code>LorAI()</code>.
+</p>
+
+<pre><code><span class="kw">from</span> lorai <span class="kw">import</span> LorAI
+
+ai = LorAI()                          <span class="cmt"># auto-pulls Docker image, starts container</span>
+<span class="fn">print</span>(ai.chat(<span class="str">"Hello!"</span>))              <span class="cmt"># local LLM response</span>
+
+<span class="cmt"># Works exactly like OpenAI:</span>
+response = ai.chat.completions.create(
+    model=<span class="str">"phi3:mini"</span>,
+    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Explain quantum computing"</span>}]
+)
+</code></pre>
+
+<!-- Features -->
+<h2>Features</h2>
+
+<div class="features">
+  <div class="feature-card">
+    <span class="badge badge-ready">Ready</span>
+    <h4>Chat &amp; LLMs</h4>
+    <p>OpenAI-compatible chat completions, text completions, and embeddings via Ollama. Streaming supported.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-ready">Ready</span>
+    <h4>Model Hub</h4>
+    <p>Pull, list, remove, and benchmark Ollama models. Default: phi3:mini (runs on CPU).</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-gpu">GPU</span>
+    <h4>Image Generation</h4>
+    <p>SDXL Turbo text-to-image and image editing. Requires GPU with 8GB+ VRAM.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-gpu">GPU</span>
+    <h4>Video Generation</h4>
+    <p>CogVideoX text-to-video. Requires GPU with 12GB+ VRAM.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-ready">Ready</span>
+    <h4>Voice (STT + TTS)</h4>
+    <p>Whisper.cpp speech-to-text and Piper text-to-speech with 6 voice options.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-ready">Ready</span>
+    <h4>Knowledge / RAG</h4>
+    <p>ChromaDB-backed document ingestion, semantic search, and RAG question answering.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-ready">Ready</span>
+    <h4>Agents</h4>
+    <p>ReAct agent loop with 5 built-in tools: search, read, write, run, knowledge.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-ready">Ready</span>
+    <h4>Code Execution</h4>
+    <p>Sandboxed Python, Bash, and JavaScript execution inside the container.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-ready">Ready</span>
+    <h4>Vision</h4>
+    <p>Image analysis and OCR via LLaVA multimodal models through Ollama.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-phase2">LoRA</span>
+    <h4>LoRA Adapters</h4>
+    <p>Load, unload, and manage GGUF LoRA adapters on top of base models.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-gpu">GPU</span>
+    <h4>Music Generation</h4>
+    <p>MusicGen text-to-music. Requires GPU with 4GB+ VRAM.</p>
+  </div>
+  <div class="feature-card">
+    <span class="badge badge-ready">Ready</span>
+    <h4>Browser Desktop</h4>
+    <p>Full desktop environment accessible via noVNC at port 6080.</p>
+  </div>
+</div>
+
+<!-- CLI -->
+<h2>CLI Quick Reference</h2>
+<pre><code>lorai start [--gpu] [--port N]   <span class="cmt"># Start the LorAI container</span>
+lorai stop                       <span class="cmt"># Stop the container</span>
+lorai status                     <span class="cmt"># Show system status</span>
+lorai chat <span class="str">"What is LorAI?"</span>       <span class="cmt"># Chat with the local AI</span>
+lorai desktop                    <span class="cmt"># Open browser desktop (noVNC)</span>
+lorai pull llama3                <span class="cmt"># Download an AI model</span>
+lorai bench                      <span class="cmt"># Benchmark your hardware</span>
+lorai logs                       <span class="cmt"># Show container logs</span>
+lorai version                    <span class="cmt"># Show version info</span></code></pre>
+
+<!-- Architecture -->
+<h2>Architecture</h2>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│ Your Python code / CLI                                  │
+│   from lorai import LorAI                               │
+│   ai = LorAI()                                          │
+└─────────────┬───────────────────────────────────────────┘
+              │ HTTP (OpenAI-compatible + LorAI-native)
+              ▼
+┌─────────────────────────────────────────────────────────┐
+│ Docker: getlorai/desktop                                │
+│ ┌─────────────────────────────────────────────────────┐ │
+│ │ FastAPI Gateway (port 1842)                         │ │
+│ │   /v1/*    → Ollama proxy (OpenAI-compatible)       │ │
+│ │   /lorai/* → Native services (RAG, agents, etc.)   │ │
+│ └──────────────────┬──────────────────────────────────┘ │
+│                    ▼                                    │
+│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────────┐  │
+│ │  Ollama  │ │ ChromaDB │ │ Whisper  │ │   noVNC    │  │
+│ │ :11434   │ │ (vector) │ │ + Piper  │ │   :6080    │  │
+│ └──────────┘ └──────────┘ └──────────┘ └────────────┘  │
+└─────────────────────────────────────────────────────────┘</code></pre>
+
+<table>
+  <tr><th>Decision</th><th>Choice</th><th>Why</th></tr>
+  <tr><td>Port</td><td><code>1842</code></td><td>Ada Lovelace's year &mdash; unique and memorable</td></tr>
+  <tr><td>LLM server</td><td>Ollama</td><td>Best DX, OpenAI-compatible out of the box</td></tr>
+  <tr><td>Default model</td><td>phi3:mini</td><td>Runs on CPU, small, fast, good quality</td></tr>
+  <tr><td>API gateway</td><td>FastAPI</td><td>Async, auto-docs, Python ecosystem</td></tr>
+  <tr><td>SDK base</td><td>OpenAI Python SDK</td><td>Zero learning curve</td></tr>
+  <tr><td>Vector DB</td><td>ChromaDB</td><td>Embedded, zero config, persistent</td></tr>
+  <tr><td>Desktop</td><td>Openbox + noVNC</td><td>Lightweight, browser-accessible</td></tr>
+  <tr><td>Base image</td><td>Alpine 3.19</td><td>~5 MB base, minimal attack surface</td></tr>
+</table>
+
+</main>
+
+<footer>
+  LorAI &mdash; MIT License &mdash; <a href="https://github.com/getlorai">GitHub</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started — LorAI</title>
+  <meta name="description" content="Get started with LorAI in minutes. Install with pip, chat with local LLMs, generate images, use RAG, run agents — all from Python or CLI.">
+  <meta name="keywords" content="LorAI guide, getting started, local AI setup, pip install lorai, AI tutorial, Docker AI">
+  <meta name="author" content="LorAI Team">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/guide.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://gajapathiks.github.io/lorai-workspace/guide.html">
+  <meta property="og:title" content="Getting Started — LorAI">
+  <meta property="og:description" content="Get started with LorAI in minutes. Install with pip, chat with local LLMs, generate images, use RAG, run agents — all from Python or CLI.">
+  <meta property="og:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="LorAI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Getting Started — LorAI">
+  <meta name="twitter:description" content="Get started with LorAI in minutes. Install with pip, chat with local LLMs, generate images, use RAG, run agents — all from Python or CLI.">
+  <meta name="twitter:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0d1117">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">Lor<span>AI</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="guide.html" class="active">Guide</a>
+      <a href="sdk.html">SDK</a>
+      <a href="api.html">API</a>
+      <a href="https://github.com/getlorai">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<div class="docs-layout">
+
+<aside class="sidebar">
+  <ul>
+    <li class="section-label">Getting Started</li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#install">Installation</a></li>
+    <li><a href="#quickstart">Quickstart</a></li>
+    <li><a href="#cli">CLI Usage</a></li>
+    <li class="section-label">Common Tasks</li>
+    <li><a href="#chat">Chat with LLMs</a></li>
+    <li><a href="#models">Managing Models</a></li>
+    <li><a href="#images">Image Generation</a></li>
+    <li><a href="#voice">Voice (STT/TTS)</a></li>
+    <li><a href="#rag">RAG / Knowledge</a></li>
+    <li><a href="#agents">Agents</a></li>
+    <li><a href="#code">Code Execution</a></li>
+    <li><a href="#vision">Vision &amp; OCR</a></li>
+    <li><a href="#lora">LoRA Adapters</a></li>
+    <li class="section-label">Reference</li>
+    <li><a href="#gpu">GPU Setup</a></li>
+    <li><a href="#ports">Ports &amp; URLs</a></li>
+    <li><a href="#data">Data Persistence</a></li>
+  </ul>
+</aside>
+
+<div>
+
+<h2>Getting Started</h2>
+
+<!-- Prerequisites -->
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+  <li><strong>Python 3.9+</strong></li>
+  <li><strong>Docker</strong> installed and running (<a href="https://docs.docker.com/get-docker/">install Docker</a>)</li>
+  <li><strong>GPU (optional)</strong> &mdash; for image/video/music generation. NVIDIA GPU with CUDA drivers and <a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html">nvidia-container-toolkit</a></li>
+</ul>
+
+<!-- Installation -->
+<h3 id="install">Installation</h3>
+<pre><code>pip install lorai</code></pre>
+<p>That's it. The SDK will automatically pull the Docker image and start the container on first use.</p>
+
+<!-- Quickstart -->
+<h3 id="quickstart">Quickstart</h3>
+<p>The simplest way to use LorAI &mdash; three lines of Python:</p>
+<pre><code><span class="kw">from</span> lorai <span class="kw">import</span> LorAI
+
+ai = LorAI()                          <span class="cmt"># pulls Docker image, starts container</span>
+<span class="fn">print</span>(ai.chat(<span class="str">"Hello!"</span>))              <span class="cmt"># chat with local LLM</span></code></pre>
+
+<p>On first run, LorAI will:</p>
+<ol>
+  <li>Check if Docker is installed</li>
+  <li>Pull the <code>getlorai/desktop</code> image (~2 GB)</li>
+  <li>Start a container named <code>lorai</code></li>
+  <li>Wait for the health check at <code>http://localhost:1842/api/health</code></li>
+  <li>Pull the default model (<code>phi3:mini</code>, ~2.3 GB)</li>
+</ol>
+
+<p>Subsequent runs skip these steps if the container is already running.</p>
+
+<p>To skip auto-start (e.g., if the container is already running):</p>
+<pre><code>ai = LorAI(auto_start=<span class="kw">False</span>)</code></pre>
+
+<p>To stop the container when done:</p>
+<pre><code>ai.stop()</code></pre>
+
+<!-- CLI -->
+<h3 id="cli">CLI Usage</h3>
+<p>The <code>lorai</code> command is installed with the SDK. All commands:</p>
+<pre><code><span class="cmt"># Start / Stop</span>
+lorai start                      <span class="cmt"># start the container</span>
+lorai start --gpu                <span class="cmt"># start with GPU passthrough</span>
+lorai start --port 8080          <span class="cmt"># use a custom port</span>
+lorai stop                       <span class="cmt"># stop and remove the container</span>
+
+<span class="cmt"># Interact</span>
+lorai chat <span class="str">"What is quantum computing?"</span>
+lorai chat <span class="str">"Translate to French: hello"</span> --model llama3
+
+<span class="cmt"># Models</span>
+lorai pull llama3                <span class="cmt"># download a model</span>
+lorai status                     <span class="cmt"># show system status</span>
+lorai bench                      <span class="cmt"># benchmark inference speed</span>
+
+<span class="cmt"># Desktop &amp; Logs</span>
+lorai desktop                    <span class="cmt"># open noVNC desktop in browser</span>
+lorai logs                       <span class="cmt"># tail container logs</span>
+lorai version                    <span class="cmt"># show version info</span></code></pre>
+
+<!-- Chat with LLMs -->
+<h3 id="chat">Chat with LLMs</h3>
+
+<h4>Simple chat</h4>
+<pre><code>ai = LorAI(auto_start=<span class="kw">False</span>)
+
+<span class="cmt"># One-shot convenience method</span>
+answer = ai.chat(<span class="str">"What is the capital of France?"</span>)
+<span class="fn">print</span>(answer)  <span class="cmt"># "The capital of France is Paris."</span></code></pre>
+
+<h4>With system prompt</h4>
+<pre><code>answer = ai.chat(
+    <span class="str">"Explain recursion"</span>,
+    system=<span class="str">"You are a CS professor. Use simple analogies."</span>,
+    temperature=<span class="num">0.5</span>,
+)</code></pre>
+
+<h4>JSON mode</h4>
+<pre><code>data = ai.chat(
+    <span class="str">"List 3 planets as JSON with name and diameter_km"</span>,
+    json_mode=<span class="kw">True</span>,
+)</code></pre>
+
+<h4>Streaming</h4>
+<pre><code>text = ai.chat(<span class="str">"Write a poem about AI"</span>, stream=<span class="kw">True</span>)</code></pre>
+
+<h4>Full OpenAI-compatible usage</h4>
+<pre><code><span class="cmt"># Since LorAI extends OpenAI, all standard methods work:</span>
+response = ai.chat.completions.create(
+    model=<span class="str">"phi3:mini"</span>,
+    messages=[
+        {<span class="str">"role"</span>: <span class="str">"system"</span>, <span class="str">"content"</span>: <span class="str">"You are helpful."</span>},
+        {<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Hello!"</span>},
+    ],
+    temperature=<span class="num">0.7</span>,
+    max_tokens=<span class="num">500</span>,
+)
+<span class="fn">print</span>(response.choices[<span class="num">0</span>].message.content)</code></pre>
+
+<!-- Managing Models -->
+<h3 id="models">Managing Models</h3>
+<pre><code><span class="cmt"># List downloaded models</span>
+models = ai.hub.models()
+
+<span class="cmt"># Pull a new model</span>
+ai.hub.pull(<span class="str">"llama3"</span>)
+
+<span class="cmt"># Remove a model</span>
+ai.hub.remove(<span class="str">"phi3:mini"</span>)
+
+<span class="cmt"># System status (CPU, RAM, GPU, loaded models)</span>
+status = ai.hub.status()
+
+<span class="cmt"># Benchmark</span>
+result = ai.hub.bench()</code></pre>
+
+<!-- Image Generation -->
+<h3 id="images">Image Generation</h3>
+<p>Requires GPU with 8GB+ VRAM. Uses SDXL Turbo.</p>
+<pre><code><span class="cmt"># Generate an image</span>
+response = ai.image.generate(
+    <span class="str">"A sunset over mountains, digital art"</span>,
+    size=<span class="str">"1024x1024"</span>,
+    save_to=<span class="str">"sunset.png"</span>,
+)
+
+<span class="cmt"># Edit an existing image</span>
+response = ai.image.edit(<span class="str">"photo.jpg"</span>, <span class="str">"Make it look like a watercolor painting"</span>)</code></pre>
+
+<!-- Voice -->
+<h3 id="voice">Voice (STT + TTS)</h3>
+<pre><code><span class="cmt"># Speech-to-text (Whisper)</span>
+text = ai.voice.transcribe(<span class="str">"recording.mp3"</span>)
+<span class="fn">print</span>(text)
+
+<span class="cmt"># Text-to-speech (Piper)</span>
+ai.voice.speak(
+    <span class="str">"Welcome to LorAI!"</span>,
+    voice=<span class="str">"nova"</span>,        <span class="cmt"># nova, alloy, echo, fable, onyx, shimmer</span>
+    save_to=<span class="str">"welcome.wav"</span>,
+)</code></pre>
+
+<!-- RAG / Knowledge -->
+<h3 id="rag">RAG / Knowledge Base</h3>
+<pre><code><span class="cmt"># Ingest documents</span>
+ai.knowledge.ingest(<span class="str">"/path/to/docs/"</span>, collection=<span class="str">"my-project"</span>)
+
+<span class="cmt"># Semantic search</span>
+results = ai.knowledge.search(<span class="str">"How does authentication work?"</span>, top_k=<span class="num">5</span>)
+
+<span class="cmt"># RAG question answering</span>
+answer = ai.knowledge.ask(<span class="str">"What is the return policy?"</span>)</code></pre>
+
+<!-- Agents -->
+<h3 id="agents">Agents</h3>
+<pre><code><span class="cmt"># Run an agent task</span>
+result = ai.agents.run(
+    <span class="str">"Find all Python files in the project and count total lines"</span>,
+    max_steps=<span class="num">10</span>,
+)
+
+<span class="cmt"># List available agents</span>
+agents = ai.agents.list_agents()
+
+<span class="cmt"># List available tools</span>
+tools = ai.agents.list_tools()</code></pre>
+
+<!-- Code Execution -->
+<h3 id="code">Code Execution</h3>
+<pre><code><span class="cmt"># Execute Python code</span>
+result = ai.code.generate(
+    <span class="str">"print('Hello from LorAI!')"</span>,
+    language=<span class="str">"python"</span>,
+    execute=<span class="kw">True</span>,
+)
+
+<span class="cmt"># Code review</span>
+feedback = ai.code.review(<span class="str">"""
+def fib(n):
+    if n <= 1: return n
+    return fib(n-1) + fib(n-2)
+"""</span>)</code></pre>
+
+<!-- Vision -->
+<h3 id="vision">Vision &amp; OCR</h3>
+<pre><code><span class="cmt"># Analyze an image</span>
+description = ai.vision.analyze(<span class="str">"photo.jpg"</span>, <span class="str">"What's in this image?"</span>)
+
+<span class="cmt"># OCR</span>
+text = ai.vision.ocr(<span class="str">"screenshot.png"</span>)</code></pre>
+
+<!-- LoRA -->
+<h3 id="lora">LoRA Adapters</h3>
+<p>Place <code>.gguf</code> LoRA files in <code>~/.lorai/data/loras/</code> (mapped to <code>/data/loras/</code> inside the container).</p>
+<pre><code><span class="cmt"># List available adapters</span>
+loras = ai.lora.list()
+
+<span class="cmt"># Load an adapter onto a base model</span>
+ai.lora.load(<span class="str">"my-adapter"</span>, base_model=<span class="str">"llama3.2"</span>)
+
+<span class="cmt"># Chat with the LoRA model</span>
+answer = ai.chat(<span class="str">"Hello!"</span>, lora=<span class="str">"my-adapter"</span>)
+
+<span class="cmt"># Unload when done</span>
+ai.lora.unload(<span class="str">"llama3.2-my-adapter"</span>)</code></pre>
+
+<!-- GPU Setup -->
+<h3 id="gpu">GPU Setup</h3>
+<p>For GPU features (image gen, video, music), you need:</p>
+<ol>
+  <li>An NVIDIA GPU with CUDA drivers installed</li>
+  <li>The <a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html">NVIDIA Container Toolkit</a></li>
+</ol>
+<p>Then start LorAI with GPU:</p>
+<pre><code><span class="cmt"># Via CLI</span>
+lorai start --gpu
+
+<span class="cmt"># Via Python</span>
+ai = LorAI(gpu=<span class="kw">True</span>)</code></pre>
+
+<table>
+  <tr><th>Feature</th><th>Min VRAM</th></tr>
+  <tr><td>LLMs (Ollama)</td><td>CPU works, GPU faster</td></tr>
+  <tr><td>Image generation (SDXL Turbo)</td><td>8 GB</td></tr>
+  <tr><td>Video generation (CogVideoX)</td><td>12 GB</td></tr>
+  <tr><td>Music generation (MusicGen)</td><td>4 GB</td></tr>
+</table>
+
+<!-- Ports & URLs -->
+<h3 id="ports">Ports &amp; URLs</h3>
+<table>
+  <tr><th>Port</th><th>Service</th><th>URL</th></tr>
+  <tr><td><code>1842</code></td><td>API Gateway</td><td><code>http://localhost:1842</code></td></tr>
+  <tr><td><code>6080</code></td><td>noVNC Desktop</td><td><code>http://localhost:6080</code></td></tr>
+  <tr><td><code>11434</code></td><td>Ollama (internal)</td><td>Not exposed externally</td></tr>
+</table>
+
+<p>Custom port:</p>
+<pre><code>ai = LorAI(port=<span class="num">8080</span>)    <span class="cmt"># API on 8080 instead of 1842</span></code></pre>
+
+<!-- Data Persistence -->
+<h3 id="data">Data Persistence</h3>
+<p>
+  LorAI mounts <code>~/.lorai/data</code> on the host to <code>/data</code> inside the container.
+  This persists across container restarts:
+</p>
+<ul>
+  <li><code>/data/vectors/</code> &mdash; ChromaDB vector store</li>
+  <li><code>/data/models/</code> &mdash; Cached models</li>
+  <li><code>/data/loras/</code> &mdash; LoRA adapter files</li>
+  <li><code>/data/config/</code> &mdash; User configuration</li>
+</ul>
+
+</div>
+</div>
+</main>
+
+<footer>
+  LorAI &mdash; MIT License &mdash; <a href="https://github.com/getlorai">GitHub</a>
+</footer>
+
+</body>
+</html>
