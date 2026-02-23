@@ -1,0 +1,54 @@
+name: Publish Docker Image
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-push:
+    name: Build & Push to Docker Hub
+    runs-on: ubuntu-latest
+    environment: dockerhub
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: meta
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          # For v1.2.3, produce tags: 1.2.3, 1.2, 1, latest
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          MINOR=$(echo "$VERSION" | cut -d. -f1-2)
+          echo "TAGS=getlorai/desktop:${VERSION},getlorai/desktop:${MINOR},getlorai/desktop:${MAJOR},getlorai/desktop:latest" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./lorai
+          file: ./lorai/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.TAGS }}
+          platforms: linux/amd64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          labels: |
+            org.opencontainers.image.title=LorAI Desktop
+            org.opencontainers.image.description=AI-first operating environment — All of AI. One Command. Port 1842.
+            org.opencontainers.image.version=${{ steps.meta.outputs.VERSION }}
+            org.opencontainers.image.source=https://github.com/getlorai/lorai
+            org.opencontainers.image.licenses=MIT
