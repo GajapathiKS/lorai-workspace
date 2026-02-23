@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,12 +18,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Extract version from tag
+      - name: Extract version
         id: meta
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION=$(python3 -c "
+          import tomllib
+          with open('lorai-sdk/pyproject.toml', 'rb') as f:
+              data = tomllib.load(f)
+          print(data['project']['version'])
+          ")
+          fi
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-          # For v1.2.3, produce tags: 1.2.3, 1.2, 1, latest
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
           MINOR=$(echo "$VERSION" | cut -d. -f1-2)
           echo "TAGS=getlorai/desktop:${VERSION},getlorai/desktop:${MINOR},getlorai/desktop:${MAJOR},getlorai/desktop:latest" >> $GITHUB_OUTPUT
