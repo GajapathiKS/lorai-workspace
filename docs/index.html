@@ -44,6 +44,7 @@
       <a href="guide.html">Guide</a>
       <a href="sdk.html">SDK</a>
       <a href="api.html">API</a>
+      <a href="integrations.html">Integrations</a>
       <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
     </div>
   </div>
@@ -59,6 +60,7 @@
   ██║     ██║   ██║██╔══██╗██╔══██║██║
   ███████╗╚██████╔╝██║  ██║██║  ██║██║
   ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝</pre>
+  <p><span class="badge badge-ready">v0.1.0-beta</span></p>
   <h1>All of AI. One Command.</h1>
   <p class="tagline">Local, free, OpenAI-compatible AI platform. LLMs, image gen, voice, video, RAG, agents &mdash; port <span class="port-badge">1842</span></p>
 
@@ -69,6 +71,7 @@
   <div class="cta-links">
     <a href="guide.html" class="primary">Get Started</a>
     <a href="api.html" class="secondary">API Reference</a>
+    <a href="integrations.html" class="secondary">Integrations</a>
     <a href="https://github.com/GajapathiKS/lorai-workspace" class="secondary">GitHub</a>
   </div>
 </section>
@@ -96,6 +99,51 @@ response = ai.chat.completions.create(
     messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Explain quantum computing"</span>}]
 )
 </code></pre>
+
+<!-- Works with Any Language -->
+<h2>Works with Any Language</h2>
+<p>
+  LorAI's API is <strong>OpenAI-compatible</strong>. Any programming language with an OpenAI SDK can use LorAI
+  out of the box &mdash; just set <code>base_url</code> to <code>http://localhost:1842/v1</code>.
+</p>
+
+<div class="lang-grid">
+  <div class="lang-card">
+    <h4>Python</h4>
+    <pre><code><span class="kw">from</span> openai <span class="kw">import</span> OpenAI
+client = OpenAI(
+  base_url=<span class="str">"http://localhost:1842/v1"</span>,
+  api_key=<span class="str">"not-needed"</span>
+)</code></pre>
+  </div>
+  <div class="lang-card">
+    <h4>Node.js</h4>
+    <pre><code><span class="kw">import</span> OpenAI <span class="kw">from</span> <span class="str">"openai"</span>;
+<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">OpenAI</span>({
+  baseURL: <span class="str">"http://localhost:1842/v1"</span>,
+  apiKey: <span class="str">"not-needed"</span>,
+});</code></pre>
+  </div>
+  <div class="lang-card">
+    <h4>Go</h4>
+    <pre><code>config := openai.<span class="fn">DefaultConfig</span>(<span class="str">"not-needed"</span>)
+config.BaseURL = <span class="str">"http://localhost:1842/v1"</span>
+client := openai.<span class="fn">NewClientWithConfig</span>(config)</code></pre>
+  </div>
+  <div class="lang-card">
+    <h4>cURL</h4>
+    <pre><code>curl http://localhost:1842/v1/chat/completions \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"model":"phi3:mini","messages":[
+    {"role":"user","content":"Hello!"}]}'</span></code></pre>
+  </div>
+</div>
+
+<p style="text-align: center; margin-top: 16px;">
+  <a href="integrations.html">View all 10 language integrations &rarr;</a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  Python, Node.js, Go, Rust, Java, Kotlin, C#, Ruby, PHP, cURL
+</p>
 
 <!-- Features -->
 <h2>Features</h2>
@@ -147,7 +195,7 @@ response = ai.chat.completions.create(
     <p>Image analysis and OCR via LLaVA multimodal models through Ollama.</p>
   </div>
   <div class="feature-card">
-    <span class="badge badge-phase2">LoRA</span>
+    <span class="badge badge-phase2">Experimental</span>
     <h4>LoRA Adapters</h4>
     <p>Load, unload, and manage GGUF LoRA adapters on top of base models.</p>
   </div>
@@ -177,26 +225,27 @@ lorai version                    <span class="cmt"># Show version info</span></c
 
 <!-- Architecture -->
 <h2>Architecture</h2>
-<pre><code>┌─────────────────────────────────────────────────────────┐
-│ Your Python code / CLI                                  │
-│   from lorai import LorAI                               │
-│   ai = LorAI()                                          │
-└─────────────┬───────────────────────────────────────────┘
-              │ HTTP (OpenAI-compatible + LorAI-native)
-              ▼
-┌─────────────────────────────────────────────────────────┐
-│ Docker: getlorai/desktop                                │
-│ ┌─────────────────────────────────────────────────────┐ │
-│ │ FastAPI Gateway (port 1842)                         │ │
-│ │   /v1/*    → Ollama proxy (OpenAI-compatible)       │ │
-│ │   /lorai/* → Native services (RAG, agents, etc.)   │ │
-│ └──────────────────┬──────────────────────────────────┘ │
-│                    ▼                                    │
-│ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌────────────┐  │
-│ │  Ollama  │ │ ChromaDB │ │ Whisper  │ │   noVNC    │  │
-│ │ :11434   │ │ (vector) │ │ + Piper  │ │   :6080    │  │
-│ └──────────┘ └──────────┘ └──────────┘ └────────────┘  │
-└─────────────────────────────────────────────────────────┘</code></pre>
+<pre><code>+-----------------------------------------------------------+
+| Your code (Python, Node.js, Go, Rust, Java, C#, Ruby...) |
+|   from lorai import LorAI    // or any OpenAI SDK         |
+|   ai = LorAI()               // or new OpenAI({baseURL})  |
++---------------------------+-------------------------------+
+                            |
+                            | HTTP (OpenAI-compatible + LorAI-native)
+                            v
++-----------------------------------------------------------+
+| Docker: getlorai/desktop                                  |
+| +-------------------------------------------------------+ |
+| | FastAPI Gateway (port 1842)                           | |
+| |   /v1/*    -> Ollama proxy (OpenAI-compatible)        | |
+| |   /lorai/* -> Native services (RAG, agents, etc.)     | |
+| +------------------------+------------------------------+ |
+|                          v                                |
+| +----------+ +----------+ +----------+ +--------------+   |
+| |  Ollama  | | ChromaDB | | Whisper  | |    noVNC     |   |
+| | :11434   | | (vector) | | + Piper  | |    :6080     |   |
+| +----------+ +----------+ +----------+ +--------------+   |
++-----------------------------------------------------------+</code></pre>
 
 <table>
   <tr><th>Decision</th><th>Choice</th><th>Why</th></tr>
@@ -210,10 +259,38 @@ lorai version                    <span class="cmt"># Show version info</span></c
   <tr><td>Base image</td><td>Alpine 3.19</td><td>~5 MB base, minimal attack surface</td></tr>
 </table>
 
+<!-- Beta Notice -->
+<h2>Beta Release</h2>
+<div class="callout callout-info">
+  <strong>LorAI v0.1.0-beta</strong> &mdash; This is the first public Beta release. The core API is stable,
+  but some features are still being refined. We're looking for early adopters to test the platform and provide feedback.
+  <br><br>
+  <a href="changelog.html">View full changelog &rarr;</a>
+</div>
+
+<h3>What's included in Beta</h3>
+<ul>
+  <li><strong>27 API endpoints</strong> &mdash; 8 OpenAI-compatible + 19 LorAI-native</li>
+  <li><strong>Python SDK</strong> with Docker auto-management, 9 service wrappers, and CLI</li>
+  <li><strong>10 language integrations</strong> &mdash; Python, Node.js, Go, Rust, Java, Kotlin, C#, Ruby, PHP, cURL</li>
+  <li><strong>13 AI capabilities</strong> &mdash; Chat, embeddings, image gen, video, voice, RAG, agents, code execution, vision, LoRA, music, model hub, browser desktop</li>
+  <li><strong>CPU + GPU support</strong> &mdash; Core features work on CPU; image/video/music gen require NVIDIA GPU</li>
+</ul>
+
+<h3>Known Limitations</h3>
+<ul>
+  <li>First startup pulls ~2 GB Docker image + ~2.3 GB default model &mdash; allow several minutes</li>
+  <li>No authentication &mdash; designed for local development, not internet-facing deployment</li>
+  <li>GPU features require NVIDIA GPU + CUDA + nvidia-container-toolkit</li>
+  <li>Windows support requires WSL2 with Docker Desktop</li>
+  <li>LoRA adapter loading is experimental</li>
+</ul>
+
 </main>
 
 <footer>
-  LorAI &mdash; MIT License &mdash; <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
+  LorAI v0.1.0-beta &mdash; MIT License &mdash; <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
+  &mdash; <a href="changelog.html">Changelog</a>
 </footer>
 
 </body>

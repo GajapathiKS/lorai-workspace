@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integrations — LorAI</title>
+  <meta name="description" content="Use LorAI from any language — Python, Node.js, Go, Rust, Java, C#, Ruby, PHP, or plain HTTP. OpenAI-compatible API on localhost:1842.">
+  <meta name="keywords" content="LorAI integrations, OpenAI SDK, Node.js AI, Go AI, Rust AI, Java AI, multi-language AI, local AI API">
+  <meta name="author" content="LorAI Team">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/integrations.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://gajapathiks.github.io/lorai-workspace/integrations.html">
+  <meta property="og:title" content="Integrations — LorAI">
+  <meta property="og:description" content="Use LorAI from any programming language. OpenAI-compatible API on localhost:1842.">
+  <meta property="og:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="LorAI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Integrations — LorAI">
+  <meta name="twitter:description" content="Use LorAI from any programming language. OpenAI-compatible API on localhost:1842.">
+  <meta name="twitter:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0d1117">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">Lor<span>AI</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="sdk.html">SDK</a>
+      <a href="api.html">API</a>
+      <a href="integrations.html" class="active">Integrations</a>
+      <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<div class="docs-layout">
+
+<aside class="sidebar">
+  <ul>
+    <li class="section-label">Overview</li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#quickref">Quick Reference</a></li>
+    <li class="section-label">Full SDK</li>
+    <li><a href="#python">Python (LorAI SDK)</a></li>
+    <li class="section-label">OpenAI SDK</li>
+    <li><a href="#python-openai">Python (OpenAI)</a></li>
+    <li><a href="#nodejs">Node.js / TypeScript</a></li>
+    <li><a href="#go">Go</a></li>
+    <li><a href="#rust">Rust</a></li>
+    <li><a href="#java">Java / Kotlin</a></li>
+    <li><a href="#csharp">C# / .NET</a></li>
+    <li><a href="#ruby">Ruby</a></li>
+    <li><a href="#php">PHP</a></li>
+    <li class="section-label">Raw HTTP</li>
+    <li><a href="#curl">cURL</a></li>
+    <li><a href="#fetch">JavaScript fetch</a></li>
+    <li class="section-label">Reference</li>
+    <li><a href="#endpoints">Common Endpoints</a></li>
+    <li><a href="#streaming">Streaming</a></li>
+  </ul>
+</aside>
+
+<div>
+
+<h2>Integrations</h2>
+
+<p>
+  LorAI exposes an <strong>OpenAI-compatible API</strong> on <code>http://localhost:1842/v1</code>.
+  This means <strong>any programming language</strong> that has an OpenAI client library can use LorAI
+  with zero custom code &mdash; just point <code>base_url</code> to <code>localhost:1842</code>.
+</p>
+
+<div class="callout callout-info">
+  <strong>Key insight:</strong> You do NOT need a language-specific LorAI SDK for every language. Any OpenAI SDK works because
+  LorAI speaks the exact same protocol. We provide a dedicated SDK for <strong>Python</strong> (<code>pip install lorai</code>)
+  that adds Docker auto-management and native service wrappers &mdash; but the core API is language-agnostic.
+</div>
+
+<!-- ============================================================ -->
+<!-- How It Works -->
+<!-- ============================================================ -->
+
+<h3 id="how-it-works">How It Works</h3>
+
+<p>LorAI runs as a Docker container on your machine. The API gateway on port <code>1842</code> proxies requests to Ollama, which provides native OpenAI API compatibility. Any HTTP client can talk to it.</p>
+
+<pre><code><span class="cmt">Your Code (any language, any framework)</span>
+        |
+        |  HTTP  &mdash;  OpenAI-compatible protocol
+        v
++--------------------------------+
+|  LorAI Gateway (port 1842)     |
+|  +----------------------------+|
+|  | /v1/*   -> Ollama (:11434) || &lt;- OpenAI-compatible routes
+|  | /lorai/* -> Native APIs    || &lt;- LorAI-specific routes
+|  +----------------------------+|
++--------------------------------+</code></pre>
+
+<p><strong>Step 1:</strong> Start the LorAI container (one-time setup):</p>
+<pre><code><span class="cmt"># Option A: Using the Python CLI (recommended)</span>
+pip install lorai
+lorai start
+
+<span class="cmt"># Option B: Using Docker directly</span>
+docker run -d --name lorai \
+  -p 1842:1842 \
+  -p 6080:6080 \
+  -v ~/.lorai/data:/data \
+  getlorai/desktop:latest</code></pre>
+
+<p><strong>Step 2:</strong> Use any OpenAI SDK or HTTP client, pointing to <code>http://localhost:1842/v1</code>.</p>
+
+<!-- ============================================================ -->
+<!-- Quick Reference -->
+<!-- ============================================================ -->
+
+<h3 id="quickref">Quick Reference Table</h3>
+
+<table>
+  <tr>
+    <th>Language</th>
+    <th>Package</th>
+    <th>Install</th>
+  </tr>
+  <tr>
+    <td><strong>Python</strong> (Full SDK)</td>
+    <td><code>lorai</code></td>
+    <td><code>pip install lorai</code></td>
+  </tr>
+  <tr>
+    <td><strong>Python</strong> (OpenAI only)</td>
+    <td><code>openai</code></td>
+    <td><code>pip install openai</code></td>
+  </tr>
+  <tr>
+    <td><strong>Node.js / TypeScript</strong></td>
+    <td><code>openai</code></td>
+    <td><code>npm install openai</code></td>
+  </tr>
+  <tr>
+    <td><strong>Go</strong></td>
+    <td><code>go-openai</code></td>
+    <td><code>go get github.com/sashabaranov/go-openai</code></td>
+  </tr>
+  <tr>
+    <td><strong>Rust</strong></td>
+    <td><code>async-openai</code></td>
+    <td><code>cargo add async-openai</code></td>
+  </tr>
+  <tr>
+    <td><strong>Java / Kotlin</strong></td>
+    <td><code>openai-java</code></td>
+    <td>Maven / Gradle (see below)</td>
+  </tr>
+  <tr>
+    <td><strong>C# / .NET</strong></td>
+    <td><code>Betalgo.OpenAI</code></td>
+    <td><code>dotnet add package Betalgo.OpenAI</code></td>
+  </tr>
+  <tr>
+    <td><strong>Ruby</strong></td>
+    <td><code>ruby-openai</code></td>
+    <td><code>gem install ruby-openai</code></td>
+  </tr>
+  <tr>
+    <td><strong>PHP</strong></td>
+    <td><code>openai-php/client</code></td>
+    <td><code>composer require openai-php/client</code></td>
+  </tr>
+  <tr>
+    <td><strong>Any (HTTP)</strong></td>
+    <td>&mdash;</td>
+    <td><code>curl</code>, <code>fetch</code>, <code>httpx</code>, etc.</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- Python Full SDK -->
+<!-- ============================================================ -->
+
+<h3 id="python">Python &mdash; LorAI SDK (Full)</h3>
+
+<div class="lang-badge lang-python">Python</div>
+
+<p>The LorAI Python SDK extends the OpenAI SDK with Docker auto-management, 9 AI service wrappers (image, video, voice, RAG, agents, code, vision, LoRA, hub), and a CLI. This is the <strong>recommended</strong> approach for Python developers.</p>
+
+<h4>Install</h4>
+<pre><code>pip install lorai</code></pre>
+
+<h4>Quick Start</h4>
+<pre><code><span class="kw">from</span> lorai <span class="kw">import</span> LorAI
+
+ai = LorAI()                              <span class="cmt"># auto-pulls Docker image, starts container</span>
+<span class="fn">print</span>(ai.chat(<span class="str">"Hello!"</span>))                  <span class="cmt"># local LLM response</span></code></pre>
+
+<h4>Full Example</h4>
+<pre><code><span class="kw">from</span> lorai <span class="kw">import</span> LorAI
+
+ai = LorAI(auto_start=<span class="kw">True</span>, gpu=<span class="kw">False</span>)
+
+<span class="cmt"># Simple chat (convenience method)</span>
+answer = ai.chat(<span class="str">"What is quantum computing?"</span>, temperature=<span class="num">0.5</span>)
+<span class="fn">print</span>(answer)
+
+<span class="cmt"># OpenAI-compatible usage (works identically to openai SDK)</span>
+response = ai.chat.completions.create(
+    model=<span class="str">"phi3:mini"</span>,
+    messages=[
+        {<span class="str">"role"</span>: <span class="str">"system"</span>, <span class="str">"content"</span>: <span class="str">"You are a helpful assistant."</span>},
+        {<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Explain recursion simply."</span>},
+    ],
+    temperature=<span class="num">0.7</span>,
+    max_tokens=<span class="num">500</span>,
+)
+<span class="fn">print</span>(response.choices[<span class="num">0</span>].message.content)
+
+<span class="cmt"># Streaming</span>
+stream = ai.chat.completions.create(
+    model=<span class="str">"phi3:mini"</span>,
+    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Write a poem about AI"</span>}],
+    stream=<span class="kw">True</span>,
+)
+<span class="kw">for</span> chunk <span class="kw">in</span> stream:
+    <span class="kw">if</span> chunk.choices[<span class="num">0</span>].delta.content:
+        <span class="fn">print</span>(chunk.choices[<span class="num">0</span>].delta.content, end=<span class="str">""</span>)
+
+<span class="cmt"># LorAI-specific services (not available via plain OpenAI SDK)</span>
+models = ai.hub.models()                      <span class="cmt"># list downloaded models</span>
+ai.hub.pull(<span class="str">"llama3"</span>)                         <span class="cmt"># download a model</span>
+text = ai.voice.transcribe(<span class="str">"audio.mp3"</span>)      <span class="cmt"># speech-to-text</span>
+ai.voice.speak(<span class="str">"Hello!"</span>, save_to=<span class="str">"out.wav"</span>)  <span class="cmt"># text-to-speech</span>
+result = ai.agents.run(<span class="str">"Summarize this folder"</span>)  <span class="cmt"># run an agent</span>
+answer = ai.knowledge.ask(<span class="str">"What is the return policy?"</span>)  <span class="cmt"># RAG</span>
+
+<span class="cmt"># Embeddings</span>
+emb = ai.embeddings.create(
+    model=<span class="str">"nomic-embed-text"</span>,
+    input=<span class="str">"The quick brown fox"</span>,
+)
+<span class="fn">print</span>(<span class="fn">len</span>(emb.data[<span class="num">0</span>].embedding))             <span class="cmt"># vector dimensions</span>
+
+<span class="cmt"># Stop when done</span>
+ai.stop()</code></pre>
+
+<p>See the full <a href="sdk.html">SDK Reference</a> for all 9 services and their methods.</p>
+
+<!-- ============================================================ -->
+<!-- Python OpenAI -->
+<!-- ============================================================ -->
+
+<h3 id="python-openai">Python &mdash; OpenAI SDK Only</h3>
+
+<div class="lang-badge lang-python">Python</div>
+
+<p>If you only need chat completions and don't need Docker auto-management or LorAI-native services, use the standard OpenAI package directly:</p>
+
+<h4>Install</h4>
+<pre><code>pip install openai</code></pre>
+
+<h4>Usage</h4>
+<pre><code><span class="kw">from</span> openai <span class="kw">import</span> OpenAI
+
+client = OpenAI(
+    base_url=<span class="str">"http://localhost:1842/v1"</span>,
+    api_key=<span class="str">"not-needed"</span>,              <span class="cmt"># LorAI doesn't require auth</span>
+)
+
+<span class="cmt"># Chat</span>
+response = client.chat.completions.create(
+    model=<span class="str">"phi3:mini"</span>,
+    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Hello!"</span>}],
+)
+<span class="fn">print</span>(response.choices[<span class="num">0</span>].message.content)
+
+<span class="cmt"># Streaming</span>
+stream = client.chat.completions.create(
+    model=<span class="str">"phi3:mini"</span>,
+    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Count to 10"</span>}],
+    stream=<span class="kw">True</span>,
+)
+<span class="kw">for</span> chunk <span class="kw">in</span> stream:
+    <span class="kw">if</span> chunk.choices[<span class="num">0</span>].delta.content:
+        <span class="fn">print</span>(chunk.choices[<span class="num">0</span>].delta.content, end=<span class="str">""</span>)
+
+<span class="cmt"># Embeddings</span>
+emb = client.embeddings.create(
+    model=<span class="str">"nomic-embed-text"</span>,
+    input=<span class="str">"Semantic search text"</span>,
+)
+<span class="fn">print</span>(<span class="fn">len</span>(emb.data[<span class="num">0</span>].embedding))</code></pre>
+
+<!-- ============================================================ -->
+<!-- Node.js / TypeScript OpenAI -->
+<!-- ============================================================ -->
+
+<h3 id="nodejs">Node.js / TypeScript &mdash; OpenAI SDK</h3>
+
+<div class="lang-badge lang-js">Node.js</div>
+
+<p>The official OpenAI npm package works directly with LorAI. Good for teams already using the OpenAI SDK.</p>
+
+<h4>Install</h4>
+<pre><code>npm install openai</code></pre>
+
+<h4>Chat Completion</h4>
+<pre><code><span class="kw">import</span> OpenAI <span class="kw">from</span> <span class="str">"openai"</span>;
+
+<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">OpenAI</span>({
+  baseURL: <span class="str">"http://localhost:1842/v1"</span>,
+  apiKey: <span class="str">"not-needed"</span>,
+});
+
+<span class="kw">const</span> response = <span class="kw">await</span> client.chat.completions.create({
+  model: <span class="str">"phi3:mini"</span>,
+  messages: [
+    { role: <span class="str">"system"</span>, content: <span class="str">"You are a helpful assistant."</span> },
+    { role: <span class="str">"user"</span>, content: <span class="str">"What is LorAI?"</span> },
+  ],
+  temperature: <span class="num">0.7</span>,
+  max_tokens: <span class="num">500</span>,
+});
+
+console.log(response.choices[<span class="num">0</span>].message.content);</code></pre>
+
+<h4>Streaming</h4>
+<pre><code><span class="kw">const</span> stream = <span class="kw">await</span> client.chat.completions.create({
+  model: <span class="str">"phi3:mini"</span>,
+  messages: [{ role: <span class="str">"user"</span>, content: <span class="str">"Write a haiku about coding"</span> }],
+  stream: <span class="kw">true</span>,
+});
+
+<span class="kw">for await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> stream) {
+  <span class="kw">const</span> content = chunk.choices[<span class="num">0</span>]?.delta?.content;
+  <span class="kw">if</span> (content) process.stdout.write(content);
+}</code></pre>
+
+<h4>Embeddings</h4>
+<pre><code><span class="kw">const</span> embedding = <span class="kw">await</span> client.embeddings.create({
+  model: <span class="str">"nomic-embed-text"</span>,
+  input: <span class="str">"The quick brown fox jumps over the lazy dog"</span>,
+});
+
+console.log(<span class="str">`Dimensions: ${embedding.data[0].embedding.length}`</span>);</code></pre>
+
+<h4>TypeScript &mdash; Full Typed Example</h4>
+<pre><code><span class="kw">import</span> OpenAI <span class="kw">from</span> <span class="str">"openai"</span>;
+<span class="kw">import type</span> { ChatCompletionMessageParam } <span class="kw">from</span> <span class="str">"openai/resources"</span>;
+
+<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">OpenAI</span>({
+  baseURL: <span class="str">"http://localhost:1842/v1"</span>,
+  apiKey: <span class="str">"not-needed"</span>,
+});
+
+<span class="kw">const</span> messages: ChatCompletionMessageParam[] = [
+  { role: <span class="str">"system"</span>, content: <span class="str">"You are a TypeScript expert."</span> },
+  { role: <span class="str">"user"</span>, content: <span class="str">"Explain generics in one paragraph."</span> },
+];
+
+<span class="kw">const</span> result = <span class="kw">await</span> client.chat.completions.create({
+  model: <span class="str">"phi3:mini"</span>,
+  messages,
+});
+
+console.log(result.choices[<span class="num">0</span>].message.content);</code></pre>
+
+<!-- ============================================================ -->
+<!-- Go -->
+<!-- ============================================================ -->
+
+<h3 id="go">Go</h3>
+
+<div class="lang-badge lang-go">Go</div>
+
+<h4>Install</h4>
+<pre><code>go get github.com/sashabaranov/go-openai</code></pre>
+
+<h4>Chat Completion</h4>
+<pre><code><span class="kw">package</span> main
+
+<span class="kw">import</span> (
+    <span class="str">"context"</span>
+    <span class="str">"fmt"</span>
+    <span class="str">"log"</span>
+
+    openai <span class="str">"github.com/sashabaranov/go-openai"</span>
+)
+
+<span class="kw">func</span> <span class="fn">main</span>() {
+    config := openai.<span class="fn">DefaultConfig</span>(<span class="str">"not-needed"</span>)
+    config.BaseURL = <span class="str">"http://localhost:1842/v1"</span>
+    client := openai.<span class="fn">NewClientWithConfig</span>(config)
+
+    resp, err := client.<span class="fn">CreateChatCompletion</span>(
+        context.<span class="fn">Background</span>(),
+        openai.ChatCompletionRequest{
+            Model: <span class="str">"phi3:mini"</span>,
+            Messages: []openai.ChatCompletionMessage{
+                {
+                    Role:    openai.ChatMessageRoleUser,
+                    Content: <span class="str">"What is LorAI?"</span>,
+                },
+            },
+            Temperature: <span class="num">0.7</span>,
+            MaxTokens:   <span class="num">500</span>,
+        },
+    )
+    <span class="kw">if</span> err != <span class="kw">nil</span> {
+        log.<span class="fn">Fatal</span>(err)
+    }
+
+    fmt.<span class="fn">Println</span>(resp.Choices[<span class="num">0</span>].Message.Content)
+}</code></pre>
+
+<h4>Streaming</h4>
+<pre><code>stream, err := client.<span class="fn">CreateChatCompletionStream</span>(
+    context.<span class="fn">Background</span>(),
+    openai.ChatCompletionRequest{
+        Model: <span class="str">"phi3:mini"</span>,
+        Messages: []openai.ChatCompletionMessage{
+            {Role: openai.ChatMessageRoleUser, Content: <span class="str">"Count to 10"</span>},
+        },
+        Stream: <span class="kw">true</span>,
+    },
+)
+<span class="kw">if</span> err != <span class="kw">nil</span> {
+    log.<span class="fn">Fatal</span>(err)
+}
+<span class="kw">defer</span> stream.<span class="fn">Close</span>()
+
+<span class="kw">for</span> {
+    response, err := stream.<span class="fn">Recv</span>()
+    <span class="kw">if</span> err != <span class="kw">nil</span> {
+        <span class="kw">break</span>
+    }
+    fmt.<span class="fn">Print</span>(response.Choices[<span class="num">0</span>].Delta.Content)
+}</code></pre>
+
+<!-- ============================================================ -->
+<!-- Rust -->
+<!-- ============================================================ -->
+
+<h3 id="rust">Rust</h3>
+
+<div class="lang-badge lang-rust">Rust</div>
+
+<h4>Cargo.toml</h4>
+<pre><code>[dependencies]
+async-openai = <span class="str">"0.25"</span>
+tokio = { version = <span class="str">"1"</span>, features = [<span class="str">"full"</span>] }</code></pre>
+
+<h4>Chat Completion</h4>
+<pre><code><span class="kw">use</span> async_openai::{
+    types::{
+        ChatCompletionRequestUserMessageArgs,
+        CreateChatCompletionRequestArgs,
+    },
+    config::OpenAIConfig,
+    Client,
+};
+
+<span class="kw">#[tokio::main]</span>
+<span class="kw">async fn</span> <span class="fn">main</span>() -&gt; Result&lt;(), Box&lt;<span class="kw">dyn</span> std::error::Error&gt;&gt; {
+    <span class="kw">let</span> config = OpenAIConfig::new()
+        .with_api_base(<span class="str">"http://localhost:1842/v1"</span>)
+        .with_api_key(<span class="str">"not-needed"</span>);
+
+    <span class="kw">let</span> client = Client::with_config(config);
+
+    <span class="kw">let</span> request = CreateChatCompletionRequestArgs::default()
+        .model(<span class="str">"phi3:mini"</span>)
+        .messages(<span class="kw">vec!</span>[
+            ChatCompletionRequestUserMessageArgs::default()
+                .content(<span class="str">"What is LorAI?"</span>)
+                .build()?
+                .into(),
+        ])
+        .temperature(<span class="num">0.7</span>)
+        .max_tokens(<span class="num">500_u32</span>)
+        .build()?;
+
+    <span class="kw">let</span> response = client.chat().create(request).<span class="kw">await</span>?;
+
+    <span class="fn">println!</span>(<span class="str">"{}"</span>, response.choices[<span class="num">0</span>].message.content
+        .as_ref().unwrap());
+
+    Ok(())
+}</code></pre>
+
+<!-- ============================================================ -->
+<!-- Java / Kotlin -->
+<!-- ============================================================ -->
+
+<h3 id="java">Java / Kotlin</h3>
+
+<div class="lang-badge lang-java">Java</div>
+
+<h4>Maven</h4>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.openai&lt;/groupId&gt;
+    &lt;artifactId&gt;openai-java&lt;/artifactId&gt;
+    &lt;version&gt;0.30.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+
+<h4>Gradle (Kotlin DSL)</h4>
+<pre><code>implementation(<span class="str">"com.openai:openai-java:0.30.0"</span>)</code></pre>
+
+<h4>Java Example</h4>
+<pre><code><span class="kw">import</span> com.openai.client.OpenAIClient;
+<span class="kw">import</span> com.openai.client.okhttp.OpenAIOkHttpClient;
+<span class="kw">import</span> com.openai.models.*;
+
+<span class="kw">public class</span> <span class="fn">LorAIExample</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(String[] args) {
+        OpenAIClient client = OpenAIOkHttpClient.builder()
+            .baseUrl(<span class="str">"http://localhost:1842/v1"</span>)
+            .apiKey(<span class="str">"not-needed"</span>)
+            .build();
+
+        ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
+            .model(<span class="str">"phi3:mini"</span>)
+            .addUserMessage(<span class="str">"What is LorAI?"</span>)
+            .temperature(<span class="num">0.7</span>)
+            .maxTokens(<span class="num">500</span>)
+            .build();
+
+        ChatCompletion completion = client.chat().completions().create(params);
+
+        System.out.println(
+            completion.choices().get(<span class="num">0</span>).message().content().get()
+        );
+    }
+}</code></pre>
+
+<h4>Kotlin Example</h4>
+<pre><code><span class="kw">val</span> client = OpenAIOkHttpClient.builder()
+    .baseUrl(<span class="str">"http://localhost:1842/v1"</span>)
+    .apiKey(<span class="str">"not-needed"</span>)
+    .build()
+
+<span class="kw">val</span> params = ChatCompletionCreateParams.builder()
+    .model(<span class="str">"phi3:mini"</span>)
+    .addUserMessage(<span class="str">"Explain Kotlin coroutines briefly"</span>)
+    .build()
+
+<span class="kw">val</span> result = client.chat().completions().create(params)
+println(result.choices()[<span class="num">0</span>].message().content().get())</code></pre>
+
+<!-- ============================================================ -->
+<!-- C# / .NET -->
+<!-- ============================================================ -->
+
+<h3 id="csharp">C# / .NET</h3>
+
+<div class="lang-badge lang-csharp">C#</div>
+
+<h4>Install</h4>
+<pre><code>dotnet add package Betalgo.OpenAI</code></pre>
+
+<h4>Chat Completion</h4>
+<pre><code><span class="kw">using</span> OpenAI;
+<span class="kw">using</span> OpenAI.Managers;
+<span class="kw">using</span> OpenAI.ObjectModels.RequestModels;
+
+<span class="kw">var</span> client = <span class="kw">new</span> <span class="fn">OpenAIService</span>(<span class="kw">new</span> OpenAiOptions
+{
+    BaseDomain = <span class="str">"http://localhost:1842"</span>,
+    ApiKey = <span class="str">"not-needed"</span>,
+});
+
+<span class="kw">var</span> result = <span class="kw">await</span> client.ChatCompletion.<span class="fn">CreateCompletion</span>(
+    <span class="kw">new</span> ChatCompletionCreateRequest
+    {
+        Model = <span class="str">"phi3:mini"</span>,
+        Messages = <span class="kw">new</span> List&lt;ChatMessage&gt;
+        {
+            ChatMessage.FromUser(<span class="str">"What is LorAI?"</span>),
+        },
+        Temperature = <span class="num">0.7f</span>,
+        MaxTokens = <span class="num">500</span>,
+    }
+);
+
+<span class="kw">if</span> (result.Successful)
+{
+    Console.WriteLine(result.Choices.First().Message.Content);
+}</code></pre>
+
+<h4>Streaming</h4>
+<pre><code><span class="kw">var</span> stream = client.ChatCompletion.<span class="fn">CreateCompletionAsStream</span>(
+    <span class="kw">new</span> ChatCompletionCreateRequest
+    {
+        Model = <span class="str">"phi3:mini"</span>,
+        Messages = <span class="kw">new</span> List&lt;ChatMessage&gt;
+        {
+            ChatMessage.FromUser(<span class="str">"Count to 10"</span>),
+        },
+    }
+);
+
+<span class="kw">await foreach</span> (<span class="kw">var</span> chunk <span class="kw">in</span> stream)
+{
+    <span class="kw">if</span> (chunk.Successful)
+        Console.Write(chunk.Choices.First().Delta.Content);
+}</code></pre>
+
+<!-- ============================================================ -->
+<!-- Ruby -->
+<!-- ============================================================ -->
+
+<h3 id="ruby">Ruby</h3>
+
+<div class="lang-badge lang-ruby">Ruby</div>
+
+<h4>Install</h4>
+<pre><code>gem install ruby-openai</code></pre>
+
+<h4>Chat Completion</h4>
+<pre><code><span class="kw">require</span> <span class="str">"openai"</span>
+
+client = OpenAI::Client.new(
+  uri_base: <span class="str">"http://localhost:1842/v1"</span>,
+  access_token: <span class="str">"not-needed"</span>,
+)
+
+response = client.chat(
+  parameters: {
+    model: <span class="str">"phi3:mini"</span>,
+    messages: [
+      { role: <span class="str">"user"</span>, content: <span class="str">"What is LorAI?"</span> },
+    ],
+    temperature: <span class="num">0.7</span>,
+    max_tokens: <span class="num">500</span>,
+  }
+)
+
+puts response.dig(<span class="str">"choices"</span>, <span class="num">0</span>, <span class="str">"message"</span>, <span class="str">"content"</span>)</code></pre>
+
+<h4>Streaming</h4>
+<pre><code>client.chat(
+  parameters: {
+    model: <span class="str">"phi3:mini"</span>,
+    messages: [{ role: <span class="str">"user"</span>, content: <span class="str">"Write a haiku"</span> }],
+    stream: proc { |chunk, _bytesize|
+      content = chunk.dig(<span class="str">"choices"</span>, <span class="num">0</span>, <span class="str">"delta"</span>, <span class="str">"content"</span>)
+      <span class="fn">print</span> content <span class="kw">if</span> content
+    },
+  }
+)</code></pre>
+
+<!-- ============================================================ -->
+<!-- PHP -->
+<!-- ============================================================ -->
+
+<h3 id="php">PHP</h3>
+
+<div class="lang-badge lang-php">PHP</div>
+
+<h4>Install</h4>
+<pre><code>composer require openai-php/client</code></pre>
+
+<h4>Chat Completion</h4>
+<pre><code><span class="kw">use</span> OpenAI;
+
+<span class="fn">$client</span> = OpenAI::<span class="fn">factory</span>()
+    -&gt;<span class="fn">withBaseUri</span>(<span class="str">'http://localhost:1842/v1'</span>)
+    -&gt;<span class="fn">withApiKey</span>(<span class="str">'not-needed'</span>)
+    -&gt;<span class="fn">make</span>();
+
+<span class="fn">$response</span> = <span class="fn">$client</span>-&gt;chat()-&gt;<span class="fn">create</span>([
+    <span class="str">'model'</span> =&gt; <span class="str">'phi3:mini'</span>,
+    <span class="str">'messages'</span> =&gt; [
+        [<span class="str">'role'</span> =&gt; <span class="str">'user'</span>, <span class="str">'content'</span> =&gt; <span class="str">'What is LorAI?'</span>],
+    ],
+    <span class="str">'temperature'</span> =&gt; <span class="num">0.7</span>,
+    <span class="str">'max_tokens'</span> =&gt; <span class="num">500</span>,
+]);
+
+<span class="fn">echo</span> <span class="fn">$response</span>-&gt;choices[<span class="num">0</span>]-&gt;message-&gt;content;</code></pre>
+
+<h4>Streaming</h4>
+<pre><code><span class="fn">$stream</span> = <span class="fn">$client</span>-&gt;chat()-&gt;<span class="fn">createStreamed</span>([
+    <span class="str">'model'</span> =&gt; <span class="str">'phi3:mini'</span>,
+    <span class="str">'messages'</span> =&gt; [
+        [<span class="str">'role'</span> =&gt; <span class="str">'user'</span>, <span class="str">'content'</span> =&gt; <span class="str">'Count to 10'</span>],
+    ],
+]);
+
+<span class="kw">foreach</span> (<span class="fn">$stream</span> <span class="kw">as</span> <span class="fn">$response</span>) {
+    <span class="fn">echo</span> <span class="fn">$response</span>-&gt;choices[<span class="num">0</span>]-&gt;delta-&gt;content;
+}</code></pre>
+
+<!-- ============================================================ -->
+<!-- cURL -->
+<!-- ============================================================ -->
+
+<h3 id="curl">cURL / Raw HTTP</h3>
+
+<div class="lang-badge lang-http">HTTP</div>
+
+<p>No SDK needed. LorAI's API works with any HTTP client.</p>
+
+<h4>Chat Completion</h4>
+<pre><code>curl http://localhost:1842/v1/chat/completions \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "model": "phi3:mini",
+    "messages": [
+      {"role": "system", "content": "You are helpful."},
+      {"role": "user", "content": "What is LorAI?"}
+    ],
+    "temperature": 0.7,
+    "max_tokens": 500
+  }'</span></code></pre>
+
+<h4>Streaming</h4>
+<pre><code>curl http://localhost:1842/v1/chat/completions \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -N \
+  -d <span class="str">'{
+    "model": "phi3:mini",
+    "messages": [{"role": "user", "content": "Count to 10"}],
+    "stream": true
+  }'</span></code></pre>
+
+<h4>List Models</h4>
+<pre><code>curl http://localhost:1842/v1/models</code></pre>
+
+<h4>Embeddings</h4>
+<pre><code>curl http://localhost:1842/v1/embeddings \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{
+    "model": "nomic-embed-text",
+    "input": "The quick brown fox"
+  }'</span></code></pre>
+
+<h4>Pull a Model</h4>
+<pre><code>curl -X POST http://localhost:1842/lorai/hub/pull \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"name": "llama3"}'</span></code></pre>
+
+<h4>Health Check</h4>
+<pre><code>curl http://localhost:1842/api/health
+<span class="cmt"># {"status": "ok", "version": "0.1.0", "port": 1842}</span></code></pre>
+
+<!-- ============================================================ -->
+<!-- JavaScript fetch -->
+<!-- ============================================================ -->
+
+<h3 id="fetch">JavaScript fetch (Browser / Deno / Bun)</h3>
+
+<div class="lang-badge lang-js">JavaScript</div>
+
+<p>No npm package needed. Works in any environment with the Fetch API.</p>
+
+<h4>Chat</h4>
+<pre><code><span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"http://localhost:1842/v1/chat/completions"</span>, {
+  method: <span class="str">"POST"</span>,
+  headers: { <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span> },
+  body: JSON.<span class="fn">stringify</span>({
+    model: <span class="str">"phi3:mini"</span>,
+    messages: [{ role: <span class="str">"user"</span>, content: <span class="str">"Hello!"</span> }],
+  }),
+});
+
+<span class="kw">const</span> data = <span class="kw">await</span> response.<span class="fn">json</span>();
+console.log(data.choices[<span class="num">0</span>].message.content);</code></pre>
+
+<h4>Streaming with fetch</h4>
+<pre><code><span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"http://localhost:1842/v1/chat/completions"</span>, {
+  method: <span class="str">"POST"</span>,
+  headers: { <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span> },
+  body: JSON.<span class="fn">stringify</span>({
+    model: <span class="str">"phi3:mini"</span>,
+    messages: [{ role: <span class="str">"user"</span>, content: <span class="str">"Write a story"</span> }],
+    stream: <span class="kw">true</span>,
+  }),
+});
+
+<span class="kw">const</span> reader = response.body.<span class="fn">getReader</span>();
+<span class="kw">const</span> decoder = <span class="kw">new</span> <span class="fn">TextDecoder</span>();
+
+<span class="kw">while</span> (<span class="kw">true</span>) {
+  <span class="kw">const</span> { done, value } = <span class="kw">await</span> reader.<span class="fn">read</span>();
+  <span class="kw">if</span> (done) <span class="kw">break</span>;
+
+  <span class="kw">const</span> lines = decoder.<span class="fn">decode</span>(value).<span class="fn">split</span>(<span class="str">"\n"</span>);
+  <span class="kw">for</span> (<span class="kw">const</span> line <span class="kw">of</span> lines) {
+    <span class="kw">if</span> (line.startsWith(<span class="str">"data: "</span>) &amp;&amp; line !== <span class="str">"data: [DONE]"</span>) {
+      <span class="kw">const</span> json = JSON.<span class="fn">parse</span>(line.slice(<span class="num">6</span>));
+      <span class="kw">const</span> content = json.choices?.[<span class="num">0</span>]?.delta?.content;
+      <span class="kw">if</span> (content) process.stdout.write(content);
+    }
+  }
+}</code></pre>
+
+<!-- ============================================================ -->
+<!-- Common Endpoints -->
+<!-- ============================================================ -->
+
+<h3 id="endpoints">Common Endpoints Reference</h3>
+
+<p>These endpoints work the same regardless of language. See the full <a href="api.html">API Reference</a> for request/response schemas.</p>
+
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><code>GET</code></td><td><code>/api/health</code></td><td>Health check</td></tr>
+  <tr><td><code>POST</code></td><td><code>/v1/chat/completions</code></td><td>Chat (streaming supported)</td></tr>
+  <tr><td><code>POST</code></td><td><code>/v1/completions</code></td><td>Text completion</td></tr>
+  <tr><td><code>POST</code></td><td><code>/v1/embeddings</code></td><td>Embeddings</td></tr>
+  <tr><td><code>GET</code></td><td><code>/v1/models</code></td><td>List models</td></tr>
+  <tr><td><code>POST</code></td><td><code>/v1/images/generations</code></td><td>Image generation (GPU)</td></tr>
+  <tr><td><code>POST</code></td><td><code>/v1/audio/transcriptions</code></td><td>Speech-to-text</td></tr>
+  <tr><td><code>POST</code></td><td><code>/v1/audio/speech</code></td><td>Text-to-speech</td></tr>
+  <tr><td><code>GET</code></td><td><code>/lorai/hub/status</code></td><td>System info</td></tr>
+  <tr><td><code>GET</code></td><td><code>/lorai/hub/models</code></td><td>Detailed model list</td></tr>
+  <tr><td><code>POST</code></td><td><code>/lorai/hub/pull</code></td><td>Download model</td></tr>
+  <tr><td><code>POST</code></td><td><code>/lorai/hub/bench</code></td><td>Benchmark</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<!-- Streaming Notes -->
+<!-- ============================================================ -->
+
+<h3 id="streaming">Streaming Notes</h3>
+
+<p>LorAI supports Server-Sent Events (SSE) streaming for chat completions, matching the OpenAI streaming format exactly:</p>
+
+<ul>
+  <li>Set <code>"stream": true</code> in the request body</li>
+  <li>Response content type is <code>text/event-stream</code></li>
+  <li>Each chunk is a JSON object prefixed with <code>data: </code></li>
+  <li>The final chunk is <code>data: [DONE]</code></li>
+  <li>Each chunk contains <code>choices[0].delta.content</code> (partial text)</li>
+</ul>
+
+<p>All OpenAI SDK streaming methods work out of the box since the wire format is identical.</p>
+
+</div>
+</div>
+</main>
+
+<footer>
+  LorAI v0.1.0-beta &mdash; MIT License &mdash; <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
+</footer>
+
+</body>
+</html>

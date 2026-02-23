@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog — LorAI</title>
+  <meta name="description" content="LorAI release notes and changelog. Track new features, improvements, and fixes across releases.">
+  <meta name="keywords" content="LorAI changelog, release notes, LorAI beta, version history">
+  <meta name="author" content="LorAI Team">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/changelog.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://gajapathiks.github.io/lorai-workspace/changelog.html">
+  <meta property="og:title" content="Changelog — LorAI">
+  <meta property="og:description" content="LorAI release notes and changelog.">
+  <meta property="og:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="LorAI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Changelog — LorAI">
+  <meta name="twitter:description" content="LorAI release notes and changelog.">
+  <meta name="twitter:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0d1117">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo">Lor<span>AI</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="guide.html">Guide</a>
+      <a href="sdk.html">SDK</a>
+      <a href="api.html">API</a>
+      <a href="integrations.html">Integrations</a>
+      <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<h2>Changelog</h2>
+
+<p>All notable changes to LorAI are documented here. This project follows <a href="https://semver.org">Semantic Versioning</a>.</p>
+
+<!-- ============================================================ -->
+<!-- v0.1.0-beta -->
+<!-- ============================================================ -->
+
+<h3 id="v010-beta">v0.1.0-beta <span class="badge badge-ready">Beta</span></h3>
+<p class="release-date">February 2026 &mdash; Initial Public Beta</p>
+
+<div class="callout callout-info">
+  <strong>This is the first public Beta release of LorAI.</strong> We're looking for early adopters to test the platform,
+  report bugs, and provide feedback. The core API is stable, but some features are still being refined.
+</div>
+
+<h4>Platform</h4>
+<ul>
+  <li><strong>Docker-native AI platform</strong> &mdash; Full self-hosted AI environment running in a single Docker container</li>
+  <li><strong>Port 1842</strong> &mdash; Named after Ada Lovelace's year (the year she wrote the first algorithm)</li>
+  <li><strong>OpenAI-compatible API</strong> &mdash; Drop-in replacement for the OpenAI API. Any OpenAI SDK works unchanged</li>
+  <li><strong>Browser desktop</strong> &mdash; Full desktop environment accessible via noVNC on port 6080</li>
+  <li><strong>Alpine 3.19 base</strong> &mdash; Minimal footprint, fast builds</li>
+</ul>
+
+<h4>AI Capabilities</h4>
+<table>
+  <tr><th>Feature</th><th>Backend</th><th>Status</th></tr>
+  <tr><td>Chat &amp; LLMs</td><td>Ollama (OpenAI-compatible proxy)</td><td><span class="badge badge-ready">Ready</span></td></tr>
+  <tr><td>Model Hub</td><td>Ollama model management</td><td><span class="badge badge-ready">Ready</span></td></tr>
+  <tr><td>Embeddings</td><td>Ollama (nomic-embed-text)</td><td><span class="badge badge-ready">Ready</span></td></tr>
+  <tr><td>Voice &mdash; STT</td><td>Whisper.cpp</td><td><span class="badge badge-ready">Ready</span></td></tr>
+  <tr><td>Voice &mdash; TTS</td><td>Piper TTS (6 voices)</td><td><span class="badge badge-ready">Ready</span></td></tr>
+  <tr><td>Knowledge / RAG</td><td>ChromaDB vector store</td><td><span class="badge badge-ready">Ready</span></td></tr>
+  <tr><td>Agents</td><td>ReAct loop with 5 tools</td><td><span class="badge badge-ready">Ready</span></td></tr>
+  <tr><td>Code Execution</td><td>Sandboxed subprocess</td><td><span class="badge badge-ready">Ready</span></td></tr>
+  <tr><td>Vision &amp; OCR</td><td>LLaVA via Ollama</td><td><span class="badge badge-ready">Ready</span></td></tr>
+  <tr><td>Image Generation</td><td>SDXL Turbo</td><td><span class="badge badge-gpu">GPU</span></td></tr>
+  <tr><td>Video Generation</td><td>CogVideoX</td><td><span class="badge badge-gpu">GPU</span></td></tr>
+  <tr><td>Music Generation</td><td>MusicGen</td><td><span class="badge badge-gpu">GPU</span></td></tr>
+  <tr><td>LoRA Adapters</td><td>GGUF adapter loading</td><td><span class="badge badge-phase2">Experimental</span></td></tr>
+</table>
+
+<h4>Python SDK (<code>lorai</code> v0.1.0)</h4>
+<ul>
+  <li><code>LorAI(OpenAI)</code> &mdash; Drop-in replacement client extending the official OpenAI Python SDK</li>
+  <li><strong>Docker auto-management</strong> &mdash; Auto-pull, start, stop, and health-check the container</li>
+  <li><strong>9 service wrappers</strong> &mdash; image, video, voice, knowledge, agents, code, vision, lora, hub</li>
+  <li><strong>CLI</strong> &mdash; <code>lorai start|stop|chat|status|pull|bench|desktop|logs|version</code></li>
+  <li><strong>GPU support</strong> &mdash; <code>LorAI(gpu=True)</code> or <code>lorai start --gpu</code></li>
+  <li>21 unit tests passing</li>
+</ul>
+
+<h4>Multi-Language Support</h4>
+<ul>
+  <li>Documented integrations for <strong>10 languages</strong>: Python, Node.js/TypeScript, Go, Rust, Java, Kotlin, C#/.NET, Ruby, PHP, and raw HTTP/cURL</li>
+  <li>All use existing OpenAI SDKs &mdash; just point <code>base_url</code> to <code>localhost:1842</code></li>
+  <li>Complete code examples with chat, streaming, and embeddings for each language</li>
+</ul>
+
+<h4>API Gateway (27 endpoints)</h4>
+<ul>
+  <li><strong>8 OpenAI-compatible routes</strong> &mdash; <code>/v1/chat/completions</code>, <code>/v1/completions</code>, <code>/v1/embeddings</code>, <code>/v1/models</code>, <code>/v1/images/*</code>, <code>/v1/audio/*</code></li>
+  <li><strong>19 LorAI-native routes</strong> &mdash; <code>/lorai/hub/*</code>, <code>/lorai/video/*</code>, <code>/lorai/knowledge/*</code>, <code>/lorai/agents/*</code>, <code>/lorai/code/*</code>, <code>/lorai/vision/*</code>, <code>/lorai/lora/*</code>, <code>/lorai/audio/music</code></li>
+  <li><strong>SSE streaming</strong> for chat completions</li>
+  <li><strong>CORS enabled</strong> for all origins</li>
+  <li><strong>Health check</strong> at <code>/api/health</code></li>
+</ul>
+
+<h4>Documentation</h4>
+<ul>
+  <li>GitHub Pages documentation site with 6 pages</li>
+  <li>Home, Guide, SDK Reference, API Reference, Integrations, Changelog</li>
+  <li>Dark theme, responsive design, SEO meta tags, Open Graph social sharing</li>
+</ul>
+
+<h4>Known Limitations (Beta)</h4>
+<ul>
+  <li>GPU features (image/video/music gen) require NVIDIA GPU with CUDA + nvidia-container-toolkit</li>
+  <li>First startup pulls ~2 GB Docker image + ~2.3 GB default model — allow several minutes</li>
+  <li>LoRA adapter loading is experimental and may not work with all model/adapter combinations</li>
+  <li>No authentication — designed for local development use only, not production/internet-facing deployment</li>
+  <li>Windows support requires WSL2 with Docker Desktop</li>
+</ul>
+
+<!-- ============================================================ -->
+<!-- Roadmap -->
+<!-- ============================================================ -->
+
+<h3 id="roadmap">Roadmap</h3>
+
+<table>
+  <tr><th>Version</th><th>Target</th><th>Highlights</th></tr>
+  <tr>
+    <td><code>v0.2.0</code></td>
+    <td>Q2 2026</td>
+    <td>Plugin system, <code>lorai install &lt;plugin&gt;</code>, ComfyUI integration, model quantization</td>
+  </tr>
+  <tr>
+    <td><code>v0.3.0</code></td>
+    <td>Q3 2026</td>
+    <td>Multi-GPU support, distributed inference, ARM/Apple Silicon builds</td>
+  </tr>
+  <tr>
+    <td><code>v1.0.0</code></td>
+    <td>Q4 2026</td>
+    <td>Production-ready release, authentication, rate limiting, cluster mode</td>
+  </tr>
+</table>
+
+</main>
+
+<footer>
+  LorAI v0.1.0-beta &mdash; MIT License &mdash; <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
+</footer>
+
+</body>
+</html>
