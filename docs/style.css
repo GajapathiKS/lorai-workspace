@@ -408,6 +408,79 @@ footer {
   margin-top: 64px;
 }
 
+/* Callout boxes */
+.callout {
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.callout-info {
+  background: #1a2a3a;
+  border: 1px solid #1a4a6a;
+  color: var(--text);
+}
+
+.callout a {
+  color: var(--accent-hover);
+}
+
+/* Language badges */
+.lang-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  font-family: var(--font-sans);
+}
+
+.lang-python { background: #2a3a1a; color: #a3d977; }
+.lang-js { background: #3a3a1a; color: #f0db4f; }
+.lang-go { background: #1a3a3a; color: #00add8; }
+.lang-rust { background: #3a2a1a; color: #dea584; }
+.lang-java { background: #3a1a1a; color: #f89820; }
+.lang-csharp { background: #2a1a3a; color: #b77aff; }
+.lang-ruby { background: #3a1a1a; color: #e74c3c; }
+.lang-php { background: #2a2a3a; color: #8892be; }
+.lang-http { background: #1a3a2a; color: var(--green); }
+
+/* Language grid (home page) */
+.lang-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.lang-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.lang-card h4 {
+  margin: 0 0 8px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.lang-card pre {
+  margin: 0;
+  font-size: 12px;
+}
+
+/* Release date */
+.release-date {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .docs-layout {
@@ -424,5 +497,7 @@ footer {
   .hero h1 { font-size: 28px; }
   .hero .install-box { font-size: 14px; padding: 12px 20px; }
   nav .nav-inner { gap: 16px; }
-  nav .nav-links { gap: 12px; }
+  nav .nav-links { gap: 12px; font-size: 13px; }
+  nav .nav-links a { font-size: 13px; }
+  .lang-grid { grid-template-columns: 1fr; }
 }
