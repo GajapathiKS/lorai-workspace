@@ -20,6 +20,7 @@ RUN apk add --no-cache \
     ffmpeg \
     nodejs \
     make \
+    cmake \
     g++ \
     zstd \
     && rm -rf /var/cache/apk/*
