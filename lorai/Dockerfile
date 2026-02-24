@@ -35,18 +35,21 @@ RUN apk add --no-cache novnc py3-websockify \
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Whisper.cpp — Speech to Text
-RUN git clone https://github.com/ggerganov/whisper.cpp /opt/whisper.cpp && \
-    cd /opt/whisper.cpp && make -j$(nproc) && \
-    bash models/download-ggml-model.sh base.en
+# Whisper.cpp — Speech to Text (soft dependency — build can fail on minimal Alpine)
+RUN git clone https://github.com/ggerganov/whisper.cpp /opt/whisper.cpp \
+    && cd /opt/whisper.cpp \
+    && cmake -B build && cmake --build build -j$(nproc) \
+    && bash models/download-ggml-model.sh base.en \
+    || echo "Whisper.cpp skipped (install later with: lorai install whisper)"
 
-# Piper TTS — Text to Speech
-RUN pip3 install --break-system-packages piper-tts && \
-    mkdir -p /data/voices && cd /data/voices && \
-    curl -L -o en_US-amy-medium.onnx \
-      "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx" && \
-    curl -L -o en_US-amy-medium.onnx.json \
-      "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx.json"
+# Piper TTS — Text to Speech (soft dependency — Alpine onnxruntime can be tricky)
+RUN pip3 install --break-system-packages onnxruntime piper-tts \
+    && mkdir -p /data/voices && cd /data/voices \
+    && curl -L -o en_US-amy-medium.onnx \
+      "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx" \
+    && curl -L -o en_US-amy-medium.onnx.json \
+      "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx.json" \
+    || echo "Piper TTS skipped (install later with: pip install piper-tts)"
 
 # Python dependencies (core)
 COPY requirements.txt /tmp/requirements.txt
