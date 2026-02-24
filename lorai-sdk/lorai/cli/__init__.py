@@ -128,7 +128,7 @@ def _cmd_start(port: int = 1842, gpu: bool = False) -> None:
     from lorai.docker import ensure_running
     ensure_running(port=port, gpu=gpu)
     print(f"\nLorAI is running at http://localhost:{port}")
-    print(f"Desktop available at http://localhost:6080")
+    print("Desktop available at http://localhost:6080")
 
 
 def _cmd_stop() -> None:
@@ -224,4 +224,4 @@ def _cmd_version() -> None:
     print(f"  Version: {__version__}")
     print(f"  Port:    {PORT}")
     print(f"  URL:     http://localhost:{PORT}")
-    print(f"  Desktop: http://localhost:6080")
+    print("  Desktop: http://localhost:6080")

@@ -56,6 +56,10 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --break-system-packages --no-cache-dir -r /tmp/requirements.txt \
     && rm /tmp/requirements.txt
 
+# Vector DB (Phase 2 — semantic file system; soft dependency on Alpine/musl)
+RUN pip3 install --break-system-packages --no-cache-dir chromadb \
+    || echo "ChromaDB skipped (will install on first RAG use)"
+
 # Image generation dependencies (loaded lazily on first GPU request)
 # Installed separately so CPU-only builds can skip/ignore failures
 RUN pip3 install --break-system-packages --no-cache-dir \
