@@ -121,7 +121,7 @@ def status(port: int = 1842) -> dict:
         "api_healthy": is_lorai_healthy(port),
         "port": port,
         "url": f"http://localhost:{port}",
-        "desktop_url": f"http://localhost:6080",
+        "desktop_url": "http://localhost:6080",
     }
 
 

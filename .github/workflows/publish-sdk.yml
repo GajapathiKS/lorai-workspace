@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - "v*"
-    branches:
-      - "claude/check-main-deployment-*"
   workflow_dispatch:
 
 permissions:

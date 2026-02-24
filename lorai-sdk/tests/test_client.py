@@ -1,9 +1,6 @@
 """Tests for the LorAI SDK."""
 
-import importlib
-from unittest.mock import patch, MagicMock
-
-import pytest
+from unittest.mock import patch
 
 
 # ------------------------------------------------------------------
@@ -35,14 +32,14 @@ def test_lorai_inherits_from_openai(mock_ensure):
 @patch("lorai.client.ensure_running")
 def test_auto_start_calls_ensure_running(mock_ensure):
     from lorai import LorAI
-    ai = LorAI(auto_start=True)
+    LorAI(auto_start=True)
     mock_ensure.assert_called_once_with(port=1842, gpu=False)
 
 
 @patch("lorai.client.ensure_running")
 def test_auto_start_false_skips_ensure_running(mock_ensure):
     from lorai import LorAI
-    ai = LorAI(auto_start=False)
+    LorAI(auto_start=False)
     mock_ensure.assert_not_called()
 
 
@@ -57,7 +54,7 @@ def test_custom_port_passes_through(mock_ensure):
 @patch("lorai.client.ensure_running")
 def test_gpu_flag_passes_through(mock_ensure):
     from lorai import LorAI
-    ai = LorAI(auto_start=True, gpu=True)
+    LorAI(auto_start=True, gpu=True)
     mock_ensure.assert_called_once_with(port=1842, gpu=True)
 
 
