@@ -69,6 +69,6 @@ jobs:
         working-directory: lorai
         run: |
           docker build \
-            --tag getlorai/desktop:ci-test \
+            --tag lorai-desktop:ci-test \
             --file Dockerfile \
             .

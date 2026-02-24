@@ -34,7 +34,9 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
           MINOR=$(echo "$VERSION" | cut -d. -f1-2)
-          echo "TAGS=getlorai/desktop:${VERSION},getlorai/desktop:${MINOR},getlorai/desktop:${MAJOR},getlorai/desktop:latest" >> $GITHUB_OUTPUT
+          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/lorai-desktop"
+          echo "TAGS=${IMAGE}:${VERSION},${IMAGE}:${MINOR},${IMAGE}:${MAJOR},${IMAGE}:latest" >> $GITHUB_OUTPUT
+          echo "IMAGE=${IMAGE}" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -59,5 +61,5 @@ jobs:
             org.opencontainers.image.title=LorAI Desktop
             org.opencontainers.image.description=AI-first operating environment — All of AI. One Command. Port 1842.
             org.opencontainers.image.version=${{ steps.meta.outputs.VERSION }}
-            org.opencontainers.image.source=https://github.com/getlorai/lorai
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.licenses=MIT
