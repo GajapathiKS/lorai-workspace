@@ -1,16 +1,17 @@
 """Docker container management for LorAI.
 
 Handles pulling, starting, stopping, and health-checking the
-getlorai/desktop Docker container.
+LorAI Desktop Docker container.
 """
 
+import os
 import shutil
 import subprocess
 import time
 
 import httpx
 
-IMAGE = "getlorai/desktop:latest"
+IMAGE = os.environ.get("LORAI_IMAGE", "gajapathiks/lorai-desktop:latest")
 CONTAINER_NAME = "lorai"
 HEALTH_TIMEOUT = 120  # seconds to wait for healthy state
 
@@ -21,7 +22,7 @@ def is_docker_installed() -> bool:
 
 
 def is_image_pulled() -> bool:
-    """Check if the getlorai/desktop image exists locally."""
+    """Check if the LorAI Desktop image exists locally."""
     result = subprocess.run(
         ["docker", "images", "-q", IMAGE],
         capture_output=True, text=True,
@@ -48,7 +49,7 @@ def is_lorai_healthy(port: int = 1842) -> bool:
 
 
 def pull_image() -> None:
-    """Pull the getlorai/desktop Docker image."""
+    """Pull the LorAI Desktop Docker image."""
     print("Pulling LorAI Docker image (this may take a while)...")
     subprocess.run(["docker", "pull", IMAGE], check=True)
 
