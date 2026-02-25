@@ -79,43 +79,56 @@
 
 <h2>Getting Started</h2>
 
+<p>
+  LorAI is a local AI platform that runs as a Docker container on your machine.
+  It gives you an OpenAI-compatible API on <code>localhost:1842</code> for chat, image generation,
+  voice, document search (RAG), agents, and more — all free, private, and offline.
+  The Python SDK handles the Docker container for you, so you never need to touch Docker directly.
+</p>
+
 <!-- Prerequisites -->
 <h3 id="prerequisites">Prerequisites</h3>
 <ul>
   <li><strong>Python 3.9+</strong></li>
-  <li><strong>Docker</strong> installed and running (<a href="https://docs.docker.com/get-docker/">install Docker</a>)</li>
-  <li><strong>GPU (optional)</strong> &mdash; for image/video/music generation. NVIDIA GPU with CUDA drivers and <a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html">nvidia-container-toolkit</a></li>
+  <li><strong>Docker</strong> installed and running &mdash; <a href="https://docs.docker.com/get-docker/">install Docker</a> if you haven't already</li>
+  <li><strong>~5 GB free disk space</strong> &mdash; for the Docker image (~2 GB) and default model (~2.3 GB)</li>
+  <li><strong>GPU (optional)</strong> &mdash; only needed for image/video/music generation. LLMs work fine on CPU.</li>
 </ul>
 
 <!-- Installation -->
 <h3 id="install">Installation</h3>
 <pre><code>pip install lorai-workspace</code></pre>
-<p>That's it. The SDK will automatically pull the Docker image and start the container on first use.</p>
+<p>That's the only install step. The Docker image pulls automatically the first time you use LorAI.</p>
 
 <!-- Quickstart -->
 <h3 id="quickstart">Quickstart</h3>
-<p>The simplest way to use LorAI &mdash; three lines of Python:</p>
 <pre><code><span class="kw">from</span> lorai <span class="kw">import</span> LorAI
 
-ai = LorAI()                          <span class="cmt"># pulls Docker image, starts container</span>
-<span class="fn">print</span>(ai.chat(<span class="str">"Hello!"</span>))              <span class="cmt"># chat with local LLM</span></code></pre>
+ai = LorAI()
+<span class="fn">print</span>(ai.chat(<span class="str">"What is 12 multiplied by 8?"</span>))</code></pre>
 
-<p>On first run, LorAI will:</p>
-<ol>
-  <li>Check if Docker is installed</li>
-  <li>Pull the <code>getlorai/desktop</code> image (~2 GB)</li>
-  <li>Start a container named <code>lorai</code></li>
-  <li>Wait for the health check at <code>http://localhost:1842/api/health</code></li>
-  <li>Pull the default model (<code>phi3:mini</code>, ~2.3 GB)</li>
-</ol>
+<p>On <strong>first run</strong>, you'll see LorAI bootstrap itself in the terminal:</p>
+<pre><code>  ██╗      ██████╗  ██████╗  █████╗ ██╗
+  ...
+  Pulling image gajapathiks/lorai-desktop:latest ... done
+  Starting container lorai on port 1842 ...
+  Waiting for Ollama ... ready
+  Pulling phi3:mini (2.3 GB) ... done
+  LorAI is ready at http://localhost:1842
 
-<p>Subsequent runs skip these steps if the container is already running.</p>
+96</code></pre>
 
-<p>To skip auto-start (e.g., if the container is already running):</p>
-<pre><code>ai = LorAI(auto_start=<span class="kw">False</span>)</code></pre>
+<p><strong>On subsequent runs</strong>, the container is already up so it skips straight to your code.</p>
 
-<p>To stop the container when done:</p>
-<pre><code>ai.stop()</code></pre>
+<p>Common options:</p>
+<pre><code><span class="cmt"># Container already running (e.g. started with 'lorai start')</span>
+ai = LorAI(auto_start=<span class="kw">False</span>)
+
+<span class="cmt"># Use a specific model instead of the default phi3:mini</span>
+response = ai.chat(<span class="str">"Hello"</span>, model=<span class="str">"llama3"</span>)
+
+<span class="cmt"># Stop the container when you're done</span>
+ai.stop()</code></pre>
 
 <!-- CLI -->
 <h3 id="cli">CLI Usage</h3>
@@ -142,149 +155,206 @@ lorai version                    <span class="cmt"># show version info</span></c
 
 <!-- Chat with LLMs -->
 <h3 id="chat">Chat with LLMs</h3>
+<p>Use this for any text task: Q&amp;A, summarisation, code generation, translation, classification, and more. The default model is <strong>phi3:mini</strong>, which runs on CPU and handles most tasks well.</p>
 
 <h4>Simple chat</h4>
 <pre><code>ai = LorAI(auto_start=<span class="kw">False</span>)
 
-<span class="cmt"># One-shot convenience method</span>
 answer = ai.chat(<span class="str">"What is the capital of France?"</span>)
-<span class="fn">print</span>(answer)  <span class="cmt"># "The capital of France is Paris."</span></code></pre>
+<span class="fn">print</span>(answer)
+<span class="cmt"># → "The capital of France is Paris."</span>
 
-<h4>With system prompt</h4>
+<span class="cmt"># Ask it to summarise or rewrite text</span>
+summary = ai.chat(<span class="str">"Summarise this in one sentence: "</span> + long_text)
+
+<span class="cmt"># Translate</span>
+translated = ai.chat(<span class="str">"Translate to Spanish: Good morning, how are you?"</span>)
+<span class="cmt"># → "Buenos días, ¿cómo estás?"</span></code></pre>
+
+<h4>With a system prompt</h4>
+<p>A system prompt shapes the model's behaviour for the whole conversation. Use it to set a persona, enforce a format, or add context.</p>
 <pre><code>answer = ai.chat(
     <span class="str">"Explain recursion"</span>,
-    system=<span class="str">"You are a CS professor. Use simple analogies."</span>,
-    temperature=<span class="num">0.5</span>,
+    system=<span class="str">"You are a CS professor teaching first-year students. Use simple analogies."</span>,
+    temperature=<span class="num">0.5</span>,   <span class="cmt"># lower = more factual, higher = more creative</span>
 )</code></pre>
 
 <h4>JSON mode</h4>
+<p>Useful when you need structured output to feed into other code.</p>
 <pre><code>data = ai.chat(
-    <span class="str">"List 3 planets as JSON with name and diameter_km"</span>,
+    <span class="str">"List 3 planets as JSON. Fields: name, diameter_km, has_rings."</span>,
     json_mode=<span class="kw">True</span>,
-)</code></pre>
+)
+<span class="cmt"># → '{"planets": [{"name": "Earth", "diameter_km": 12742, "has_rings": false}, ...]}'</span>
+<span class="kw">import</span> json
+planets = json.loads(data)</code></pre>
 
 <h4>Streaming</h4>
-<pre><code>text = ai.chat(<span class="str">"Write a poem about AI"</span>, stream=<span class="kw">True</span>)</code></pre>
+<p>Stream tokens as they are generated — useful for long responses or interactive UIs.</p>
+<pre><code>ai.chat(<span class="str">"Write a short story about a robot"</span>, stream=<span class="kw">True</span>)
+<span class="cmt"># tokens print to stdout as they arrive</span></code></pre>
 
-<h4>Full OpenAI-compatible usage</h4>
-<pre><code><span class="cmt"># Since LorAI extends OpenAI, all standard methods work:</span>
+<h4>Drop-in for OpenAI SDK</h4>
+<p>Because <code>LorAI</code> extends the OpenAI client, any code written for OpenAI works without changes.</p>
+<pre><code><span class="cmt"># Existing OpenAI code — just replace OpenAI() with LorAI()</span>
 response = ai.chat.completions.create(
-    model=<span class="str">"phi3:mini"</span>,
+    model=<span class="str">"phi3:mini"</span>,   <span class="cmt"># any model you've pulled with 'lorai pull &lt;name&gt;'</span>
     messages=[
-        {<span class="str">"role"</span>: <span class="str">"system"</span>, <span class="str">"content"</span>: <span class="str">"You are helpful."</span>},
-        {<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Hello!"</span>},
+        {<span class="str">"role"</span>: <span class="str">"system"</span>, <span class="str">"content"</span>: <span class="str">"You are a helpful assistant."</span>},
+        {<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"What's a good name for a Python package?"</span>},
     ],
     temperature=<span class="num">0.7</span>,
-    max_tokens=<span class="num">500</span>,
+    max_tokens=<span class="num">200</span>,
 )
 <span class="fn">print</span>(response.choices[<span class="num">0</span>].message.content)</code></pre>
 
 <!-- Managing Models -->
 <h3 id="models">Managing Models</h3>
-<pre><code><span class="cmt"># List downloaded models</span>
-models = ai.hub.models()
+<p>LorAI uses <a href="https://ollama.com">Ollama</a> under the hood to manage LLMs. You can pull any model from the Ollama library. Larger models produce better output but require more RAM and run slower.</p>
 
-<span class="cmt"># Pull a new model</span>
+<table>
+  <tr><th>Model</th><th>Size</th><th>Best for</th></tr>
+  <tr><td><code>phi3:mini</code> (default)</td><td>2.3 GB</td><td>Fast, general use, works on CPU</td></tr>
+  <tr><td><code>llama3</code></td><td>4.7 GB</td><td>Higher quality answers, needs 8 GB RAM</td></tr>
+  <tr><td><code>llama3.2</code></td><td>2.0 GB</td><td>Good balance of speed and quality</td></tr>
+  <tr><td><code>codellama</code></td><td>3.8 GB</td><td>Code generation and review</td></tr>
+  <tr><td><code>mistral</code></td><td>4.1 GB</td><td>Strong reasoning and instruction following</td></tr>
+</table>
+
+<pre><code><span class="cmt"># Download a model (saved to ~/.lorai/data/models/)</span>
 ai.hub.pull(<span class="str">"llama3"</span>)
 
-<span class="cmt"># Remove a model</span>
+<span class="cmt"># See what's downloaded</span>
+models = ai.hub.models()
+
+<span class="cmt"># Use a specific model for a chat</span>
+answer = ai.chat(<span class="str">"Explain black holes"</span>, model=<span class="str">"llama3"</span>)
+
+<span class="cmt"># Free up disk space</span>
 ai.hub.remove(<span class="str">"phi3:mini"</span>)
 
-<span class="cmt"># System status (CPU, RAM, GPU, loaded models)</span>
+<span class="cmt"># Check CPU, RAM, GPU and which models are loaded</span>
 status = ai.hub.status()
 
-<span class="cmt"># Benchmark</span>
+<span class="cmt"># Measure how fast your hardware runs inference (tokens/sec)</span>
 result = ai.hub.bench()</code></pre>
+
+<p>You can also manage models from the CLI:</p>
+<pre><code>lorai pull llama3        <span class="cmt"># download</span>
+lorai status             <span class="cmt"># see loaded models + system resources</span>
+lorai bench              <span class="cmt"># benchmark</span></code></pre>
 
 <!-- Image Generation -->
 <h3 id="images">Image Generation</h3>
-<p>Requires GPU with 8GB+ VRAM. Uses SDXL Turbo.</p>
-<pre><code><span class="cmt"># Generate an image</span>
-response = ai.image.generate(
-    <span class="str">"A sunset over mountains, digital art"</span>,
+<p>Generate images from a text description, or modify an existing image. Uses SDXL Turbo. <strong>Requires an NVIDIA GPU with 8 GB+ VRAM</strong> — this won't work on CPU.</p>
+<pre><code><span class="cmt"># Start LorAI with GPU passthrough enabled</span>
+ai = LorAI(gpu=<span class="kw">True</span>)
+
+<span class="cmt"># Generate an image and save it to disk</span>
+ai.image.generate(
+    <span class="str">"A cozy coffee shop in the rain, impressionist painting style"</span>,
     size=<span class="str">"1024x1024"</span>,
-    save_to=<span class="str">"sunset.png"</span>,
+    save_to=<span class="str">"coffee_shop.png"</span>,
 )
 
-<span class="cmt"># Edit an existing image</span>
-response = ai.image.edit(<span class="str">"photo.jpg"</span>, <span class="str">"Make it look like a watercolor painting"</span>)</code></pre>
+<span class="cmt"># Edit an existing photo</span>
+ai.image.edit(<span class="str">"portrait.jpg"</span>, <span class="str">"Add a futuristic cyberpunk background"</span>)</code></pre>
 
 <!-- Voice -->
 <h3 id="voice">Voice (STT + TTS)</h3>
-<pre><code><span class="cmt"># Speech-to-text (Whisper)</span>
-text = ai.voice.transcribe(<span class="str">"recording.mp3"</span>)
+<p>Convert audio to text (speech-to-text) using Whisper, or generate spoken audio from text (text-to-speech) using Piper. Both run entirely locally.</p>
+<pre><code><span class="cmt"># Transcribe a recording to text (supports mp3, wav, m4a, ogg)</span>
+text = ai.voice.transcribe(<span class="str">"meeting_notes.mp3"</span>)
 <span class="fn">print</span>(text)
+<span class="cmt"># → "Good morning everyone, let's get started with the weekly sync..."</span>
 
-<span class="cmt"># Text-to-speech (Piper)</span>
+<span class="cmt"># Convert text to spoken audio and save as .wav</span>
 ai.voice.speak(
-    <span class="str">"Welcome to LorAI!"</span>,
-    voice=<span class="str">"nova"</span>,        <span class="cmt"># nova, alloy, echo, fable, onyx, shimmer</span>
-    save_to=<span class="str">"welcome.wav"</span>,
+    <span class="str">"Your report has been generated and is ready for download."</span>,
+    voice=<span class="str">"nova"</span>,           <span class="cmt"># options: nova, alloy, echo, fable, onyx, shimmer</span>
+    save_to=<span class="str">"notification.wav"</span>,
 )</code></pre>
 
 <!-- RAG / Knowledge -->
 <h3 id="rag">RAG / Knowledge Base</h3>
-<pre><code><span class="cmt"># Ingest documents</span>
-ai.knowledge.ingest(<span class="str">"/path/to/docs/"</span>, collection=<span class="str">"my-project"</span>)
+<p>RAG (Retrieval-Augmented Generation) lets you point the LLM at your own documents so it can answer questions about them. Useful for internal documentation, codebases, PDFs, and research notes. Documents are stored in ChromaDB and persist across restarts.</p>
+<pre><code><span class="cmt"># Step 1: Ingest your documents (do this once, or re-run when docs change)</span>
+ai.knowledge.ingest(<span class="str">"/path/to/your/docs/"</span>, collection=<span class="str">"my-project"</span>)
+<span class="cmt"># Recursively reads .txt, .md, .pdf files and indexes them</span>
 
-<span class="cmt"># Semantic search</span>
-results = ai.knowledge.search(<span class="str">"How does authentication work?"</span>, top_k=<span class="num">5</span>)
+<span class="cmt"># Step 2: Ask questions — the model grounds its answer in your docs</span>
+answer = ai.knowledge.ask(<span class="str">"What is the process for requesting time off?"</span>)
+<span class="fn">print</span>(answer)
+<span class="cmt"># → "According to the employee handbook, time off requests should be..."</span>
 
-<span class="cmt"># RAG question answering</span>
-answer = ai.knowledge.ask(<span class="str">"What is the return policy?"</span>)</code></pre>
+<span class="cmt"># Or do a raw semantic search to find the relevant passages yourself</span>
+results = ai.knowledge.search(<span class="str">"authentication and authorisation"</span>, top_k=<span class="num">5</span>)
+<span class="kw">for</span> r <span class="kw">in</span> results:
+    <span class="fn">print</span>(r[<span class="str">"text"</span>], r[<span class="str">"source"</span>])</code></pre>
 
 <!-- Agents -->
 <h3 id="agents">Agents</h3>
-<pre><code><span class="cmt"># Run an agent task</span>
+<p>Agents can plan and execute multi-step tasks using tools like file read/write, web search, code execution, and knowledge lookup. Give them a goal in plain English and they figure out the steps.</p>
+<pre><code><span class="cmt"># Ask the agent to complete a task autonomously</span>
 result = ai.agents.run(
-    <span class="str">"Find all Python files in the project and count total lines"</span>,
-    max_steps=<span class="num">10</span>,
+    <span class="str">"Read all .py files in ./src/, find the three largest functions, and write a summary to summary.md"</span>,
+    max_steps=<span class="num">15</span>,
 )
+<span class="fn">print</span>(result[<span class="str">"output"</span>])
 
-<span class="cmt"># List available agents</span>
-agents = ai.agents.list_agents()
-
-<span class="cmt"># List available tools</span>
-tools = ai.agents.list_tools()</code></pre>
+<span class="cmt"># See which agents and tools are available</span>
+<span class="fn">print</span>(ai.agents.list_agents())
+<span class="fn">print</span>(ai.agents.list_tools())</code></pre>
 
 <!-- Code Execution -->
-<h3 id="code">Code Execution</h3>
-<pre><code><span class="cmt"># Execute Python code</span>
+<h3 id="code">Code Generation &amp; Review</h3>
+<p>Ask the model to write code and optionally run it inside the container's sandboxed environment. Results come back as text.</p>
+<pre><code><span class="cmt"># Generate code and run it immediately</span>
 result = ai.code.generate(
-    <span class="str">"print('Hello from LorAI!')"</span>,
+    <span class="str">"Write a Python function that checks if a string is a palindrome, then test it"</span>,
     language=<span class="str">"python"</span>,
     execute=<span class="kw">True</span>,
 )
+<span class="fn">print</span>(result[<span class="str">"code"</span>])    <span class="cmt"># the generated code</span>
+<span class="fn">print</span>(result[<span class="str">"output"</span>])  <span class="cmt"># stdout from running it</span>
 
-<span class="cmt"># Code review</span>
+<span class="cmt"># Have the model review existing code and suggest improvements</span>
 feedback = ai.code.review(<span class="str">"""
-def fib(n):
-    if n <= 1: return n
-    return fib(n-1) + fib(n-2)
-"""</span>)</code></pre>
+def get_user(id):
+    conn = connect(DB_URL)
+    return conn.execute(f"SELECT * FROM users WHERE id = {id}").fetchone()
+"""</span>)
+<span class="cmt"># → "This function has a SQL injection vulnerability. Use parameterised queries..."</span></code></pre>
 
 <!-- Vision -->
 <h3 id="vision">Vision &amp; OCR</h3>
-<pre><code><span class="cmt"># Analyze an image</span>
-description = ai.vision.analyze(<span class="str">"photo.jpg"</span>, <span class="str">"What's in this image?"</span>)
+<p>Analyse images using LLaVA, a multimodal model that understands images and text together. Extract text from screenshots with OCR.</p>
+<pre><code><span class="cmt"># Describe or answer questions about an image</span>
+description = ai.vision.analyze(<span class="str">"chart.png"</span>, <span class="str">"What trend does this graph show?"</span>)
+<span class="fn">print</span>(description)
+<span class="cmt"># → "The graph shows a steady upward trend in monthly revenue from Jan to June..."</span>
 
-<span class="cmt"># OCR</span>
-text = ai.vision.ocr(<span class="str">"screenshot.png"</span>)</code></pre>
+<span class="cmt"># Extract text from a screenshot or photo of a document</span>
+text = ai.vision.ocr(<span class="str">"receipt.jpg"</span>)
+<span class="fn">print</span>(text)
+<span class="cmt"># → "Café Nero\nDate: 14 Feb 2026\nFlat White x1 ... £3.50\nTotal: £3.50"</span></code></pre>
 
 <!-- LoRA -->
 <h3 id="lora">LoRA Adapters</h3>
-<p>Place <code>.gguf</code> LoRA files in <code>~/.lorai/data/loras/</code> (mapped to <code>/data/loras/</code> inside the container).</p>
-<pre><code><span class="cmt"># List available adapters</span>
+<p>LoRA adapters fine-tune a base model's style or domain knowledge without retraining it from scratch. Load a <code>.gguf</code> adapter file and use it alongside any Ollama base model. This feature is experimental.</p>
+<pre><code><span class="cmt"># Put your .gguf adapter in ~/.lorai/data/loras/ first</span>
+
+<span class="cmt"># See what adapters are available</span>
 loras = ai.lora.list()
 
-<span class="cmt"># Load an adapter onto a base model</span>
-ai.lora.load(<span class="str">"my-adapter"</span>, base_model=<span class="str">"llama3.2"</span>)
+<span class="cmt"># Load an adapter on top of a base model</span>
+ai.lora.load(<span class="str">"my-finetune"</span>, base_model=<span class="str">"llama3.2"</span>)
 
-<span class="cmt"># Chat with the LoRA model</span>
-answer = ai.chat(<span class="str">"Hello!"</span>, lora=<span class="str">"my-adapter"</span>)
+<span class="cmt"># Chat using the fine-tuned model</span>
+answer = ai.chat(<span class="str">"Write a product description for noise-cancelling headphones"</span>, lora=<span class="str">"my-finetune"</span>)
 
-<span class="cmt"># Unload when done</span>
-ai.lora.unload(<span class="str">"llama3.2-my-adapter"</span>)</code></pre>
+<span class="cmt"># Unload when done to free memory</span>
+ai.lora.unload(<span class="str">"llama3.2-my-finetune"</span>)</code></pre>
 
 <!-- GPU Setup -->
 <h3 id="gpu">GPU Setup</h3>

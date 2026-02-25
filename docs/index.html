@@ -79,26 +79,53 @@
 <!-- What is LorAI -->
 <h2>What is LorAI?</h2>
 <p>
-  <strong>LorAI</strong> ("Lore" + "AI" + "LoRA") is a self-hosted AI platform that runs inside a Docker container on your machine.
-  One <code>pip install lorai-workspace</code> gives you an OpenAI-compatible API with 50+ tools &mdash; LLMs, image generation, video,
-  voice, code execution, agents, RAG, and vision &mdash; all on <code>localhost:1842</code>.
+  LorAI is a <strong>local AI platform</strong> that runs entirely on your machine &mdash; no cloud, no API keys, no usage bills.
+  One <code>pip install lorai-workspace</code> spins up a Docker container with LLMs, image generation, voice, RAG, agents, and more,
+  all available on <code>localhost:1842</code> behind a fully OpenAI-compatible API.
 </p>
 <p>
-  It extends the official <a href="https://github.com/openai/openai-python">OpenAI Python SDK</a>, so any existing OpenAI code works
-  unchanged &mdash; just swap <code>OpenAI()</code> for <code>LorAI()</code>.
+  Think of it as a self-hosted replacement for the OpenAI API. Your data never leaves your machine, there are no rate limits,
+  and it costs nothing to run. If you already use the OpenAI SDK, just swap <code>OpenAI()</code> for <code>LorAI()</code> &mdash; everything else stays the same.
 </p>
 
 <pre><code><span class="kw">from</span> lorai <span class="kw">import</span> LorAI
 
-ai = LorAI()                          <span class="cmt"># auto-pulls Docker image, starts container</span>
-<span class="fn">print</span>(ai.chat(<span class="str">"Hello!"</span>))              <span class="cmt"># local LLM response</span>
+<span class="cmt"># First run: pulls Docker image and starts the container automatically</span>
+ai = LorAI()
 
-<span class="cmt"># Works exactly like OpenAI:</span>
+<span class="cmt"># Chat with a local LLM — no API key, no internet required</span>
+<span class="fn">print</span>(ai.chat(<span class="str">"What is the capital of France?"</span>))
+<span class="cmt"># → "The capital of France is Paris."</span>
+
+<span class="cmt"># Or use the full OpenAI-compatible interface — same syntax, local model</span>
 response = ai.chat.completions.create(
     model=<span class="str">"phi3:mini"</span>,
-    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Explain quantum computing"</span>}]
+    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Explain quantum computing in one sentence"</span>}]
 )
+<span class="fn">print</span>(response.choices[<span class="num">0</span>].message.content)
+<span class="cmt"># → "Quantum computing uses quantum bits to solve certain problems exponentially faster than classical computers."</span>
 </code></pre>
+
+<!-- Why LorAI -->
+<h2>Why LorAI?</h2>
+<div class="features">
+  <div class="feature-card">
+    <h4>Free to run</h4>
+    <p>No per-token billing. Run thousands of requests a day on your own hardware at zero cost. The default model (phi3:mini) runs comfortably on CPU with 8 GB RAM.</p>
+  </div>
+  <div class="feature-card">
+    <h4>Private by default</h4>
+    <p>Your prompts, documents, and outputs never leave your machine. Drop in sensitive source code, internal docs, or personal data without worry.</p>
+  </div>
+  <div class="feature-card">
+    <h4>Drop-in for OpenAI</h4>
+    <p>Already using the OpenAI Python SDK, LangChain, or any OpenAI-compatible library? Point it at <code>http://localhost:1842/v1</code> and your code works unchanged.</p>
+  </div>
+  <div class="feature-card">
+    <h4>One command setup</h4>
+    <p>No YAML files, no docker-compose, no manual configuration. <code>pip install lorai-workspace</code> + two lines of Python and you're running.</p>
+  </div>
+</div>
 
 <!-- Works with Any Language -->
 <h2>Works with Any Language</h2>
@@ -223,41 +250,24 @@ lorai bench                      <span class="cmt"># Benchmark your hardware</sp
 lorai logs                       <span class="cmt"># Show container logs</span>
 lorai version                    <span class="cmt"># Show version info</span></code></pre>
 
-<!-- Architecture -->
-<h2>Architecture</h2>
-<pre><code>+-----------------------------------------------------------+
-| Your code (Python, Node.js, Go, Rust, Java, C#, Ruby...) |
-|   from lorai import LorAI    // or any OpenAI SDK         |
-|   ai = LorAI()               // or new OpenAI({baseURL})  |
-+---------------------------+-------------------------------+
-                            |
-                            | HTTP (OpenAI-compatible + LorAI-native)
-                            v
-+-----------------------------------------------------------+
-| Docker: getlorai/desktop                                  |
-| +-------------------------------------------------------+ |
-| | FastAPI Gateway (port 1842)                           | |
-| |   /v1/*    -> Ollama proxy (OpenAI-compatible)        | |
-| |   /lorai/* -> Native services (RAG, agents, etc.)     | |
-| +------------------------+------------------------------+ |
-|                          v                                |
-| +----------+ +----------+ +----------+ +--------------+   |
-| |  Ollama  | | ChromaDB | | Whisper  | |    noVNC     |   |
-| | :11434   | | (vector) | | + Piper  | |    :6080     |   |
-| +----------+ +----------+ +----------+ +--------------+   |
-+-----------------------------------------------------------+</code></pre>
+<!-- How it works -->
+<h2>How it works</h2>
+<p>LorAI is a Docker container that runs on your machine. The Python SDK manages the container lifecycle for you — you never need to touch Docker directly.</p>
+<pre><code><span class="cmt">Step 1 — Install the SDK (once)</span>
+pip install lorai-workspace
 
-<table>
-  <tr><th>Decision</th><th>Choice</th><th>Why</th></tr>
-  <tr><td>Port</td><td><code>1842</code></td><td>Ada Lovelace's year &mdash; unique and memorable</td></tr>
-  <tr><td>LLM server</td><td>Ollama</td><td>Best DX, OpenAI-compatible out of the box</td></tr>
-  <tr><td>Default model</td><td>phi3:mini</td><td>Runs on CPU, small, fast, good quality</td></tr>
-  <tr><td>API gateway</td><td>FastAPI</td><td>Async, auto-docs, Python ecosystem</td></tr>
-  <tr><td>SDK base</td><td>OpenAI Python SDK</td><td>Zero learning curve</td></tr>
-  <tr><td>Vector DB</td><td>ChromaDB</td><td>Embedded, zero config, persistent</td></tr>
-  <tr><td>Desktop</td><td>Openbox + noVNC</td><td>Lightweight, browser-accessible</td></tr>
-  <tr><td>Base image</td><td>Alpine 3.19</td><td>~5 MB base, minimal attack surface</td></tr>
-</table>
+<span class="cmt">Step 2 — Use it in Python (container starts automatically on first import)</span>
+<span class="kw">from</span> lorai <span class="kw">import</span> LorAI
+ai = LorAI()           <span class="cmt"># pulls image (~2 GB) + starts container + waits for health check</span>
+                       <span class="cmt"># subsequent runs skip this — already running</span>
+
+<span class="cmt">Step 3 — Everything runs locally on port 1842</span>
+ai.chat(<span class="str">"Summarise this file"</span>, system=<span class="str">"You are a helpful assistant"</span>)
+ai.image.generate(<span class="str">"a cat in a space suit"</span>, save_to=<span class="str">"cat.png"</span>)
+ai.knowledge.ingest(<span class="str">"/docs/"</span>)
+ai.knowledge.ask(<span class="str">"What is the refund policy?"</span>)</code></pre>
+
+<p>Internally, the container runs <strong>Ollama</strong> for LLMs, <strong>ChromaDB</strong> for vector search, <strong>Whisper</strong> for speech-to-text, and <strong>Piper</strong> for text-to-speech — all orchestrated behind a single FastAPI gateway on port 1842.</p>
 
 <!-- Beta Notice -->
 <h2>Beta Release</h2>
