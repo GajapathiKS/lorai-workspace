@@ -26,7 +26,7 @@ Then:
 ## Or use the SDK
 
 ```bash
-pip install lorai
+pip install lorai-workspace
 ```
 
 ```python

@@ -7,7 +7,7 @@ LorAI gives you a local, free, OpenAI-compatible AI platform with 50+ tools — 
 ## Quick Start
 
 ```bash
-pip install lorai
+pip install lorai-workspace
 ```
 
 ```python
