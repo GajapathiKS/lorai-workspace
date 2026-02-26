@@ -109,18 +109,68 @@ main {
   margin-bottom: 32px;
 }
 
-.hero .install-box {
-  display: inline-block;
-  background: var(--bg-code);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px 32px;
-  font-family: var(--font-mono);
-  font-size: 18px;
+.hero .install-steps {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
   margin-bottom: 24px;
 }
 
-.hero .install-box .prompt { color: var(--green); }
+.hero .install-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 20px;
+}
+
+.hero .install-step .step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #000;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.hero .install-step .step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero .install-step .step-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.hero .install-step .step-link {
+  font-size: 14px;
+  color: var(--green);
+  text-decoration: none;
+}
+
+.hero .install-step .step-link:hover { text-decoration: underline; }
+
+.hero .install-step .install-cmd {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--text);
+  background: none;
+  padding: 0;
+}
+
+.hero .install-step .install-cmd .prompt { color: var(--green); }
+.hero .install-step .install-cmd .kw { color: var(--purple); }
+.hero .install-step .install-cmd .str { color: var(--yellow); }
 
 .hero .cta-links {
   display: flex;

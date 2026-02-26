@@ -90,15 +90,29 @@
 <h3 id="prerequisites">Prerequisites</h3>
 <ul>
   <li><strong>Python 3.9+</strong></li>
-  <li><strong>Docker</strong> installed and running &mdash; <a href="https://docs.docker.com/get-docker/">install Docker</a> if you haven't already</li>
   <li><strong>~5 GB free disk space</strong> &mdash; for the Docker image (~2 GB) and default model (~2.3 GB)</li>
   <li><strong>GPU (optional)</strong> &mdash; only needed for image/video/music generation. LLMs work fine on CPU.</li>
 </ul>
 
-<!-- Installation -->
-<h3 id="install">Installation</h3>
+<!-- Step 1: Install Docker -->
+<h3 id="install-docker">Step 1 &mdash; Install Docker</h3>
+<p>LorAI Workspace runs inside a Docker container, so Docker must be installed first. Pick your OS:</p>
+<ul>
+  <li><strong>macOS</strong> &mdash; <a href="https://docs.docker.com/desktop/install/mac-install/" target="_blank">Download Docker Desktop for Mac →</a></li>
+  <li><strong>Windows</strong> &mdash; <a href="https://docs.docker.com/desktop/install/windows-install/" target="_blank">Download Docker Desktop for Windows →</a></li>
+  <li><strong>Linux</strong> &mdash; run the official install script:
+    <pre><code>curl -fsSL https://get.docker.com | sh
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER  # log out and back in after this</code></pre>
+  </li>
+</ul>
+<p>Verify Docker is working before continuing:</p>
+<pre><code>docker run hello-world</code></pre>
+
+<!-- Step 2: Install SDK -->
+<h3 id="install">Step 2 &mdash; Install the SDK</h3>
 <pre><code>pip install lorai-workspace</code></pre>
-<p>That's the only install step. The Docker image pulls automatically the first time you use LorAI Workspace.</p>
+<p>That's it. The Docker image (~2 GB) and default model (~2.3 GB) pull automatically on first use — you don't need to run any <code>docker</code> commands manually.</p>
 
 <!-- Quickstart -->
 <h3 id="quickstart">Quickstart</h3>

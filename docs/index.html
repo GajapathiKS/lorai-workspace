@@ -64,8 +64,28 @@
   <h1>All of AI. One Command.</h1>
   <p class="tagline">Local, free, OpenAI-compatible AI platform. LLMs, image gen, voice, video, RAG, agents &mdash; port <span class="port-badge">1842</span></p>
 
-  <div class="install-box">
-    <span class="prompt">$</span> pip install lorai-workspace
+  <div class="install-steps">
+    <div class="install-step">
+      <span class="step-num">1</span>
+      <div class="step-body">
+        <span class="step-label">Install Docker</span>
+        <a href="https://docs.docker.com/get-docker/" class="step-link" target="_blank">docs.docker.com/get-docker →</a>
+      </div>
+    </div>
+    <div class="install-step">
+      <span class="step-num">2</span>
+      <div class="step-body">
+        <span class="step-label">Install the SDK</span>
+        <code class="install-cmd"><span class="prompt">$</span> pip install lorai-workspace</code>
+      </div>
+    </div>
+    <div class="install-step">
+      <span class="step-num">3</span>
+      <div class="step-body">
+        <span class="step-label">Use it — container starts automatically</span>
+        <code class="install-cmd"><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI; LorAI().chat(<span class="str">"Hello"</span>)</code>
+      </div>
+    </div>
   </div>
 
   <div class="cta-links">
@@ -80,7 +100,7 @@
 <h2>What is LorAI Workspace?</h2>
 <p>
   LorAI Workspace is a <strong>local AI platform</strong> that runs entirely on your machine &mdash; no cloud, no API keys, no usage bills.
-  One <code>pip install lorai-workspace</code> spins up a Docker container with LLMs, image generation, voice, RAG, agents, and more,
+  Install Docker, run <code>pip install lorai-workspace</code>, and you have a full AI platform — LLMs, image generation, voice, RAG, agents, and more —
   all available on <code>localhost:1842</code> behind a fully OpenAI-compatible API.
 </p>
 <p>
