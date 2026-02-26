@@ -20,11 +20,11 @@ print(ai.chat("Hello!"))   # gets response from local LLM
 ## CLI
 
 ```bash
-lorai start          # Start the LorAI container
-lorai chat "Hello!"  # Chat with your local AI
-lorai status         # Check system status
-lorai desktop        # Open the browser desktop
-lorai stop           # Stop the container
+lorai-workspace start          # Start the LorAI container
+lorai-workspace chat "Hello!"  # Chat with your local AI
+lorai-workspace status         # Check system status
+lorai-workspace desktop        # Open the browser desktop
+lorai-workspace stop           # Stop the container
 ```
 
 ## Features

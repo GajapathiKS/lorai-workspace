@@ -121,7 +121,7 @@ ai = LorAI()
 <p><strong>On subsequent runs</strong>, the container is already up so it skips straight to your code.</p>
 
 <p>Common options:</p>
-<pre><code><span class="cmt"># Container already running (e.g. started with 'lorai start')</span>
+<pre><code><span class="cmt"># Container already running (e.g. started with 'lorai-workspace start')</span>
 ai = LorAI(auto_start=<span class="kw">False</span>)
 
 <span class="cmt"># Use a specific model instead of the default phi3:mini</span>
@@ -134,24 +134,24 @@ ai.stop()</code></pre>
 <h3 id="cli">CLI Usage</h3>
 <p>The <code>lorai</code> command is installed with the SDK. All commands:</p>
 <pre><code><span class="cmt"># Start / Stop</span>
-lorai start                      <span class="cmt"># start the container</span>
-lorai start --gpu                <span class="cmt"># start with GPU passthrough</span>
-lorai start --port 8080          <span class="cmt"># use a custom port</span>
-lorai stop                       <span class="cmt"># stop and remove the container</span>
+lorai-workspace start                      <span class="cmt"># start the container</span>
+lorai-workspace start --gpu                <span class="cmt"># start with GPU passthrough</span>
+lorai-workspace start --port 8080          <span class="cmt"># use a custom port</span>
+lorai-workspace stop                       <span class="cmt"># stop and remove the container</span>
 
 <span class="cmt"># Interact</span>
-lorai chat <span class="str">"What is quantum computing?"</span>
-lorai chat <span class="str">"Translate to French: hello"</span> --model llama3
+lorai-workspace chat <span class="str">"What is quantum computing?"</span>
+lorai-workspace chat <span class="str">"Translate to French: hello"</span> --model llama3
 
 <span class="cmt"># Models</span>
-lorai pull llama3                <span class="cmt"># download a model</span>
-lorai status                     <span class="cmt"># show system status</span>
-lorai bench                      <span class="cmt"># benchmark inference speed</span>
+lorai-workspace pull llama3                <span class="cmt"># download a model</span>
+lorai-workspace status                     <span class="cmt"># show system status</span>
+lorai-workspace bench                      <span class="cmt"># benchmark inference speed</span>
 
 <span class="cmt"># Desktop &amp; Logs</span>
-lorai desktop                    <span class="cmt"># open noVNC desktop in browser</span>
-lorai logs                       <span class="cmt"># tail container logs</span>
-lorai version                    <span class="cmt"># show version info</span></code></pre>
+lorai-workspace desktop                    <span class="cmt"># open noVNC desktop in browser</span>
+lorai-workspace logs                       <span class="cmt"># tail container logs</span>
+lorai-workspace version                    <span class="cmt"># show version info</span></code></pre>
 
 <!-- Chat with LLMs -->
 <h3 id="chat">Chat with LLMs</h3>
@@ -198,7 +198,7 @@ planets = json.loads(data)</code></pre>
 <p>Because <code>LorAI</code> extends the OpenAI client, any code written for OpenAI works without changes.</p>
 <pre><code><span class="cmt"># Existing OpenAI code — just replace OpenAI() with LorAI()</span>
 response = ai.chat.completions.create(
-    model=<span class="str">"phi3:mini"</span>,   <span class="cmt"># any model you've pulled with 'lorai pull &lt;name&gt;'</span>
+    model=<span class="str">"phi3:mini"</span>,   <span class="cmt"># any model you've pulled with 'lorai-workspace pull &lt;name&gt;'</span>
     messages=[
         {<span class="str">"role"</span>: <span class="str">"system"</span>, <span class="str">"content"</span>: <span class="str">"You are a helpful assistant."</span>},
         {<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"What's a good name for a Python package?"</span>},
@@ -240,9 +240,9 @@ status = ai.hub.status()
 result = ai.hub.bench()</code></pre>
 
 <p>You can also manage models from the CLI:</p>
-<pre><code>lorai pull llama3        <span class="cmt"># download</span>
-lorai status             <span class="cmt"># see loaded models + system resources</span>
-lorai bench              <span class="cmt"># benchmark</span></code></pre>
+<pre><code>lorai-workspace pull llama3        <span class="cmt"># download</span>
+lorai-workspace status             <span class="cmt"># see loaded models + system resources</span>
+lorai-workspace bench              <span class="cmt"># benchmark</span></code></pre>
 
 <!-- Image Generation -->
 <h3 id="images">Image Generation</h3>
@@ -365,7 +365,7 @@ ai.lora.unload(<span class="str">"llama3.2-my-finetune"</span>)</code></pre>
 </ol>
 <p>Then start LorAI with GPU:</p>
 <pre><code><span class="cmt"># Via CLI</span>
-lorai start --gpu
+lorai-workspace start --gpu
 
 <span class="cmt"># Via Python</span>
 ai = LorAI(gpu=<span class="kw">True</span>)</code></pre>

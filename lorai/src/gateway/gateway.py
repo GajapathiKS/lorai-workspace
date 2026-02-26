@@ -189,7 +189,7 @@ async def generate_image(request: Request):
     try:
         import torch
         if not torch.cuda.is_available():
-            raise HTTPException(503, "Image generation requires GPU. Start with: lorai start --gpu")
+            raise HTTPException(503, "Image generation requires GPU. Start with: lorai-workspace start --gpu")
 
         global _image_pipeline
         if _image_pipeline is None:
@@ -234,7 +234,7 @@ async def edit_image(image: UploadFile, prompt: str = Form(...)):
     try:
         import torch
         if not torch.cuda.is_available():
-            raise HTTPException(503, "Image editing requires GPU. Start with: lorai start --gpu")
+            raise HTTPException(503, "Image editing requires GPU. Start with: lorai-workspace start --gpu")
 
         from PIL import Image as PILImage
         from diffusers import AutoPipelineForImage2Image
@@ -353,7 +353,7 @@ async def generate_video(request: Request):
     try:
         import torch
         if not torch.cuda.is_available():
-            raise HTTPException(503, "Video generation requires GPU. Start with: lorai start --gpu")
+            raise HTTPException(503, "Video generation requires GPU. Start with: lorai-workspace start --gpu")
 
         gpu_mem = torch.cuda.get_device_properties(0).total_mem / 1e9
         if gpu_mem < 12:

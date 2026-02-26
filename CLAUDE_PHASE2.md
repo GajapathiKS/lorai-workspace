@@ -124,7 +124,7 @@ def get_image_pipeline():
     if _image_pipeline is None:
         import torch
         if not torch.cuda.is_available():
-            raise HTTPException(503, "Image generation requires GPU. Start with: lorai start --gpu")
+            raise HTTPException(503, "Image generation requires GPU. Start with: lorai-workspace start --gpu")
         from diffusers import AutoPipelineForText2Image
         _image_pipeline = AutoPipelineForText2Image.from_pretrained(
             "stabilityai/sdxl-turbo", torch_dtype=torch.float16, variant="fp16"
@@ -324,7 +324,7 @@ async def generate_video(request: Request):
     import torch
 
     if not torch.cuda.is_available():
-        raise HTTPException(503, "Video generation requires GPU. Start with: lorai start --gpu")
+        raise HTTPException(503, "Video generation requires GPU. Start with: lorai-workspace start --gpu")
 
     gpu_mem = torch.cuda.get_device_properties(0).total_mem / 1e9
     if gpu_mem < 12:

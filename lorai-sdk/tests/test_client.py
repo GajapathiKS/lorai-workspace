@@ -176,7 +176,7 @@ def test_cli_entry_point():
 
 
 def test_cli_version_command(capsys):
-    """Test that 'lorai version' prints version and port."""
+    """Test that 'lorai-workspace version' prints version and port."""
     from lorai.cli import main
     main(["version"])
     captured = capsys.readouterr()
@@ -185,7 +185,7 @@ def test_cli_version_command(capsys):
 
 
 def test_cli_help_command(capsys):
-    """Test that 'lorai help' prints the banner."""
+    """Test that 'lorai-workspace help' prints the banner."""
     from lorai.cli import main
     main(["help"])
     captured = capsys.readouterr()
