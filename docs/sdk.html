@@ -106,7 +106,7 @@ lorai.PORT          <span class="cmt"># 1842</span></code></pre>
 <p>When <code>auto_start=True</code> (default), the constructor calls <code>ensure_running()</code> which will:</p>
 <ol>
   <li>Check if Docker is installed</li>
-  <li>Pull the <code>gajapathiks/lorai-desktop</code> image if not present</li>
+  <li>Pull the <code>gajapathiks/lorai-workspace</code> image if not present</li>
   <li>Start the container if not running</li>
   <li>Wait for the health check</li>
 </ol>
@@ -167,10 +167,10 @@ lorai.PORT          <span class="cmt"># 1842</span></code></pre>
 <table>
   <tr><th>Function</th><th>Returns</th><th>Description</th></tr>
   <tr><td><code>is_docker_installed()</code></td><td><code>bool</code></td><td>Check if Docker CLI exists</td></tr>
-  <tr><td><code>is_image_pulled()</code></td><td><code>bool</code></td><td>Check if <code>gajapathiks/lorai-desktop</code> image exists locally</td></tr>
+  <tr><td><code>is_image_pulled()</code></td><td><code>bool</code></td><td>Check if <code>gajapathiks/lorai-workspace</code> image exists locally</td></tr>
   <tr><td><code>is_container_running()</code></td><td><code>bool</code></td><td>Check if container named <code>lorai</code> is running</td></tr>
   <tr><td><code>is_lorai_healthy()</code></td><td><code>bool</code></td><td>GET <code>http://localhost:1842/api/health</code></td></tr>
-  <tr><td><code>pull_image()</code></td><td><code>None</code></td><td>Run <code>docker pull gajapathiks/lorai-desktop:latest</code></td></tr>
+  <tr><td><code>pull_image()</code></td><td><code>None</code></td><td>Run <code>docker pull gajapathiks/lorai-workspace:latest</code></td></tr>
   <tr>
     <td><code>start_container(port=1842, vnc_port=6080, gpu=False)</code></td>
     <td><code>None</code></td>
@@ -193,7 +193,7 @@ lorai.PORT          <span class="cmt"># 1842</span></code></pre>
   -v ~/.lorai/data:/data \
   -e LORAI_MODE=hybrid \
   -e LORAI_MODEL=phi3:mini \
-  gajapathiks/lorai-desktop:latest</code></pre>
+  gajapathiks/lorai-workspace:latest</code></pre>
 
 <p>With <code>gpu=True</code>, adds <code>--gpus all</code>.</p>
 

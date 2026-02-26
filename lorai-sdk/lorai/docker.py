@@ -11,7 +11,7 @@ import time
 
 import httpx
 
-IMAGE = os.environ.get("LORAI_IMAGE", "gajapathiks/lorai-desktop:latest")
+IMAGE = os.environ.get("LORAI_IMAGE", "gajapathiks/lorai-workspace:latest")
 CONTAINER_NAME = "lorai"
 HEALTH_TIMEOUT = 120  # seconds to wait for healthy state
 
