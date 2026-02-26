@@ -63,6 +63,7 @@
       <div class="step-body">
         <span class="step-label">In your Terminal (macOS/Linux) or PowerShell (Windows) — on your computer, not inside Docker:</span>
         <code class="install-cmd"><span class="prompt">$</span> pip install lorai-workspace</code>
+        <span class="step-hint">This installs the Python client only &mdash; it does not touch Docker, pull any image, or start anything</span>
       </div>
     </div>
 
@@ -71,7 +72,7 @@
       <div class="step-body">
         <span class="step-label">In a Python file or Python shell — on your computer:</span>
         <code class="install-cmd"><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI; <span class="fn">LorAI</span>().<span class="fn">chat</span>(<span class="str">"Hello"</span>)</code>
-        <span class="step-hint">LorAI pulls the Docker image and starts the container automatically — no docker commands needed</span>
+        <span class="step-hint"><strong>LorAI()</strong> is where Docker gets involved &mdash; it pulls <code>gajapathiks/lorai-workspace:latest</code> from Docker Hub (~2 GB) and starts the container automatically. This only happens once; subsequent runs skip straight to your code.</span>
       </div>
     </div>
 
@@ -97,7 +98,8 @@
     </div>
     <pre><code><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
 
-<span class="cmt"># Starts Docker automatically on first run</span>
+<span class="cmt"># ← THIS line pulls Docker image + starts container</span>
+<span class="cmt">#   pip install does NOT touch Docker — only LorAI() does</span>
 ai = <span class="fn">LorAI</span>()
 
 <span class="cmt"># Chat with a local LLM</span>
@@ -121,10 +123,13 @@ text = ai.voice.<span class="fn">transcribe</span>(<span class="str">"meeting.mp
     <div class="output-tabs">
       <span class="output-tab">Output &mdash; what you see in your terminal</span>
     </div>
-    <pre><span class="out-dim">Pulling lorai-workspace:latest ... done  (2.1 GB)
+    <pre><span class="out-dim">← triggered by LorAI() on line 4
+
+Pulling gajapathiks/lorai-workspace:latest
+  ... done  (2.1 GB, first run only)
 Starting container on port 1842 ...
 Waiting for Ollama ... ready
-Pulling phi3:mini ... done  (2.3 GB)
+Pulling phi3:mini ... done  (2.3 GB, first run only)
 LorAI Workspace ready ✓  http://localhost:1842
 </span>
 <span class="out-label">ai.chat →</span>
