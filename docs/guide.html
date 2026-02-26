@@ -116,24 +116,40 @@ sudo usermod -aG docker $USER  # log out and back in after this</code></pre>
 <!-- Quickstart -->
 <h3 id="quickstart">Quickstart</h3>
 
+<div class="callout callout-info">
+  <strong>What pip install does vs what LorAI() does:</strong>
+  <ul style="margin: 8px 0 0; padding-left: 20px;">
+    <li><code>pip install lorai-workspace</code> &mdash; installs the Python client only. Does <strong>not</strong> pull Docker, does not start anything.</li>
+    <li><code>LorAI()</code> &mdash; this is the line that contacts Docker. On first run it pulls <code>gajapathiks/lorai-workspace:latest</code> from Docker Hub (~2 GB), starts the container, waits for it to be healthy, then returns. On subsequent runs the container is already up, so this is instant.</li>
+  </ul>
+</div>
+
 <div class="editor">
   <div class="editor-tabs">
     <span class="editor-tab">quickstart.py</span>
-    <span class="editor-lang">Python</span>
+    <span class="editor-lang">Python — run on your computer</span>
   </div>
   <pre><code><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
 
-<span class="cmt"># Pulls Docker image (~2 GB) and starts the container on first run</span>
-<span class="cmt"># Subsequent runs skip this — container is already up</span>
+<span class="cmt"># LorAI() is where Docker gets involved:</span>
+<span class="cmt">#   1. Checks Docker is installed</span>
+<span class="cmt">#   2. Pulls gajapathiks/lorai-workspace:latest (first run only, ~2 GB)</span>
+<span class="cmt">#   3. Starts the container on port 1842</span>
+<span class="cmt">#   4. Waits for health check, then returns</span>
+<span class="cmt"># Subsequent runs: container already running → skips straight to your code</span>
 ai = <span class="fn">LorAI</span>()
 
 <span class="fn">print</span>(ai.<span class="fn">chat</span>(<span class="str">"What is 12 multiplied by 8?"</span>))
 <span class="cmt"># → "12 multiplied by 8 is 96."</span>
 
-<span class="cmt"># Common options</span>
-ai = <span class="fn">LorAI</span>(auto_start=<span class="kw">False</span>)   <span class="cmt"># container already running</span>
-ai.<span class="fn">chat</span>(<span class="str">"Hello"</span>, model=<span class="str">"llama3"</span>)  <span class="cmt"># use a specific model</span>
-ai.<span class="fn">stop</span>()                          <span class="cmt"># stop when done</span></code></pre>
+<span class="cmt"># If you started the container manually (lorai-workspace start), skip auto-start:</span>
+ai = <span class="fn">LorAI</span>(auto_start=<span class="kw">False</span>)
+
+<span class="cmt"># Use a specific model</span>
+ai.<span class="fn">chat</span>(<span class="str">"Hello"</span>, model=<span class="str">"llama3"</span>)
+
+<span class="cmt"># Stop the container when done</span>
+ai.<span class="fn">stop</span>()</code></pre>
 </div>
 
 <!-- CLI -->
