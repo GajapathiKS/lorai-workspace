@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Getting Started — LorAI Workspace</title>
-  <meta name="description" content="Get started with LorAI in minutes. Install with pip, chat with local LLMs, generate images, use RAG, run agents — all from Python or CLI.">
-  <meta name="keywords" content="LorAI guide, getting started, local AI setup, pip install lorai-workspace, AI tutorial, Docker AI">
-  <meta name="author" content="LorAI Team">
+  <meta name="description" content="Get started with LorAI Workspace Workspace in minutes. Install with pip, chat with local LLMs, generate images, use RAG, run agents — all from Python or CLI.">
+  <meta name="keywords" content="LorAI Workspace guide, getting started, local AI setup, pip install lorai-workspace, AI tutorial, Docker AI">
+  <meta name="author" content="LorAI Workspace Team">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/guide.html">
 
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://gajapathiks.github.io/lorai-workspace/guide.html">
   <meta property="og:title" content="Getting Started — LorAI Workspace">
-  <meta property="og:description" content="Get started with LorAI in minutes. Install with pip, chat with local LLMs, generate images, use RAG, run agents — all from Python or CLI.">
+  <meta property="og:description" content="Get started with LorAI Workspace Workspace in minutes. Install with pip, chat with local LLMs, generate images, use RAG, run agents — all from Python or CLI.">
   <meta property="og:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -23,7 +23,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Getting Started — LorAI Workspace">
-  <meta name="twitter:description" content="Get started with LorAI in minutes. Install with pip, chat with local LLMs, generate images, use RAG, run agents — all from Python or CLI.">
+  <meta name="twitter:description" content="Get started with LorAI Workspace Workspace in minutes. Install with pip, chat with local LLMs, generate images, use RAG, run agents — all from Python or CLI.">
   <meta name="twitter:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
 
   <!-- Theme -->
@@ -98,7 +98,7 @@
 <!-- Installation -->
 <h3 id="install">Installation</h3>
 <pre><code>pip install lorai-workspace</code></pre>
-<p>That's the only install step. The Docker image pulls automatically the first time you use LorAI.</p>
+<p>That's the only install step. The Docker image pulls automatically the first time you use LorAI Workspace.</p>
 
 <!-- Quickstart -->
 <h3 id="quickstart">Quickstart</h3>
@@ -107,7 +107,7 @@
 ai = LorAI()
 <span class="fn">print</span>(ai.chat(<span class="str">"What is 12 multiplied by 8?"</span>))</code></pre>
 
-<p>On <strong>first run</strong>, you'll see LorAI bootstrap itself in the terminal:</p>
+<p>On <strong>first run</strong>, you'll see LorAI Workspace bootstrap itself in the terminal:</p>
 <pre><code>  ██╗      ██████╗  ██████╗  █████╗ ██╗
   ...
   Pulling image gajapathiks/lorai-workspace:latest ... done
@@ -195,8 +195,8 @@ planets = json.loads(data)</code></pre>
 <span class="cmt"># tokens print to stdout as they arrive</span></code></pre>
 
 <h4>Drop-in for OpenAI SDK</h4>
-<p>Because <code>LorAI</code> (the LorAI Workspace client) extends the OpenAI client, any code written for OpenAI works without changes.</p>
-<pre><code><span class="cmt"># Existing OpenAI code — just replace OpenAI() with LorAI()</span>
+<p>Because <code>LorAI</code> (the LorAI Workspace Workspace client) extends the OpenAI client, any code written for OpenAI works without changes.</p>
+<pre><code><span class="cmt"># Existing OpenAI code — just replace OpenAI() with LorAI Workspace()</span>
 response = ai.chat.completions.create(
     model=<span class="str">"phi3:mini"</span>,   <span class="cmt"># any model you've pulled with 'lorai-workspace pull &lt;name&gt;'</span>
     messages=[
@@ -210,7 +210,7 @@ response = ai.chat.completions.create(
 
 <!-- Managing Models -->
 <h3 id="models">Managing Models</h3>
-<p>LorAI uses <a href="https://ollama.com">Ollama</a> under the hood to manage LLMs. You can pull any model from the Ollama library. Larger models produce better output but require more RAM and run slower.</p>
+<p>LorAI Workspace uses <a href="https://ollama.com">Ollama</a> under the hood to manage LLMs. You can pull any model from the Ollama library. Larger models produce better output but require more RAM and run slower.</p>
 
 <table>
   <tr><th>Model</th><th>Size</th><th>Best for</th></tr>
@@ -247,7 +247,7 @@ lorai-workspace bench              <span class="cmt"># benchmark</span></code></
 <!-- Image Generation -->
 <h3 id="images">Image Generation</h3>
 <p>Generate images from a text description, or modify an existing image. Uses SDXL Turbo. <strong>Requires an NVIDIA GPU with 8 GB+ VRAM</strong> — this won't work on CPU.</p>
-<pre><code><span class="cmt"># Start LorAI with GPU passthrough enabled</span>
+<pre><code><span class="cmt"># Start LorAI Workspace with GPU passthrough enabled</span>
 ai = LorAI(gpu=<span class="kw">True</span>)
 
 <span class="cmt"># Generate an image and save it to disk</span>
@@ -393,7 +393,7 @@ ai = LorAI(gpu=<span class="kw">True</span>)</code></pre>
 <!-- Data Persistence -->
 <h3 id="data">Data Persistence</h3>
 <p>
-  LorAI mounts <code>~/.lorai/data</code> on the host to <code>/data</code> inside the container.
+  LorAI Workspace mounts <code>~/.lorai/data</code> on the host to <code>/data</code> inside the container.
   This persists across container restarts:
 </p>
 <ul>

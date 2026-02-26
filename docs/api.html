@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Reference — LorAI Workspace</title>
-  <meta name="description" content="Complete API reference for LorAI — 27 endpoints covering chat completions, image generation, voice, video, RAG, agents, code execution, vision, and LoRA management.">
-  <meta name="keywords" content="LorAI API, REST API, OpenAI compatible API, chat completions, image generation API, RAG API, agent API, local AI API">
-  <meta name="author" content="LorAI Team">
+  <meta name="description" content="Complete API reference for LorAI Workspace — 27 endpoints covering chat completions, image generation, voice, video, RAG, agents, code execution, vision, and LoRA management.">
+  <meta name="keywords" content="LorAI Workspace API, REST API, OpenAI compatible API, chat completions, image generation API, RAG API, agent API, local AI API">
+  <meta name="author" content="LorAI Workspace Team">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/api.html">
 
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://gajapathiks.github.io/lorai-workspace/api.html">
   <meta property="og:title" content="API Reference — LorAI Workspace">
-  <meta property="og:description" content="Complete API reference for LorAI — 27 endpoints covering chat, images, voice, video, RAG, agents, code execution, vision, and LoRA.">
+  <meta property="og:description" content="Complete API reference for LorAI Workspace — 27 endpoints covering chat, images, voice, video, RAG, agents, code execution, vision, and LoRA.">
   <meta property="og:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -23,7 +23,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="API Reference — LorAI Workspace">
-  <meta name="twitter:description" content="Complete API reference for LorAI — 27 endpoints covering chat, images, voice, video, RAG, agents, code execution, vision, and LoRA.">
+  <meta name="twitter:description" content="Complete API reference for LorAI Workspace — 27 endpoints covering chat, images, voice, video, RAG, agents, code execution, vision, and LoRA.">
   <meta name="twitter:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
 
   <!-- Theme -->
@@ -94,7 +94,7 @@
 <p>
   All endpoints are served from <code>http://localhost:1842</code>.
   The <code>/v1/*</code> routes are OpenAI-compatible (proxied to Ollama).
-  The <code>/lorai/*</code> routes are LorAI-native endpoints.
+  The <code>/lorai/*</code> routes are LorAI Workspace-native endpoints.
   CORS is enabled for all origins.
 </p>
 
@@ -109,7 +109,7 @@
 │   ├── images/edits             <span class="cmt"># POST — Image editing (GPU)</span>
 │   ├── audio/transcriptions     <span class="cmt"># POST — Speech-to-text</span>
 │   └── audio/speech             <span class="cmt"># POST — Text-to-speech</span>
-└── lorai/                       <span class="cmt"># LorAI-native</span>
+└── lorai/                       <span class="cmt"># LorAI Workspace-native</span>
     ├── hub/{status,models,pull,remove,bench}
     ├── video/generate
     ├── knowledge/{ingest,search,ask}
@@ -344,7 +344,7 @@
     <p>Text-to-speech using Piper TTS. Returns WAV audio bytes.</p>
     <h4>Request Body</h4>
 <pre><code>{
-  <span class="str">"input"</span>: <span class="str">"Hello, welcome to LorAI!"</span>,
+  <span class="str">"input"</span>: <span class="str">"Hello, welcome to LorAI Workspace!"</span>,
   <span class="str">"voice"</span>: <span class="str">"nova"</span>,       <span class="cmt">// nova, alloy, echo, fable, onyx, shimmer</span>
   <span class="str">"speed"</span>: <span class="num">1.0</span>
 }</code></pre>

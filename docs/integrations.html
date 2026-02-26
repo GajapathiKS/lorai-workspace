@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Integrations — LorAI Workspace</title>
   <meta name="description" content="Use LorAI from any language — Python, Node.js, Go, Rust, Java, C#, Ruby, PHP, or plain HTTP. OpenAI-compatible API on localhost:1842.">
-  <meta name="keywords" content="LorAI integrations, OpenAI SDK, Node.js AI, Go AI, Rust AI, Java AI, multi-language AI, local AI API">
-  <meta name="author" content="LorAI Team">
+  <meta name="keywords" content="LorAI Workspace integrations, OpenAI SDK, Node.js AI, Go AI, Rust AI, Java AI, multi-language AI, local AI API">
+  <meta name="author" content="LorAI Workspace Team">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/integrations.html">
 
@@ -57,7 +57,7 @@
     <li><a href="#how-it-works">How It Works</a></li>
     <li><a href="#quickref">Quick Reference</a></li>
     <li class="section-label">Full SDK</li>
-    <li><a href="#python">Python (LorAI SDK)</a></li>
+    <li><a href="#python">Python (LorAI Workspace Workspace SDK)</a></li>
     <li class="section-label">OpenAI SDK</li>
     <li><a href="#python-openai">Python (OpenAI)</a></li>
     <li><a href="#nodejs">Node.js / TypeScript</a></li>
@@ -81,14 +81,14 @@
 <h2>Integrations</h2>
 
 <p>
-  LorAI exposes an <strong>OpenAI-compatible API</strong> on <code>http://localhost:1842/v1</code>.
-  This means <strong>any programming language</strong> that has an OpenAI client library can use LorAI
+  LorAI Workspace exposes an <strong>OpenAI-compatible API</strong> on <code>http://localhost:1842/v1</code>.
+  This means <strong>any programming language</strong> that has an OpenAI client library can use LorAI Workspace
   with zero custom code &mdash; just point <code>base_url</code> to <code>localhost:1842</code>.
 </p>
 
 <div class="callout callout-info">
-  <strong>Key insight:</strong> You do NOT need a language-specific LorAI SDK for every language. Any OpenAI SDK works because
-  LorAI speaks the exact same protocol. We provide a dedicated SDK for <strong>Python</strong> (<code>pip install lorai-workspace</code>)
+  <strong>Key insight:</strong> You do NOT need a language-specific LorAI Workspace SDK for every language. Any OpenAI SDK works because
+  LorAI Workspace speaks the exact same protocol. We provide a dedicated SDK for <strong>Python</strong> (<code>pip install lorai-workspace</code>)
   that adds Docker auto-management and native service wrappers &mdash; but the core API is language-agnostic.
 </div>
 
@@ -98,21 +98,21 @@
 
 <h3 id="how-it-works">How It Works</h3>
 
-<p>LorAI runs as a Docker container on your machine. The API gateway on port <code>1842</code> proxies requests to Ollama, which provides native OpenAI API compatibility. Any HTTP client can talk to it.</p>
+<p>LorAI Workspace runs as a Docker container on your machine. The API gateway on port <code>1842</code> proxies requests to Ollama, which provides native OpenAI API compatibility. Any HTTP client can talk to it.</p>
 
 <pre><code><span class="cmt">Your Code (any language, any framework)</span>
         |
         |  HTTP  &mdash;  OpenAI-compatible protocol
         v
 +--------------------------------+
-|  LorAI Gateway (port 1842)     |
+|  LorAI Workspace Gateway (port 1842)     |
 |  +----------------------------+|
 |  | /v1/*   -> Ollama (:11434) || &lt;- OpenAI-compatible routes
-|  | /lorai/* -> Native APIs    || &lt;- LorAI-specific routes
+|  | /lorai/* -> Native APIs    || &lt;- LorAI Workspace-specific routes
 |  +----------------------------+|
 +--------------------------------+</code></pre>
 
-<p><strong>Step 1:</strong> Start the LorAI container (one-time setup):</p>
+<p><strong>Step 1:</strong> Start the LorAI Workspace Workspace container (one-time setup):</p>
 <pre><code><span class="cmt"># Option A: Using the Python CLI (recommended)</span>
 pip install lorai-workspace
 lorai-workspace start
@@ -194,11 +194,11 @@ docker run -d --name lorai \
 <!-- Python Full SDK -->
 <!-- ============================================================ -->
 
-<h3 id="python">Python &mdash; LorAI SDK (Full)</h3>
+<h3 id="python">Python &mdash; LorAI Workspace SDK (Full)</h3>
 
 <div class="lang-badge lang-python">Python</div>
 
-<p>The LorAI Python SDK extends the OpenAI SDK with Docker auto-management, 9 AI service wrappers (image, video, voice, RAG, agents, code, vision, LoRA, hub), and a CLI. This is the <strong>recommended</strong> approach for Python developers.</p>
+<p>The LorAI Workspace Python SDK extends the OpenAI SDK with Docker auto-management, 9 AI service wrappers (image, video, voice, RAG, agents, code, vision, LoRA, hub), and a CLI. This is the <strong>recommended</strong> approach for Python developers.</p>
 
 <h4>Install</h4>
 <pre><code>pip install lorai-workspace</code></pre>
@@ -240,7 +240,7 @@ stream = ai.chat.completions.create(
     <span class="kw">if</span> chunk.choices[<span class="num">0</span>].delta.content:
         <span class="fn">print</span>(chunk.choices[<span class="num">0</span>].delta.content, end=<span class="str">""</span>)
 
-<span class="cmt"># LorAI-specific services (not available via plain OpenAI SDK)</span>
+<span class="cmt"># LorAI Workspace-specific services (not available via plain OpenAI SDK)</span>
 models = ai.hub.models()                      <span class="cmt"># list downloaded models</span>
 ai.hub.pull(<span class="str">"llama3"</span>)                         <span class="cmt"># download a model</span>
 text = ai.voice.transcribe(<span class="str">"audio.mp3"</span>)      <span class="cmt"># speech-to-text</span>
@@ -268,7 +268,7 @@ ai.stop()</code></pre>
 
 <div class="lang-badge lang-python">Python</div>
 
-<p>If you only need chat completions and don't need Docker auto-management or LorAI-native services, use the standard OpenAI package directly:</p>
+<p>If you only need chat completions and don't need Docker auto-management or LorAI Workspace-native services, use the standard OpenAI package directly:</p>
 
 <h4>Install</h4>
 <pre><code>pip install openai</code></pre>
@@ -278,7 +278,7 @@ ai.stop()</code></pre>
 
 client = OpenAI(
     base_url=<span class="str">"http://localhost:1842/v1"</span>,
-    api_key=<span class="str">"not-needed"</span>,              <span class="cmt"># LorAI doesn't require auth</span>
+    api_key=<span class="str">"not-needed"</span>,              <span class="cmt"># LorAI Workspace doesn't require auth</span>
 )
 
 <span class="cmt"># Chat</span>
@@ -313,7 +313,7 @@ emb = client.embeddings.create(
 
 <div class="lang-badge lang-js">Node.js</div>
 
-<p>The official OpenAI npm package works directly with LorAI. Good for teams already using the OpenAI SDK.</p>
+<p>The official OpenAI npm package works directly with LorAI Workspace. Good for teams already using the OpenAI SDK.</p>
 
 <h4>Install</h4>
 <pre><code>npm install openai</code></pre>
@@ -713,7 +713,7 @@ puts response.dig(<span class="str">"choices"</span>, <span class="num">0</span>
 
 <div class="lang-badge lang-http">HTTP</div>
 
-<p>No SDK needed. LorAI's API works with any HTTP client.</p>
+<p>No SDK needed. LorAI Workspace's API works with any HTTP client.</p>
 
 <h4>Chat Completion</h4>
 <pre><code>curl http://localhost:1842/v1/chat/completions \
@@ -839,7 +839,7 @@ console.log(data.choices[<span class="num">0</span>].message.content);</code></p
 
 <h3 id="streaming">Streaming Notes</h3>
 
-<p>LorAI supports Server-Sent Events (SSE) streaming for chat completions, matching the OpenAI streaming format exactly:</p>
+<p>LorAI Workspace supports Server-Sent Events (SSE) streaming for chat completions, matching the OpenAI streaming format exactly:</p>
 
 <ul>
   <li>Set <code>"stream": true</code> in the request body</li>
