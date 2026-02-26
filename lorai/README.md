@@ -2,7 +2,7 @@
 
 **All of AI. One Command. Port 1842.**
 
-LorAI is an AI-first operating environment running in Docker. It provides:
+LorAI Workspace is an AI-first operating environment running in Docker. It provides:
 
 - OpenAI-compatible API gateway on port 1842
 - Ollama-powered local LLMs
@@ -30,7 +30,7 @@ pip install lorai-workspace
 ```
 
 ```python
-from lorai import LorAI
+from lorai_workspace import LorAI
 ai = LorAI()
 print(ai.chat("Hello!"))
 ```

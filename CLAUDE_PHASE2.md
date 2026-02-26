@@ -851,7 +851,7 @@ curl http://localhost:1842/lorai/lora/list
 
 # ── SDK Integration Test ──
 python3 -c "
-from lorai import LorAI
+from lorai_workspace import LorAI
 ai = LorAI(auto_start=False)
 
 # Chat

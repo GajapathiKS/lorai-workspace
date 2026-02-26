@@ -125,20 +125,20 @@ def _cmd_help() -> None:
 
 
 def _cmd_start(port: int = 1842, gpu: bool = False) -> None:
-    from lorai.docker import ensure_running
+    from lorai_workspace.docker import ensure_running
     ensure_running(port=port, gpu=gpu)
-    print(f"\nLorAI is running at http://localhost:{port}")
+    print(f"\nLorAI Workspace is running at http://localhost:{port}")
     print("Desktop available at http://localhost:6080")
 
 
 def _cmd_stop() -> None:
-    from lorai.docker import stop_container
+    from lorai_workspace.docker import stop_container
     stop_container()
     print("LorAI stopped.")
 
 
 def _cmd_status() -> None:
-    from lorai.docker import status
+    from lorai_workspace.docker import status
     s = status()
     print(BANNER)
     print(f"  Docker installed:    {'yes' if s['docker_installed'] else 'NO'}")
@@ -163,7 +163,7 @@ def _cmd_chat(message: str, model: str | None = None) -> None:
         data = resp.json()
         print(data["choices"][0]["message"]["content"])
     except httpx.ConnectError:
-        print("Error: LorAI is not running. Start it with: lorai-workspace start")
+        print("Error: LorAI Workspace is not running. Start it with: lorai-workspace start")
         sys.exit(1)
     except Exception as e:
         print(f"Error: {e}")
@@ -186,7 +186,7 @@ def _cmd_pull(model: str) -> None:
         resp.raise_for_status()
         print(json.dumps(resp.json(), indent=2))
     except httpx.ConnectError:
-        print("Error: LorAI is not running. Start it with: lorai-workspace start")
+        print("Error: LorAI Workspace is not running. Start it with: lorai-workspace start")
         sys.exit(1)
 
 
@@ -200,7 +200,7 @@ def _cmd_bench() -> None:
         resp.raise_for_status()
         print(json.dumps(resp.json(), indent=2))
     except httpx.ConnectError:
-        print("Error: LorAI is not running. Start it with: lorai-workspace start")
+        print("Error: LorAI Workspace is not running. Start it with: lorai-workspace start")
         sys.exit(1)
 
 
@@ -219,7 +219,7 @@ def _cmd_logs() -> None:
 
 
 def _cmd_version() -> None:
-    from lorai import __version__, PORT
+    from lorai_workspace import __version__, PORT
     print(BANNER)
     print(f"  Version: {__version__}")
     print(f"  Port:    {PORT}")

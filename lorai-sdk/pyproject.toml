@@ -34,7 +34,7 @@ Homepage = "https://getlorai.com"
 Repository = "https://github.com/getlorai/lorai-sdk"
 
 [project.scripts]
-lorai-workspace = "lorai.cli:main"
+lorai-workspace = "lorai_workspace.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["lorai*"]
+include = ["lorai_workspace*"]

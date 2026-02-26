@@ -103,7 +103,7 @@ def ensure_running(port: int = 1842, gpu: bool = False) -> None:
     deadline = time.time() + HEALTH_TIMEOUT
     while time.time() < deadline:
         if is_lorai_healthy(port):
-            print(f"LorAI is ready at http://localhost:{port}")
+            print(f"LorAI Workspace is ready at http://localhost:{port}")
             return
         time.sleep(2)
 
