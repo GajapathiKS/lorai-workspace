@@ -88,7 +88,7 @@
   and it costs nothing to run. If you already use the OpenAI SDK, just swap <code>OpenAI()</code> for <code>LorAI()</code> &mdash; everything else stays the same.
 </p>
 
-<pre><code><span class="kw">from</span> lorai <span class="kw">import</span> LorAI
+<pre><code><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
 
 <span class="cmt"># First run: pulls Docker image and starts the container automatically</span>
 ai = LorAI()
@@ -257,7 +257,7 @@ lorai-workspace version                    <span class="cmt"># Show version info
 pip install lorai-workspace
 
 <span class="cmt">Step 2 — Use it in Python (container starts automatically on first import)</span>
-<span class="kw">from</span> lorai <span class="kw">import</span> LorAI
+<span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
 ai = LorAI()           <span class="cmt"># pulls image (~2 GB) + starts container + waits for health check</span>
                        <span class="cmt"># subsequent runs skip this — already running</span>
 
