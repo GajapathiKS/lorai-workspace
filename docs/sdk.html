@@ -75,7 +75,7 @@
 
 <h2>SDK Reference</h2>
 <p>
-  The LorAI SDK (<code>pip install lorai</code>) provides a Python client that extends the
+  The LorAI SDK (<code>pip install lorai-workspace</code>) provides a Python client that extends the
   <a href="https://github.com/openai/openai-python">OpenAI Python SDK</a>.
   Any code that works with <code>OpenAI()</code> works with <code>LorAI()</code>.
 </p>
@@ -106,7 +106,7 @@ lorai.PORT          <span class="cmt"># 1842</span></code></pre>
 <p>When <code>auto_start=True</code> (default), the constructor calls <code>ensure_running()</code> which will:</p>
 <ol>
   <li>Check if Docker is installed</li>
-  <li>Pull the <code>getlorai/desktop</code> image if not present</li>
+  <li>Pull the <code>gajapathiks/lorai-workspace</code> image if not present</li>
   <li>Start the container if not running</li>
   <li>Wait for the health check</li>
 </ol>
@@ -167,10 +167,10 @@ lorai.PORT          <span class="cmt"># 1842</span></code></pre>
 <table>
   <tr><th>Function</th><th>Returns</th><th>Description</th></tr>
   <tr><td><code>is_docker_installed()</code></td><td><code>bool</code></td><td>Check if Docker CLI exists</td></tr>
-  <tr><td><code>is_image_pulled()</code></td><td><code>bool</code></td><td>Check if <code>getlorai/desktop</code> image exists locally</td></tr>
+  <tr><td><code>is_image_pulled()</code></td><td><code>bool</code></td><td>Check if <code>gajapathiks/lorai-workspace</code> image exists locally</td></tr>
   <tr><td><code>is_container_running()</code></td><td><code>bool</code></td><td>Check if container named <code>lorai</code> is running</td></tr>
   <tr><td><code>is_lorai_healthy()</code></td><td><code>bool</code></td><td>GET <code>http://localhost:1842/api/health</code></td></tr>
-  <tr><td><code>pull_image()</code></td><td><code>None</code></td><td>Run <code>docker pull getlorai/desktop:latest</code></td></tr>
+  <tr><td><code>pull_image()</code></td><td><code>None</code></td><td>Run <code>docker pull gajapathiks/lorai-workspace:latest</code></td></tr>
   <tr>
     <td><code>start_container(port=1842, vnc_port=6080, gpu=False)</code></td>
     <td><code>None</code></td>
@@ -193,7 +193,7 @@ lorai.PORT          <span class="cmt"># 1842</span></code></pre>
   -v ~/.lorai/data:/data \
   -e LORAI_MODE=hybrid \
   -e LORAI_MODEL=phi3:mini \
-  getlorai/desktop:latest</code></pre>
+  gajapathiks/lorai-workspace:latest</code></pre>
 
 <p>With <code>gpu=True</code>, adds <code>--gpus all</code>.</p>
 
@@ -406,16 +406,16 @@ ai.image.generate(<span class="str">"A portrait"</span>, lora=<span class="str">
 
 <table>
   <tr><th>Command</th><th>Description</th></tr>
-  <tr><td><code>lorai start [--gpu] [--port N]</code></td><td>Start the Docker container. Pulls image if needed.</td></tr>
-  <tr><td><code>lorai stop</code></td><td>Stop and remove the container.</td></tr>
-  <tr><td><code>lorai status</code></td><td>Show Docker, image, container, and API status.</td></tr>
-  <tr><td><code>lorai chat "message" [--model M]</code></td><td>Send a chat message and print the response.</td></tr>
-  <tr><td><code>lorai desktop</code></td><td>Open the noVNC desktop at <code>http://localhost:6080</code>.</td></tr>
-  <tr><td><code>lorai pull &lt;model&gt;</code></td><td>Download an Ollama model.</td></tr>
-  <tr><td><code>lorai bench</code></td><td>Benchmark inference speed.</td></tr>
-  <tr><td><code>lorai logs</code></td><td>Tail the container logs (<code>docker logs --tail 50 -f lorai</code>).</td></tr>
-  <tr><td><code>lorai version</code></td><td>Show version, port, and URLs.</td></tr>
-  <tr><td><code>lorai help</code></td><td>Show the ASCII banner and command reference.</td></tr>
+  <tr><td><code>lorai-workspace start [--gpu] [--port N]</code></td><td>Start the Docker container. Pulls image if needed.</td></tr>
+  <tr><td><code>lorai-workspace stop</code></td><td>Stop and remove the container.</td></tr>
+  <tr><td><code>lorai-workspace status</code></td><td>Show Docker, image, container, and API status.</td></tr>
+  <tr><td><code>lorai-workspace chat "message" [--model M]</code></td><td>Send a chat message and print the response.</td></tr>
+  <tr><td><code>lorai-workspace desktop</code></td><td>Open the noVNC desktop at <code>http://localhost:6080</code>.</td></tr>
+  <tr><td><code>lorai-workspace pull &lt;model&gt;</code></td><td>Download an Ollama model.</td></tr>
+  <tr><td><code>lorai-workspace bench</code></td><td>Benchmark inference speed.</td></tr>
+  <tr><td><code>lorai-workspace logs</code></td><td>Tail the container logs (<code>docker logs --tail 50 -f lorai</code>).</td></tr>
+  <tr><td><code>lorai-workspace version</code></td><td>Show version, port, and URLs.</td></tr>
+  <tr><td><code>lorai-workspace help</code></td><td>Show the ASCII banner and command reference.</td></tr>
 </table>
 
 </div>

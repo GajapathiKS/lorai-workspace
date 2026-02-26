@@ -75,7 +75,7 @@ if echo "$MODELS" | grep -q "${LORAI_MODEL}"; then
     echo "  Model ${LORAI_MODEL} already available."
 else
     echo "  Pulling ${LORAI_MODEL} (this may take a while)..."
-    ollama pull "${LORAI_MODEL}" || echo "  Warning: Failed to pull model. You can pull it later with: lorai pull ${LORAI_MODEL}"
+    ollama pull "${LORAI_MODEL}" || echo "  Warning: Failed to pull model. You can pull it later with: lorai-workspace pull ${LORAI_MODEL}"
 fi
 
 # 7. Start LorAI Gateway

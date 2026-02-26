@@ -1,16 +1,16 @@
 """LorAI CLI — All of AI. One Command. Port 1842.
 
 Usage:
-    lorai start [--gpu] [--port PORT]
-    lorai stop
-    lorai status
-    lorai chat "message"
-    lorai desktop
-    lorai pull <model>
-    lorai bench
-    lorai logs
-    lorai version
-    lorai help
+    lorai-workspace start [--gpu] [--port PORT]
+    lorai-workspace stop
+    lorai-workspace status
+    lorai-workspace chat "message"
+    lorai-workspace desktop
+    lorai-workspace pull <model>
+    lorai-workspace bench
+    lorai-workspace logs
+    lorai-workspace version
+    lorai-workspace help
 """
 
 from __future__ import annotations
@@ -117,11 +117,11 @@ def _cmd_help() -> None:
     print("  help                       Show this help")
     print()
     print("Examples:")
-    print("  lorai start")
-    print('  lorai chat "What is the meaning of life?"')
-    print("  lorai pull llama3")
-    print("  lorai desktop")
-    print("  lorai stop")
+    print("  lorai-workspace start")
+    print('  lorai-workspace chat "What is the meaning of life?"')
+    print("  lorai-workspace pull llama3")
+    print("  lorai-workspace desktop")
+    print("  lorai-workspace stop")
 
 
 def _cmd_start(port: int = 1842, gpu: bool = False) -> None:
@@ -163,7 +163,7 @@ def _cmd_chat(message: str, model: str | None = None) -> None:
         data = resp.json()
         print(data["choices"][0]["message"]["content"])
     except httpx.ConnectError:
-        print("Error: LorAI is not running. Start it with: lorai start")
+        print("Error: LorAI is not running. Start it with: lorai-workspace start")
         sys.exit(1)
     except Exception as e:
         print(f"Error: {e}")
@@ -186,7 +186,7 @@ def _cmd_pull(model: str) -> None:
         resp.raise_for_status()
         print(json.dumps(resp.json(), indent=2))
     except httpx.ConnectError:
-        print("Error: LorAI is not running. Start it with: lorai start")
+        print("Error: LorAI is not running. Start it with: lorai-workspace start")
         sys.exit(1)
 
 
@@ -200,7 +200,7 @@ def _cmd_bench() -> None:
         resp.raise_for_status()
         print(json.dumps(resp.json(), indent=2))
     except httpx.ConnectError:
-        print("Error: LorAI is not running. Start it with: lorai start")
+        print("Error: LorAI is not running. Start it with: lorai-workspace start")
         sys.exit(1)
 
 
@@ -214,7 +214,7 @@ def _cmd_logs() -> None:
         print("Error: Docker is not installed.")
         sys.exit(1)
     except subprocess.CalledProcessError:
-        print("Error: LorAI container not found. Start it with: lorai start")
+        print("Error: LorAI container not found. Start it with: lorai-workspace start")
         sys.exit(1)
 
 

@@ -3,7 +3,7 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lorai"
+name = "lorai-workspace"
 version = "0.1.0"
 description = "All of AI. One Command. Port 1842."
 readme = "README.md"
@@ -34,7 +34,7 @@ Homepage = "https://getlorai.com"
 Repository = "https://github.com/getlorai/lorai-sdk"
 
 [project.scripts]
-lorai = "lorai.cli:main"
+lorai-workspace = "lorai.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["lorai*"]

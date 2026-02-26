@@ -88,7 +88,7 @@
 
 <div class="callout callout-info">
   <strong>Key insight:</strong> You do NOT need a language-specific LorAI SDK for every language. Any OpenAI SDK works because
-  LorAI speaks the exact same protocol. We provide a dedicated SDK for <strong>Python</strong> (<code>pip install lorai</code>)
+  LorAI speaks the exact same protocol. We provide a dedicated SDK for <strong>Python</strong> (<code>pip install lorai-workspace</code>)
   that adds Docker auto-management and native service wrappers &mdash; but the core API is language-agnostic.
 </div>
 
@@ -114,15 +114,15 @@
 
 <p><strong>Step 1:</strong> Start the LorAI container (one-time setup):</p>
 <pre><code><span class="cmt"># Option A: Using the Python CLI (recommended)</span>
-pip install lorai
-lorai start
+pip install lorai-workspace
+lorai-workspace start
 
 <span class="cmt"># Option B: Using Docker directly</span>
 docker run -d --name lorai \
   -p 1842:1842 \
   -p 6080:6080 \
   -v ~/.lorai/data:/data \
-  getlorai/desktop:latest</code></pre>
+  gajapathiks/lorai-workspace:latest</code></pre>
 
 <p><strong>Step 2:</strong> Use any OpenAI SDK or HTTP client, pointing to <code>http://localhost:1842/v1</code>.</p>
 
@@ -140,8 +140,8 @@ docker run -d --name lorai \
   </tr>
   <tr>
     <td><strong>Python</strong> (Full SDK)</td>
-    <td><code>lorai</code></td>
-    <td><code>pip install lorai</code></td>
+    <td><code>lorai-workspace</code></td>
+    <td><code>pip install lorai-workspace</code></td>
   </tr>
   <tr>
     <td><strong>Python</strong> (OpenAI only)</td>
@@ -201,7 +201,7 @@ docker run -d --name lorai \
 <p>The LorAI Python SDK extends the OpenAI SDK with Docker auto-management, 9 AI service wrappers (image, video, voice, RAG, agents, code, vision, LoRA, hub), and a CLI. This is the <strong>recommended</strong> approach for Python developers.</p>
 
 <h4>Install</h4>
-<pre><code>pip install lorai</code></pre>
+<pre><code>pip install lorai-workspace</code></pre>
 
 <h4>Quick Start</h4>
 <pre><code><span class="kw">from</span> lorai <span class="kw">import</span> LorAI

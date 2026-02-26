@@ -16,7 +16,7 @@ LorAI is an AI-first operating environment running in Docker. It provides:
 docker run -d --name lorai \
   -p 1842:1842 \
   -p 6080:6080 \
-  gajapathiks/lorai-desktop:latest
+  gajapathiks/lorai-workspace:latest
 ```
 
 Then:
@@ -26,7 +26,7 @@ Then:
 ## Or use the SDK
 
 ```bash
-pip install lorai
+pip install lorai-workspace
 ```
 
 ```python
