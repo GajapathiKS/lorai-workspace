@@ -9,12 +9,12 @@ from unittest.mock import patch
 
 def test_port_is_1842():
     import lorai_workspace
-    assert lorai.PORT == 1842
+    assert lorai_workspace.PORT == 1842
 
 
 def test_version_is_set():
     import lorai_workspace
-    assert lorai.__version__ == "0.1.0"
+    assert lorai_workspace.__version__ == "0.1.0"
 
 
 # ------------------------------------------------------------------
