@@ -80,10 +80,9 @@
 <h2>Getting Started</h2>
 
 <p>
-  LorAI Workspace is a local AI platform that runs as a Docker container on your machine.
-  It gives you an OpenAI-compatible API on <code>localhost:1842</code> for chat, image generation,
-  voice, document search (RAG), agents, and more — all free, private, and offline.
-  The Python SDK handles the Docker container for you, so you never need to touch Docker directly.
+  LorAI Workspace is a <strong>local AI platform</strong> that runs as a Docker container on your machine.
+  The <code>LorAI</code> Python client gives you chat, image generation, voice, document search, agents, and more &mdash; all free, private, and offline.
+  You never need to touch Docker directly; the client handles the container for you.
 </p>
 
 <!-- Prerequisites -->
@@ -116,33 +115,26 @@ sudo usermod -aG docker $USER  # log out and back in after this</code></pre>
 
 <!-- Quickstart -->
 <h3 id="quickstart">Quickstart</h3>
-<pre><code><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
 
-ai = LorAI()
-<span class="fn">print</span>(ai.chat(<span class="str">"What is 12 multiplied by 8?"</span>))</code></pre>
+<div class="editor">
+  <div class="editor-tabs">
+    <span class="editor-tab">quickstart.py</span>
+    <span class="editor-lang">Python</span>
+  </div>
+  <pre><code><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
 
-<p>On <strong>first run</strong>, you'll see LorAI Workspace bootstrap itself in the terminal:</p>
-<pre><code>  ██╗      ██████╗  ██████╗  █████╗ ██╗
-  ...
-  Pulling image gajapathiks/lorai-workspace:latest ... done
-  Starting container lorai on port 1842 ...
-  Waiting for Ollama ... ready
-  Pulling phi3:mini (2.3 GB) ... done
-  LorAI Workspace is ready at http://localhost:1842
+<span class="cmt"># Pulls Docker image (~2 GB) and starts the container on first run</span>
+<span class="cmt"># Subsequent runs skip this — container is already up</span>
+ai = <span class="fn">LorAI</span>()
 
-96</code></pre>
+<span class="fn">print</span>(ai.<span class="fn">chat</span>(<span class="str">"What is 12 multiplied by 8?"</span>))
+<span class="cmt"># → "12 multiplied by 8 is 96."</span>
 
-<p><strong>On subsequent runs</strong>, the container is already up so it skips straight to your code.</p>
-
-<p>Common options:</p>
-<pre><code><span class="cmt"># Container already running (e.g. started with 'lorai-workspace start')</span>
-ai = LorAI(auto_start=<span class="kw">False</span>)
-
-<span class="cmt"># Use a specific model instead of the default phi3:mini</span>
-response = ai.chat(<span class="str">"Hello"</span>, model=<span class="str">"llama3"</span>)
-
-<span class="cmt"># Stop the container when you're done</span>
-ai.stop()</code></pre>
+<span class="cmt"># Common options</span>
+ai = <span class="fn">LorAI</span>(auto_start=<span class="kw">False</span>)   <span class="cmt"># container already running</span>
+ai.<span class="fn">chat</span>(<span class="str">"Hello"</span>, model=<span class="str">"llama3"</span>)  <span class="cmt"># use a specific model</span>
+ai.<span class="fn">stop</span>()                          <span class="cmt"># stop when done</span></code></pre>
+</div>
 
 <!-- CLI -->
 <h3 id="cli">CLI Usage</h3>
@@ -208,19 +200,6 @@ planets = json.loads(data)</code></pre>
 <pre><code>ai.chat(<span class="str">"Write a short story about a robot"</span>, stream=<span class="kw">True</span>)
 <span class="cmt"># tokens print to stdout as they arrive</span></code></pre>
 
-<h4>Drop-in for OpenAI SDK</h4>
-<p>Because <code>LorAI</code> (the LorAI Workspace Workspace client) extends the OpenAI client, any code written for OpenAI works without changes.</p>
-<pre><code><span class="cmt"># Existing OpenAI code — just replace OpenAI() with LorAI Workspace()</span>
-response = ai.chat.completions.create(
-    model=<span class="str">"phi3:mini"</span>,   <span class="cmt"># any model you've pulled with 'lorai-workspace pull &lt;name&gt;'</span>
-    messages=[
-        {<span class="str">"role"</span>: <span class="str">"system"</span>, <span class="str">"content"</span>: <span class="str">"You are a helpful assistant."</span>},
-        {<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"What's a good name for a Python package?"</span>},
-    ],
-    temperature=<span class="num">0.7</span>,
-    max_tokens=<span class="num">200</span>,
-)
-<span class="fn">print</span>(response.choices[<span class="num">0</span>].message.content)</code></pre>
 
 <!-- Managing Models -->
 <h3 id="models">Managing Models</h3>
@@ -369,6 +348,27 @@ answer = ai.chat(<span class="str">"Write a product description for noise-cancel
 
 <span class="cmt"># Unload when done to free memory</span>
 ai.lora.unload(<span class="str">"llama3.2-my-finetune"</span>)</code></pre>
+
+<!-- OpenAI SDK compatibility -->
+<h3 id="openai-compat">OpenAI SDK Compatibility</h3>
+<p>
+  If you already have code written for the OpenAI Python SDK, it works with LorAI Workspace unchanged.
+  The underlying API speaks the same protocol &mdash; just swap <code>OpenAI()</code> for <code>LorAI()</code>.
+</p>
+<pre><code><span class="cmt"># Existing OpenAI SDK code works as-is</span>
+response = ai.chat.completions.create(
+    model=<span class="str">"phi3:mini"</span>,
+    messages=[
+        {<span class="str">"role"</span>: <span class="str">"system"</span>, <span class="str">"content"</span>: <span class="str">"You are a helpful assistant."</span>},
+        {<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"What's a good name for a Python package?"</span>},
+    ],
+    temperature=<span class="num">0.7</span>,
+    max_tokens=<span class="num">200</span>,
+)
+<span class="fn">print</span>(response.choices[<span class="num">0</span>].message.content)
+
+<span class="cmt"># Or point any HTTP client at localhost:1842/v1 directly</span>
+<span class="cmt"># See the Integrations page for Node.js, Go, Rust, cURL, and more</span></code></pre>
 
 <!-- GPU Setup -->
 <h3 id="gpu">GPU Setup</h3>
