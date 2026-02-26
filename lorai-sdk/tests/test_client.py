@@ -171,13 +171,13 @@ def test_docker_module_functions():
 
 def test_cli_entry_point():
     """Verify the CLI main function is importable and callable."""
-    from lorai.cli import main
+    from lorai_workspace.cli import main
     assert callable(main)
 
 
 def test_cli_version_command(capsys):
     """Test that 'lorai-workspace version' prints version and port."""
-    from lorai.cli import main
+    from lorai_workspace.cli import main
     main(["version"])
     captured = capsys.readouterr()
     assert "0.1.0" in captured.out
@@ -186,7 +186,7 @@ def test_cli_version_command(capsys):
 
 def test_cli_help_command(capsys):
     """Test that 'lorai-workspace help' prints the banner."""
-    from lorai.cli import main
+    from lorai_workspace.cli import main
     main(["help"])
     captured = capsys.readouterr()
     assert "All of AI" in captured.out
