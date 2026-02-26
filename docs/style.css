@@ -54,9 +54,10 @@ nav .nav-inner {
 
 nav .logo {
   font-weight: 700;
-  font-size: 17px;
+  font-size: 15px;
   color: var(--text);
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
 }
 
 nav .logo span { color: var(--accent); }
@@ -86,7 +87,7 @@ main {
 /* Hero */
 .hero {
   text-align: center;
-  padding: 72px 0 56px;
+  padding: 36px 0 44px;
 }
 
 .hero pre.banner {
@@ -174,6 +175,13 @@ main {
 }
 
 .install-step .install-cmd .prompt { color: var(--green); }
+
+.install-step .step-hint {
+  font-size: 11px;
+  color: #6e7681;
+  font-style: italic;
+  margin-top: 3px;
+}
 
 /* CTA buttons */
 .hero .cta-links {

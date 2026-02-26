@@ -32,7 +32,7 @@
 
 <nav>
   <div class="nav-inner">
-    <a href="index.html" class="logo">Lor<span>AI</span></a>
+    <a href="index.html" class="logo">Lor<span>AI</span> Workspace</a>
     <div class="nav-links">
       <a href="index.html" class="active">Home</a>
       <a href="guide.html">Guide</a>
@@ -53,27 +53,33 @@
   <p class="tagline">Local, free, private AI platform &mdash; LLMs, image gen, voice, RAG, agents &mdash; port <span class="port-badge">1842</span></p>
 
   <div class="install-steps">
+
     <div class="install-step">
       <span class="step-num">1</span>
       <div class="step-body">
-        <span class="step-label">Install Docker</span>
+        <span class="step-label">Install Docker on your computer (macOS / Windows / Linux)</span>
         <a href="https://docs.docker.com/get-docker/" class="step-link" target="_blank">docs.docker.com/get-docker →</a>
+        <span class="step-hint">LorAI runs inside Docker — you only need Docker installed, not configured</span>
       </div>
     </div>
+
     <div class="install-step">
       <span class="step-num">2</span>
       <div class="step-body">
-        <span class="step-label">Install LorAI</span>
+        <span class="step-label">In your Terminal / PowerShell / Command Prompt — on your computer, not inside Docker:</span>
         <code class="install-cmd"><span class="prompt">$</span> pip install lorai-workspace</code>
       </div>
     </div>
+
     <div class="install-step">
       <span class="step-num">3</span>
       <div class="step-body">
-        <span class="step-label">Run it — Docker starts automatically</span>
+        <span class="step-label">In a Python file or interactive Python shell — on your computer:</span>
         <code class="install-cmd"><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI; <span class="fn">LorAI</span>().<span class="fn">chat</span>(<span class="str">"Hello"</span>)</code>
+        <span class="step-hint">LorAI automatically pulls and starts the Docker container for you — no docker commands needed</span>
       </div>
     </div>
+
   </div>
 
   <div class="cta-links">
