@@ -4,34 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LorAI Workspace — All of AI. One Command.</title>
-  <meta name="description" content="Local, free, OpenAI-compatible AI platform. LLMs, image gen, voice, video, RAG, agents, vision — all from one pip install. Port 1842.">
-  <meta name="keywords" content="LorAI Workspace, AI platform, local AI, OpenAI compatible, LLM, image generation, voice, RAG, agents, Docker, Ollama, self-hosted AI">
+  <meta name="description" content="Local AI platform that runs on your machine. LLMs, image gen, voice, RAG, agents — no cloud, no API keys, no bills. Port 1842.">
+  <meta name="keywords" content="LorAI Workspace, local AI, AI platform, LLM, image generation, voice, RAG, agents, Docker, Ollama, self-hosted AI">
   <meta name="author" content="LorAI Workspace Team">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/">
 
-  <!-- Open Graph / Facebook / LinkedIn -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://gajapathiks.github.io/lorai-workspace/">
   <meta property="og:title" content="LorAI Workspace — All of AI. One Command.">
-  <meta property="og:description" content="Local, free, OpenAI-compatible AI platform with 50+ tools — LLMs, image gen, voice, video, RAG, agents — running on port 1842.">
+  <meta property="og:description" content="Local AI platform. LLMs, image gen, voice, RAG, agents — running free on your machine on port 1842.">
   <meta property="og:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="LorAI Workspace — All of AI. One Command. pip install lorai-workspace. Port 1842.">
   <meta property="og:site_name" content="LorAI Workspace">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="LorAI Workspace — All of AI. One Command.">
-  <meta name="twitter:description" content="Local, free, OpenAI-compatible AI platform with 50+ tools — LLMs, image gen, voice, video, RAG, agents — running on port 1842.">
+  <meta name="twitter:description" content="Local AI platform. LLMs, image gen, voice, RAG, agents — running free on your machine on port 1842.">
   <meta name="twitter:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
-  <meta name="twitter:image:alt" content="LorAI Workspace — All of AI. One Command. pip install lorai-workspace. Port 1842.">
 
-  <!-- Theme -->
   <meta name="theme-color" content="#0d1117">
   <meta name="color-scheme" content="dark">
-
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -54,18 +48,32 @@
 
 <!-- Hero -->
 <section class="hero">
-<pre class="banner">  ██╗      ██████╗  ██████╗  █████╗ ██╗
-  ██║     ██╔═══██╗██╔══██╗██╔══██╗██║
-  ██║     ██║   ██║██████╔╝███████║██║
-  ██║     ██║   ██║██╔══██╗██╔══██║██║
-  ███████╗╚██████╔╝██║  ██║██║  ██║██║
-  ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝</pre>
   <p><span class="badge badge-ready">v0.1.0-beta</span></p>
   <h1>All of AI. One Command.</h1>
-  <p class="tagline">Local, free, OpenAI-compatible AI platform. LLMs, image gen, voice, video, RAG, agents &mdash; port <span class="port-badge">1842</span></p>
+  <p class="tagline">Local, free, private AI platform &mdash; LLMs, image gen, voice, RAG, agents &mdash; port <span class="port-badge">1842</span></p>
 
-  <div class="install-box">
-    <span class="prompt">$</span> pip install lorai-workspace
+  <div class="install-steps">
+    <div class="install-step">
+      <span class="step-num">1</span>
+      <div class="step-body">
+        <span class="step-label">Install Docker</span>
+        <a href="https://docs.docker.com/get-docker/" class="step-link" target="_blank">docs.docker.com/get-docker →</a>
+      </div>
+    </div>
+    <div class="install-step">
+      <span class="step-num">2</span>
+      <div class="step-body">
+        <span class="step-label">Install LorAI</span>
+        <code class="install-cmd"><span class="prompt">$</span> pip install lorai-workspace</code>
+      </div>
+    </div>
+    <div class="install-step">
+      <span class="step-num">3</span>
+      <div class="step-body">
+        <span class="step-label">Run it — Docker starts automatically</span>
+        <code class="install-cmd"><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI; <span class="fn">LorAI</span>().<span class="fn">chat</span>(<span class="str">"Hello"</span>)</code>
+      </div>
+    </div>
   </div>
 
   <div class="cta-links">
@@ -80,111 +88,82 @@
 <h2>What is LorAI Workspace?</h2>
 <p>
   LorAI Workspace is a <strong>local AI platform</strong> that runs entirely on your machine &mdash; no cloud, no API keys, no usage bills.
-  One <code>pip install lorai-workspace</code> spins up a Docker container with LLMs, image generation, voice, RAG, agents, and more,
-  all available on <code>localhost:1842</code> behind a fully OpenAI-compatible API.
+  Install Docker, run <code>pip install lorai-workspace</code>, and you have a full AI stack on <code>localhost:1842</code>.
 </p>
 <p>
-  Think of it as a self-hosted replacement for the OpenAI API. Your data never leaves your machine, there are no rate limits,
-  and it costs nothing to run. If you already use the OpenAI SDK, just swap <code>OpenAI()</code> for <code>LorAI()</code> &mdash; everything else stays the same.
+  The <code>LorAI</code> client gives you chat, image generation, voice, document search, agents, and more through one clean Python API.
+  Your data never leaves your machine, there are no rate limits, and it costs nothing to run.
 </p>
 
-<pre><code><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
+<div class="editor">
+  <div class="editor-tabs">
+    <span class="editor-tab">quickstart.py</span>
+    <span class="editor-lang">Python</span>
+  </div>
+  <pre><code><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
 
-<span class="cmt"># First run: pulls Docker image and starts the container automatically</span>
-ai = LorAI()
+<span class="cmt"># First run: pulls the Docker image and starts the container automatically</span>
+ai = <span class="fn">LorAI</span>()
 
 <span class="cmt"># Chat with a local LLM — no API key, no internet required</span>
-<span class="fn">print</span>(ai.chat(<span class="str">"What is the capital of France?"</span>))
+<span class="fn">print</span>(ai.<span class="fn">chat</span>(<span class="str">"What is the capital of France?"</span>))
 <span class="cmt"># → "The capital of France is Paris."</span>
 
-<span class="cmt"># Or use the full OpenAI-compatible interface — same syntax, local model</span>
-response = ai.chat.completions.create(
-    model=<span class="str">"phi3:mini"</span>,
-    messages=[{<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: <span class="str">"Explain quantum computing in one sentence"</span>}]
-)
-<span class="fn">print</span>(response.choices[<span class="num">0</span>].message.content)
-<span class="cmt"># → "Quantum computing uses quantum bits to solve certain problems exponentially faster than classical computers."</span>
-</code></pre>
+<span class="cmt"># Generate an image (requires GPU)</span>
+ai.image.<span class="fn">generate</span>(<span class="str">"a cat in a space suit"</span>, save_to=<span class="str">"cat.png"</span>)
+
+<span class="cmt"># Index your documents and ask questions</span>
+ai.knowledge.<span class="fn">ingest</span>(<span class="str">"/my/docs/"</span>)
+<span class="fn">print</span>(ai.knowledge.<span class="fn">ask</span>(<span class="str">"What is the refund policy?"</span>))
+
+<span class="cmt"># Transcribe audio</span>
+text = ai.voice.<span class="fn">transcribe</span>(<span class="str">"meeting.mp3"</span>)
+
+<span class="cmt"># Stop when done</span>
+ai.<span class="fn">stop</span>()</code></pre>
+</div>
 
 <!-- Why LorAI -->
 <h2>Why LorAI Workspace?</h2>
 <div class="features">
   <div class="feature-card">
     <h4>Free to run</h4>
-    <p>No per-token billing. Run thousands of requests a day on your own hardware at zero cost. The default model (phi3:mini) runs comfortably on CPU with 8 GB RAM.</p>
+    <p>No per-token billing. Run thousands of requests a day on your own hardware. The default model (phi3:mini) runs comfortably on CPU.</p>
   </div>
   <div class="feature-card">
     <h4>Private by default</h4>
-    <p>Your prompts, documents, and outputs never leave your machine. Drop in sensitive source code, internal docs, or personal data without worry.</p>
+    <p>Your prompts, documents, and outputs never leave your machine. Drop in sensitive source code or internal docs without worry.</p>
   </div>
   <div class="feature-card">
-    <h4>Drop-in for OpenAI</h4>
-    <p>Already using the OpenAI Python SDK, LangChain, or any OpenAI-compatible library? Point it at <code>http://localhost:1842/v1</code> and your code works unchanged.</p>
+    <h4>One clean API</h4>
+    <p><code>ai.chat()</code>, <code>ai.image.generate()</code>, <code>ai.knowledge.ask()</code> &mdash; everything through one consistent Python client.</p>
   </div>
   <div class="feature-card">
-    <h4>One command setup</h4>
-    <p>No YAML files, no docker-compose, no manual configuration. <code>pip install lorai-workspace</code> + two lines of Python and you're running.</p>
+    <h4>Zero config</h4>
+    <p>No YAML files, no docker-compose, no manual setup. Two lines of Python and you're running.</p>
+  </div>
+  <div class="feature-card">
+    <h4>OpenAI-compatible</h4>
+    <p>The underlying API speaks OpenAI's protocol. Point any existing OpenAI SDK at <code>localhost:1842/v1</code> and it works.</p>
+  </div>
+  <div class="feature-card">
+    <h4>Switch models freely</h4>
+    <p>Pull any Ollama model — llama3, mistral, codestral, gemma — and swap with one argument.</p>
   </div>
 </div>
-
-<!-- Works with Any Language -->
-<h2>Works with Any Language</h2>
-<p>
-  LorAI Workspace's API is <strong>OpenAI-compatible</strong>. Any programming language with an OpenAI SDK can use LorAI Workspace Workspace
-  out of the box &mdash; just set <code>base_url</code> to <code>http://localhost:1842/v1</code>.
-</p>
-
-<div class="lang-grid">
-  <div class="lang-card">
-    <h4>Python</h4>
-    <pre><code><span class="kw">from</span> openai <span class="kw">import</span> OpenAI
-client = OpenAI(
-  base_url=<span class="str">"http://localhost:1842/v1"</span>,
-  api_key=<span class="str">"not-needed"</span>
-)</code></pre>
-  </div>
-  <div class="lang-card">
-    <h4>Node.js</h4>
-    <pre><code><span class="kw">import</span> OpenAI <span class="kw">from</span> <span class="str">"openai"</span>;
-<span class="kw">const</span> client = <span class="kw">new</span> <span class="fn">OpenAI</span>({
-  baseURL: <span class="str">"http://localhost:1842/v1"</span>,
-  apiKey: <span class="str">"not-needed"</span>,
-});</code></pre>
-  </div>
-  <div class="lang-card">
-    <h4>Go</h4>
-    <pre><code>config := openai.<span class="fn">DefaultConfig</span>(<span class="str">"not-needed"</span>)
-config.BaseURL = <span class="str">"http://localhost:1842/v1"</span>
-client := openai.<span class="fn">NewClientWithConfig</span>(config)</code></pre>
-  </div>
-  <div class="lang-card">
-    <h4>cURL</h4>
-    <pre><code>curl http://localhost:1842/v1/chat/completions \
-  -H <span class="str">"Content-Type: application/json"</span> \
-  -d <span class="str">'{"model":"phi3:mini","messages":[
-    {"role":"user","content":"Hello!"}]}'</span></code></pre>
-  </div>
-</div>
-
-<p style="text-align: center; margin-top: 16px;">
-  <a href="integrations.html">View all 10 language integrations &rarr;</a>
-  &nbsp;&nbsp;|&nbsp;&nbsp;
-  Python, Node.js, Go, Rust, Java, Kotlin, C#, Ruby, PHP, cURL
-</p>
 
 <!-- Features -->
-<h2>Features</h2>
-
+<h2>Capabilities</h2>
 <div class="features">
   <div class="feature-card">
     <span class="badge badge-ready">Ready</span>
     <h4>Chat &amp; LLMs</h4>
-    <p>OpenAI-compatible chat completions, text completions, and embeddings via Ollama. Streaming supported.</p>
+    <p>Local chat completions, text completions, and embeddings via Ollama. Streaming supported.</p>
   </div>
   <div class="feature-card">
     <span class="badge badge-ready">Ready</span>
     <h4>Model Hub</h4>
-    <p>Pull, list, remove, and benchmark Ollama models. Default: phi3:mini (runs on CPU).</p>
+    <p>Pull, list, remove, and benchmark any Ollama model. Default: phi3:mini.</p>
   </div>
   <div class="feature-card">
     <span class="badge badge-gpu">GPU</span>
@@ -209,7 +188,7 @@ client := openai.<span class="fn">NewClientWithConfig</span>(config)</code></pre
   <div class="feature-card">
     <span class="badge badge-ready">Ready</span>
     <h4>Agents</h4>
-    <p>ReAct agent loop with 5 built-in tools: search, read, write, run, knowledge.</p>
+    <p>ReAct agent loop with built-in tools: search, read, write, run, knowledge.</p>
   </div>
   <div class="feature-card">
     <span class="badge badge-ready">Ready</span>
@@ -219,12 +198,12 @@ client := openai.<span class="fn">NewClientWithConfig</span>(config)</code></pre
   <div class="feature-card">
     <span class="badge badge-ready">Ready</span>
     <h4>Vision</h4>
-    <p>Image analysis and OCR via LLaVA multimodal models through Ollama.</p>
+    <p>Image analysis and OCR via LLaVA multimodal models.</p>
   </div>
   <div class="feature-card">
     <span class="badge badge-phase2">Experimental</span>
     <h4>LoRA Adapters</h4>
-    <p>Load, unload, and manage GGUF LoRA adapters on top of base models.</p>
+    <p>Load and manage GGUF LoRA adapters on top of base models.</p>
   </div>
   <div class="feature-card">
     <span class="badge badge-gpu">GPU</span>
@@ -240,66 +219,143 @@ client := openai.<span class="fn">NewClientWithConfig</span>(config)</code></pre
 
 <!-- CLI -->
 <h2>CLI Quick Reference</h2>
-<pre><code>lorai-workspace start [--gpu] [--port N]   <span class="cmt"># Start the LorAI Workspace Workspace container</span>
-lorai-workspace stop                       <span class="cmt"># Stop the container</span>
-lorai-workspace status                     <span class="cmt"># Show system status</span>
-lorai-workspace chat <span class="str">"What is LorAI?"</span>       <span class="cmt"># Chat with the local AI</span>
-lorai-workspace desktop                    <span class="cmt"># Open browser desktop (noVNC)</span>
-lorai-workspace pull llama3                <span class="cmt"># Download an AI model</span>
-lorai-workspace bench                      <span class="cmt"># Benchmark your hardware</span>
-lorai-workspace logs                       <span class="cmt"># Show container logs</span>
-lorai-workspace version                    <span class="cmt"># Show version info</span></code></pre>
+<div class="editor">
+  <div class="editor-tabs">
+    <span class="editor-tab">terminal</span>
+    <span class="editor-lang">Shell</span>
+  </div>
+  <pre><code>lorai-workspace start [--gpu] [--port N]   <span class="cmt"># start the container</span>
+lorai-workspace stop                       <span class="cmt"># stop the container</span>
+lorai-workspace status                     <span class="cmt"># show health and loaded models</span>
+lorai-workspace chat <span class="str">"What is LorAI?"</span>       <span class="cmt"># chat from the terminal</span>
+lorai-workspace pull llama3                <span class="cmt"># download a model</span>
+lorai-workspace desktop                    <span class="cmt"># open the browser desktop</span>
+lorai-workspace bench                      <span class="cmt"># benchmark your hardware</span>
+lorai-workspace logs                       <span class="cmt"># tail container logs</span>
+lorai-workspace version                    <span class="cmt"># show version</span></code></pre>
+</div>
+
+<!-- Works with Any Language -->
+<h2>Works with Any Language</h2>
+<p>
+  LorAI Workspace exposes a standard HTTP API on <code>localhost:1842</code>.
+  Any language can talk to it &mdash; either through the Python client or directly via HTTP.
+</p>
+
+<div class="lang-grid">
+  <div class="lang-card">
+    <div class="lang-card-header">
+      <h4>Python (LorAI client)</h4>
+      <span class="lang-badge lang-python">Python</span>
+    </div>
+    <pre><code><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
+ai = <span class="fn">LorAI</span>()
+<span class="fn">print</span>(ai.<span class="fn">chat</span>(<span class="str">"Hello"</span>))</code></pre>
+  </div>
+  <div class="lang-card">
+    <div class="lang-card-header">
+      <h4>Node.js</h4>
+      <span class="lang-badge lang-js">JavaScript</span>
+    </div>
+    <pre><code><span class="kw">import</span> OpenAI <span class="kw">from</span> <span class="str">"openai"</span>;
+<span class="kw">const</span> ai = <span class="kw">new</span> <span class="fn">OpenAI</span>({
+  baseURL: <span class="str">"http://localhost:1842/v1"</span>,
+  apiKey: <span class="str">"not-needed"</span>,
+});</code></pre>
+  </div>
+  <div class="lang-card">
+    <div class="lang-card-header">
+      <h4>Go</h4>
+      <span class="lang-badge lang-go">Go</span>
+    </div>
+    <pre><code>config := openai.<span class="fn">DefaultConfig</span>(<span class="str">"not-needed"</span>)
+config.BaseURL = <span class="str">"http://localhost:1842/v1"</span>
+client := openai.<span class="fn">NewClientWithConfig</span>(config)</code></pre>
+  </div>
+  <div class="lang-card">
+    <div class="lang-card-header">
+      <h4>HTTP / cURL</h4>
+      <span class="lang-badge lang-http">cURL</span>
+    </div>
+    <pre><code>curl http://localhost:1842/v1/chat/completions \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"model":"phi3:mini",
+    "messages":[{"role":"user",
+    "content":"Hello!"}]}'</span></code></pre>
+  </div>
+</div>
+
+<p style="text-align: center; margin-top: 8px; color: var(--text-muted); font-size: 14px;">
+  <a href="integrations.html">View all 10 language integrations &rarr;</a>
+  &nbsp;&middot;&nbsp;
+  Python &middot; Node.js &middot; Go &middot; Rust &middot; Java &middot; Kotlin &middot; C# &middot; Ruby &middot; PHP &middot; cURL
+</p>
 
 <!-- How it works -->
 <h2>How it works</h2>
-<p>LorAI Workspace is a Docker container that runs on your machine. The Python SDK manages the container lifecycle for you — you never need to touch Docker directly.</p>
-<pre><code><span class="cmt">Step 1 — Install the SDK (once)</span>
-pip install lorai-workspace
+<p>
+  LorAI Workspace is a Docker container with Ollama, ChromaDB, Whisper, and Piper inside — all orchestrated behind a single API gateway on port 1842.
+  The Python client handles the container lifecycle for you.
+</p>
 
-<span class="cmt">Step 2 — Use it in Python (container starts automatically on first import)</span>
+<div class="editor">
+  <div class="editor-tabs">
+    <span class="editor-tab">how-it-works.py</span>
+    <span class="editor-lang">Python</span>
+  </div>
+  <pre><code><span class="cmt"># Install once</span>
+<span class="cmt"># $ pip install lorai-workspace</span>
+
 <span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
-ai = LorAI()           <span class="cmt"># pulls image (~2 GB) + starts container + waits for health check</span>
-                       <span class="cmt"># subsequent runs skip this — already running</span>
 
-<span class="cmt">Step 3 — Everything runs locally on port 1842</span>
-ai.chat(<span class="str">"Summarise this file"</span>, system=<span class="str">"You are a helpful assistant"</span>)
-ai.image.generate(<span class="str">"a cat in a space suit"</span>, save_to=<span class="str">"cat.png"</span>)
-ai.knowledge.ingest(<span class="str">"/docs/"</span>)
-ai.knowledge.ask(<span class="str">"What is the refund policy?"</span>)</code></pre>
+<span class="cmt"># First run: pulls Docker image (~2 GB) + starts container + health checks</span>
+<span class="cmt"># Subsequent runs: container already running, skips straight to your code</span>
+ai = <span class="fn">LorAI</span>()
 
-<p>Internally, the container runs <strong>Ollama</strong> for LLMs, <strong>ChromaDB</strong> for vector search, <strong>Whisper</strong> for speech-to-text, and <strong>Piper</strong> for text-to-speech — all orchestrated behind a single FastAPI gateway on port 1842.</p>
+<span class="cmt"># Chat</span>
+ai.<span class="fn">chat</span>(<span class="str">"Summarise this meeting transcript"</span>, system=<span class="str">"Be concise"</span>)
+
+<span class="cmt"># Image (GPU needed)</span>
+ai.image.<span class="fn">generate</span>(<span class="str">"a minimalist logo for a tech startup"</span>, save_to=<span class="str">"logo.png"</span>)
+
+<span class="cmt"># RAG — ingest docs then ask questions</span>
+ai.knowledge.<span class="fn">ingest</span>(<span class="str">"/my/company/docs/"</span>)
+ai.knowledge.<span class="fn">ask</span>(<span class="str">"What is the onboarding process?"</span>)
+
+<span class="cmt"># Run an agent with access to tools</span>
+ai.agents.<span class="fn">run</span>(<span class="str">"Find all TODO comments in ./src/ and write a summary"</span>)</code></pre>
+</div>
 
 <!-- Beta Notice -->
 <h2>Beta Release</h2>
 <div class="callout callout-info">
-  <strong>LorAI Workspace v0.1.0-beta</strong> &mdash; This is the first public Beta release. The core API is stable,
-  but some features are still being refined. We're looking for early adopters to test the platform and provide feedback.
+  <strong>LorAI Workspace v0.1.0-beta</strong> &mdash; This is the first public release. The core API is stable but some features are still being refined.
+  We're looking for early adopters to test and give feedback.
   <br><br>
   <a href="changelog.html">View full changelog &rarr;</a>
 </div>
 
-<h3>What's included in Beta</h3>
+<h3>What's in Beta</h3>
 <ul>
-  <li><strong>27 API endpoints</strong> &mdash; 8 OpenAI-compatible + 19 LorAI Workspace-native</li>
-  <li><strong>Python SDK</strong> with Docker auto-management, 9 service wrappers, and CLI</li>
+  <li><strong>27 API endpoints</strong> &mdash; chat, images, audio, embeddings, RAG, agents, code, vision, LoRA, model hub</li>
+  <li><strong>Python SDK</strong> with auto Docker management, 9 service wrappers, and CLI</li>
   <li><strong>10 language integrations</strong> &mdash; Python, Node.js, Go, Rust, Java, Kotlin, C#, Ruby, PHP, cURL</li>
-  <li><strong>13 AI capabilities</strong> &mdash; Chat, embeddings, image gen, video, voice, RAG, agents, code execution, vision, LoRA, music, model hub, browser desktop</li>
-  <li><strong>CPU + GPU support</strong> &mdash; Core features work on CPU; image/video/music gen require NVIDIA GPU</li>
+  <li><strong>CPU + GPU support</strong> &mdash; chat/voice/RAG work on CPU; image/video/music need NVIDIA GPU</li>
 </ul>
 
 <h3>Known Limitations</h3>
 <ul>
-  <li>First startup pulls ~2 GB Docker image + ~2.3 GB default model &mdash; allow several minutes</li>
+  <li>First startup downloads ~2 GB Docker image + ~2.3 GB default model &mdash; allow a few minutes</li>
   <li>No authentication &mdash; designed for local development, not internet-facing deployment</li>
   <li>GPU features require NVIDIA GPU + CUDA + nvidia-container-toolkit</li>
-  <li>Windows support requires WSL2 with Docker Desktop</li>
-  <li>LoRA adapter loading is experimental</li>
+  <li>Windows requires WSL2 with Docker Desktop</li>
 </ul>
 
 </main>
 
 <footer>
-  LorAI Workspace v0.1.0-beta &mdash; MIT License &mdash; <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
+  LorAI Workspace v0.1.0-beta &mdash; MIT License &mdash;
+  <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
   &mdash; <a href="changelog.html">Changelog</a>
 </footer>
 
