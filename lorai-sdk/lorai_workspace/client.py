@@ -1,7 +1,7 @@
 """LorAI client — extends OpenAI with 10 AI services.
 
 Usage:
-    from lorai import LorAI
+    from lorai_workspace import LorAI
     ai = LorAI()
     print(ai.chat("Hello!"))
 """
@@ -15,7 +15,7 @@ from typing import Any
 import httpx
 from openai import OpenAI
 
-from lorai.docker import ensure_running, stop_container
+from lorai_workspace.docker import ensure_running, stop_container
 
 
 class LorAI(OpenAI):

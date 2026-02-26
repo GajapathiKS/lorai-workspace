@@ -11,7 +11,7 @@ pip install lorai-workspace
 ```
 
 ```python
-from lorai import LorAI
+from lorai_workspace import LorAI
 
 ai = LorAI()              # auto-pulls Docker image, starts container
 print(ai.chat("Hello!"))   # gets response from local LLM

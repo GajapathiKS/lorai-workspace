@@ -1,6 +1,6 @@
 """LorAI Quickstart — All of AI. One Command."""
 
-from lorai import LorAI
+from lorai_workspace import LorAI
 
 # Create client (auto-starts Docker container on first use)
 ai = LorAI()
