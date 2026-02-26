@@ -42,7 +42,7 @@
       <a href="guide.html">Guide</a>
       <a href="sdk.html">SDK</a>
       <a href="api.html">API</a>
-      <a href="integrations.html" class="active">Integrations</a>
+      <a href="integrations.html" class="active">Other Languages</a>
       <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
     </div>
   </div>
@@ -78,19 +78,19 @@
 
 <div>
 
-<h2>Integrations</h2>
-
-<p>
-  LorAI Workspace exposes an <strong>OpenAI-compatible API</strong> on <code>http://localhost:1842/v1</code>.
-  This means <strong>any programming language</strong> that has an OpenAI client library can use LorAI Workspace
-  with zero custom code &mdash; just point <code>base_url</code> to <code>localhost:1842</code>.
-</p>
+<h2>Other Languages &mdash; HTTP API</h2>
 
 <div class="callout callout-info">
-  <strong>Key insight:</strong> You do NOT need a language-specific LorAI Workspace SDK for every language. Any OpenAI SDK works because
-  LorAI Workspace speaks the exact same protocol. We provide a dedicated SDK for <strong>Python</strong> (<code>pip install lorai-workspace</code>)
-  that adds Docker auto-management and native service wrappers &mdash; but the core API is language-agnostic.
+  <strong>Python users:</strong> use the LorAI Python client &mdash; <code>pip install lorai-workspace</code> &mdash; which manages Docker for you automatically and gives you <code>ai.chat()</code>, <code>ai.image.generate()</code>, <code>ai.knowledge.ask()</code>, and more.
+  <a href="sdk.html">See the SDK reference &rarr;</a>
 </div>
+
+<p>
+  <strong>Every other language</strong> connects to the LorAI Workspace HTTP API directly on <code>http://localhost:1842/v1</code>.
+  The API follows the same format as OpenAI's REST API, so any existing OpenAI client library works by changing one line &mdash;
+  set <code>base_url</code> to <code>localhost:1842</code> and <code>api_key</code> to <code>"not-needed"</code>.
+  No LorAI-specific SDK or package required.
+</p>
 
 <!-- ============================================================ -->
 <!-- How It Works -->

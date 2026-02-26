@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SDK Reference — LorAI Workspace</title>
-  <meta name="description" content="LorAI Workspace Python SDK reference — LorAI(OpenAI) client with 9 AI services, Docker auto-management, and CLI. Drop-in replacement for the OpenAI SDK.">
-  <meta name="keywords" content="LorAI Workspace SDK, Python SDK, OpenAI SDK, AI client, LorAI Python, Docker AI, local AI SDK">
+  <meta name="description" content="LorAI Workspace Python SDK reference — LorAI client with 9 AI services, Docker auto-management, and CLI.">
+  <meta name="keywords" content="LorAI Workspace SDK, Python SDK, AI client, LorAI Python, Docker AI, local AI SDK">
   <meta name="author" content="LorAI Workspace Team">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://gajapathiks.github.io/lorai-workspace/sdk.html">
@@ -14,7 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://gajapathiks.github.io/lorai-workspace/sdk.html">
   <meta property="og:title" content="SDK Reference — LorAI Workspace">
-  <meta property="og:description" content="LorAI Workspace Python SDK — extends OpenAI with 9 AI services, Docker auto-management, and CLI. Drop-in replacement for the OpenAI SDK.">
+  <meta property="og:description" content="LorAI Workspace Python SDK — 9 AI services, Docker auto-management, and CLI. Chat, image gen, voice, RAG, agents and more.">
   <meta property="og:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -23,7 +23,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SDK Reference — LorAI Workspace">
-  <meta name="twitter:description" content="LorAI Workspace Python SDK — extends OpenAI with 9 AI services, Docker auto-management, and CLI. Drop-in replacement for the OpenAI SDK.">
+  <meta name="twitter:description" content="LorAI Workspace Python SDK — 9 AI services, Docker auto-management, and CLI. Chat, image gen, voice, RAG, agents and more.">
   <meta name="twitter:image" content="https://gajapathiks.github.io/lorai-workspace/og-image.png">
 
   <!-- Theme -->
@@ -42,7 +42,7 @@
       <a href="guide.html">Guide</a>
       <a href="sdk.html" class="active">SDK</a>
       <a href="api.html">API</a>
-      <a href="integrations.html">Integrations</a>
+      <a href="integrations.html">Other Languages</a>
       <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
     </div>
   </div>
@@ -75,22 +75,40 @@
 
 <h2>SDK Reference</h2>
 <p>
-  The LorAI Workspace SDK (<code>pip install lorai-workspace</code>) provides a Python client that extends the
-  <a href="https://github.com/openai/openai-python">OpenAI Python SDK</a>.
-  Any code that works with <code>OpenAI()</code> works with <code>LorAI()</code>.
+  <code>pip install lorai-workspace</code> gives you the <code>LorAI</code> Python client &mdash; a single object
+  that manages your Docker container and exposes chat, image generation, voice, RAG, agents, and more
+  through a clean, consistent API.
 </p>
 
-<pre><code><span class="kw">import</span> lorai
+<div class="editor">
+  <div class="editor-tabs">
+    <span class="editor-tab">example.py</span>
+    <span class="editor-lang">Python</span>
+  </div>
+  <pre><code><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI
 
-lorai.__version__   <span class="cmt"># "0.1.0"</span>
-lorai.PORT          <span class="cmt"># 1842</span></code></pre>
+ai = <span class="fn">LorAI</span>()                              <span class="cmt"># starts Docker automatically</span>
+ai.<span class="fn">chat</span>(<span class="str">"Hello"</span>)                           <span class="cmt"># chat with local LLM</span>
+ai.image.<span class="fn">generate</span>(<span class="str">"a mountain at sunset"</span>)  <span class="cmt"># generate an image</span>
+ai.knowledge.<span class="fn">ingest</span>(<span class="str">"/docs/"</span>)             <span class="cmt"># index documents</span>
+ai.knowledge.<span class="fn">ask</span>(<span class="str">"What is the policy?"</span>)   <span class="cmt"># RAG Q&amp;A</span>
+ai.voice.<span class="fn">transcribe</span>(<span class="str">"audio.mp3"</span>)          <span class="cmt"># speech to text</span>
+ai.agents.<span class="fn">run</span>(<span class="str">"Find TODOs in ./src/"</span>)     <span class="cmt"># run an agent</span></code></pre>
+</div>
+
+<div class="callout callout-info">
+  <strong>Using Node.js, Go, Rust, Java, C#, or another language?</strong>
+  The LorAI Workspace API is HTTP-based and speaks the same protocol as OpenAI, so any OpenAI-compatible
+  SDK works by pointing its <code>base_url</code> at <code>http://localhost:1842/v1</code>.
+  &nbsp;<a href="integrations.html">See examples for all 10 languages &rarr;</a>
+</div>
 
 <!-- ============================================================ -->
 <!-- LorAI Class -->
 <!-- ============================================================ -->
 
 <h3 id="lorai-class">LorAI</h3>
-<p><code>lorai.client.LorAI</code> &mdash; extends <code>openai.OpenAI</code></p>
+<p><code>lorai_workspace.LorAI</code> &mdash; the main client class</p>
 
 <h4>Constructor</h4>
 <pre><code>LorAI(
