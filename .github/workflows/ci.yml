@@ -34,7 +34,7 @@ jobs:
         run: pytest tests/ -v
 
       - name: Verify CLI entry point
-        run: lorai version
+        run: lorai-workspace version
 
   lint:
     name: Lint
