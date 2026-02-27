@@ -108,8 +108,39 @@ sudo usermod -aG docker $USER  # log out and back in after this</code></pre>
 <p>Verify Docker is working before continuing:</p>
 <pre><code>docker run hello-world</code></pre>
 
-<!-- Step 2: Install SDK -->
-<h3 id="install">Step 2 &mdash; Install the SDK</h3>
+<!-- Step 2: Python -->
+<h3 id="install-python">Step 2 &mdash; Install Python (if you don't have it)</h3>
+<p>The LorAI SDK is a Python package. If you already have Python 3.9+, skip this step. If not:</p>
+<table style="border-collapse:collapse;width:100%;font-size:13px;margin:12px 0">
+  <thead>
+    <tr style="border-bottom:1px solid var(--border);text-align:left">
+      <th style="padding:6px 12px;color:var(--text-muted);font-weight:600">OS</th>
+      <th style="padding:6px 12px;color:var(--text-muted);font-weight:600">Quickest way</th>
+      <th style="padding:6px 12px;color:var(--text-muted);font-weight:600">Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:6px 12px">macOS</td>
+      <td style="padding:6px 12px"><code>brew install python3</code></td>
+      <td style="padding:6px 12px;color:var(--text-muted)">Or download from <a href="https://www.python.org/downloads/macos/" target="_blank">python.org</a></td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:6px 12px">Windows</td>
+      <td style="padding:6px 12px"><code>winget install Python.Python.3.12</code></td>
+      <td style="padding:6px 12px;color:var(--text-muted)">Or <a href="https://www.python.org/downloads/windows/" target="_blank">python.org installer</a> — tick <strong>"Add to PATH"</strong></td>
+    </tr>
+    <tr>
+      <td style="padding:6px 12px">Linux</td>
+      <td style="padding:6px 12px"><code>sudo apt install python3 python3-pip</code></td>
+      <td style="padding:6px 12px;color:var(--text-muted)">Use <code>dnf</code> on Fedora, <code>pacman</code> on Arch</td>
+    </tr>
+  </tbody>
+</table>
+<p>Verify with: <code>python3 --version</code> (macOS/Linux) or <code>python --version</code> (Windows). You need 3.9 or higher.</p>
+
+<!-- Step 3: Install SDK -->
+<h3 id="install">Step 3 &mdash; Install the SDK</h3>
 <pre><code>pip install lorai-workspace</code></pre>
 <p>That's it. The Docker image (~2 GB) and default model (~2.3 GB) pull automatically on first use — you don't need to run any <code>docker</code> commands manually.</p>
 

@@ -58,12 +58,63 @@
       </div>
     </div>
 
-    <div class="install-step">
+    <div class="install-step py-step" id="step-python">
       <span class="step-num">2</span>
       <div class="step-body">
-        <span class="step-label">In your Terminal (macOS/Linux) or PowerShell (Windows) — on your computer, not inside Docker:</span>
-        <code class="install-cmd"><span class="prompt">$</span> pip install lorai-workspace</code>
-        <span class="step-hint">This installs the Python client only &mdash; it does not touch Docker, pull any image, or start anything</span>
+
+        <!-- Python check -->
+        <div class="py-question">
+          <span class="step-label">Do you have Python 3.9 or newer installed?</span>
+          <div class="py-toggle">
+            <button class="py-btn py-yes" onclick="setPyHas(true)">Yes, I have Python</button>
+            <button class="py-btn py-no" onclick="setPyHas(false)">No &mdash; show me how</button>
+          </div>
+        </div>
+
+        <!-- OS-specific Python install instructions (shown when No) -->
+        <div class="py-install-panel" id="py-install-panel">
+          <div class="os-tabs">
+            <button class="os-tab" data-os="mac" onclick="setOS('mac')">macOS</button>
+            <button class="os-tab" data-os="win" onclick="setOS('win')">Windows</button>
+            <button class="os-tab" data-os="linux" onclick="setOS('linux')">Linux</button>
+          </div>
+
+          <div class="os-pane" id="os-mac">
+            <p class="os-opt">Option 1 — Homebrew (recommended if you have it):</p>
+            <code class="install-cmd"><span class="prompt">$</span> brew install python3</code>
+            <p class="os-opt">Option 2 — Official installer:</p>
+            <a href="https://www.python.org/downloads/macos/" class="step-link" target="_blank">python.org/downloads/macos &rarr;</a>
+            <p class="os-verify">Verify: run <code>python3 --version</code> in Terminal &mdash; should print Python 3.x.x</p>
+          </div>
+
+          <div class="os-pane" id="os-win">
+            <p class="os-opt">Option 1 — Windows Package Manager:</p>
+            <code class="install-cmd"><span class="prompt">&gt;</span> winget install Python.Python.3.12</code>
+            <div class="os-warn">Restart PowerShell after install so the PATH updates take effect.</div>
+            <p class="os-opt">Option 2 — Official installer (easiest for beginners):</p>
+            <a href="https://www.python.org/downloads/windows/" class="step-link" target="_blank">python.org/downloads/windows &rarr;</a>
+            <div class="os-warn">During install: tick <strong>"Add python.exe to PATH"</strong> on the first screen — without this pip won't work.</div>
+            <p class="os-verify">Verify: open PowerShell, run <code>python --version</code></p>
+          </div>
+
+          <div class="os-pane" id="os-linux">
+            <p class="os-opt">Ubuntu / Debian:</p>
+            <code class="install-cmd"><span class="prompt">$</span> sudo apt update &amp;&amp; sudo apt install python3 python3-pip</code>
+            <p class="os-opt">Fedora / RHEL / CentOS:</p>
+            <code class="install-cmd"><span class="prompt">$</span> sudo dnf install python3 python3-pip</code>
+            <p class="os-opt">Arch:</p>
+            <code class="install-cmd"><span class="prompt">$</span> sudo pacman -S python python-pip</code>
+            <p class="os-verify">Verify: <code>python3 --version</code> &amp;&amp; <code>pip3 --version</code></p>
+          </div>
+        </div>
+
+        <!-- pip install — always visible -->
+        <div class="py-pip-block">
+          <span class="step-label">Then, in your Terminal or PowerShell:</span>
+          <code class="install-cmd"><span class="prompt">$</span> pip install lorai-workspace</code>
+          <span class="step-hint">Installs the Python client only &mdash; does not touch Docker, pull any image, or start anything</span>
+        </div>
+
       </div>
     </div>
 
@@ -264,6 +315,46 @@ lorai-workspace version             <span class="cmt"># show version and port</s
   <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
   &mdash; <a href="changelog.html">Changelog</a>
 </footer>
+
+<script>
+(function () {
+  function detectOS() {
+    var ua = navigator.userAgent;
+    if (/Macintosh|Mac OS X/.test(ua)) return 'mac';
+    if (/Windows/.test(ua)) return 'win';
+    return 'linux';
+  }
+
+  function setOS(os) {
+    localStorage.setItem('lorai-os', os);
+    document.querySelectorAll('.os-pane').forEach(function (p) { p.style.display = 'none'; });
+    document.querySelectorAll('.os-tab').forEach(function (t) { t.classList.remove('active'); });
+    var pane = document.getElementById('os-' + os);
+    if (pane) pane.style.display = 'flex';
+    var tab = document.querySelector('.os-tab[data-os="' + os + '"]');
+    if (tab) tab.classList.add('active');
+  }
+
+  function setPyHas(has) {
+    localStorage.setItem('lorai-has-python', has ? 'yes' : 'no');
+    var panel = document.getElementById('py-install-panel');
+    if (panel) panel.style.display = has ? 'none' : 'block';
+    document.querySelectorAll('.py-btn').forEach(function (b) { b.classList.remove('active'); });
+    var btn = document.querySelector(has ? '.py-yes' : '.py-no');
+    if (btn) btn.classList.add('active');
+  }
+
+  window.setOS = setOS;
+  window.setPyHas = setPyHas;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var savedOS = localStorage.getItem('lorai-os') || detectOS();
+    setOS(savedOS);
+    var hasPy = localStorage.getItem('lorai-has-python');
+    setPyHas(hasPy !== 'no');
+  });
+}());
+</script>
 
 </body>
 </html>
