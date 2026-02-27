@@ -21,7 +21,7 @@ def test_version_is_set():
 # Test LorAI client
 # ------------------------------------------------------------------
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_lorai_inherits_from_openai(mock_ensure):
     from openai import OpenAI
     from lorai_workspace import LorAI
@@ -29,21 +29,21 @@ def test_lorai_inherits_from_openai(mock_ensure):
     assert isinstance(ai, OpenAI)
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_auto_start_calls_ensure_running(mock_ensure):
     from lorai_workspace import LorAI
     LorAI(auto_start=True)
     mock_ensure.assert_called_once_with(port=1842, gpu=False)
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_auto_start_false_skips_ensure_running(mock_ensure):
     from lorai_workspace import LorAI
     LorAI(auto_start=False)
     mock_ensure.assert_not_called()
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_custom_port_passes_through(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=True, port=9999)
@@ -51,7 +51,7 @@ def test_custom_port_passes_through(mock_ensure):
     assert ai._port == 9999
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_gpu_flag_passes_through(mock_ensure):
     from lorai_workspace import LorAI
     LorAI(auto_start=True, gpu=True)
@@ -62,7 +62,7 @@ def test_gpu_flag_passes_through(mock_ensure):
 # Test all 9 services exist with correct methods
 # ------------------------------------------------------------------
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_image_service(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
@@ -71,7 +71,7 @@ def test_image_service(mock_ensure):
     assert hasattr(svc, "edit")
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_video_service(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
@@ -79,7 +79,7 @@ def test_video_service(mock_ensure):
     assert hasattr(svc, "generate")
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_voice_service(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
@@ -88,7 +88,7 @@ def test_voice_service(mock_ensure):
     assert hasattr(svc, "speak")
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_knowledge_service(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
@@ -98,7 +98,7 @@ def test_knowledge_service(mock_ensure):
     assert hasattr(svc, "ask")
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_agents_service(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
@@ -108,7 +108,7 @@ def test_agents_service(mock_ensure):
     assert hasattr(svc, "list_tools")
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_code_service(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
@@ -117,7 +117,7 @@ def test_code_service(mock_ensure):
     assert hasattr(svc, "review")
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_vision_service(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
@@ -126,7 +126,7 @@ def test_vision_service(mock_ensure):
     assert hasattr(svc, "ocr")
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_lora_service(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
@@ -136,7 +136,7 @@ def test_lora_service(mock_ensure):
     assert hasattr(svc, "unload")
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_hub_service(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
@@ -197,14 +197,14 @@ def test_cli_help_command(capsys):
 # Test default model
 # ------------------------------------------------------------------
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_default_model(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False, default_model="llama3")
     assert ai._default_model == "llama3"
 
 
-@patch("lorai.client.ensure_running")
+@patch("lorai_workspace.client.ensure_running")
 def test_default_model_auto(mock_ensure):
     from lorai_workspace import LorAI
     ai = LorAI(auto_start=False)
