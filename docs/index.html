@@ -81,29 +81,44 @@
 
           <div class="os-pane" id="os-mac">
             <p class="os-opt">Option 1 — Homebrew (recommended if you have it):</p>
-            <code class="install-cmd"><span class="prompt">$</span> brew install python3</code>
+            <div class="cmd-block">
+              <code class="install-cmd">brew install python3</code>
+              <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+            </div>
             <p class="os-opt">Option 2 — Official installer:</p>
             <a href="https://www.python.org/downloads/macos/" class="step-link" target="_blank">python.org/downloads/macos &rarr;</a>
-            <p class="os-verify">Verify: run <code>python3 --version</code> in Terminal &mdash; should print Python 3.x.x</p>
+            <p class="os-verify">Verify: open Terminal and run <code>python3 --version</code> &mdash; should print Python 3.x.x</p>
           </div>
 
           <div class="os-pane" id="os-win">
             <p class="os-opt">Option 1 — Windows Package Manager:</p>
-            <code class="install-cmd"><span class="prompt">&gt;</span> winget install Python.Python.3.12</code>
+            <div class="cmd-block">
+              <code class="install-cmd">winget install Python.Python.3.12</code>
+              <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+            </div>
             <div class="os-warn">Restart PowerShell after install so the PATH updates take effect.</div>
             <p class="os-opt">Option 2 — Official installer (easiest for beginners):</p>
             <a href="https://www.python.org/downloads/windows/" class="step-link" target="_blank">python.org/downloads/windows &rarr;</a>
             <div class="os-warn">During install: tick <strong>"Add python.exe to PATH"</strong> on the first screen — without this pip won't work.</div>
-            <p class="os-verify">Verify: open PowerShell, run <code>python --version</code></p>
+            <p class="os-verify">Verify: open PowerShell and run <code>python --version</code></p>
           </div>
 
           <div class="os-pane" id="os-linux">
             <p class="os-opt">Ubuntu / Debian:</p>
-            <code class="install-cmd"><span class="prompt">$</span> sudo apt update &amp;&amp; sudo apt install python3 python3-pip</code>
+            <div class="cmd-block">
+              <code class="install-cmd">sudo apt update &amp;&amp; sudo apt install python3 python3-pip</code>
+              <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+            </div>
             <p class="os-opt">Fedora / RHEL / CentOS:</p>
-            <code class="install-cmd"><span class="prompt">$</span> sudo dnf install python3 python3-pip</code>
+            <div class="cmd-block">
+              <code class="install-cmd">sudo dnf install python3 python3-pip</code>
+              <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+            </div>
             <p class="os-opt">Arch:</p>
-            <code class="install-cmd"><span class="prompt">$</span> sudo pacman -S python python-pip</code>
+            <div class="cmd-block">
+              <code class="install-cmd">sudo pacman -S python python-pip</code>
+              <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+            </div>
             <p class="os-verify">Verify: <code>python3 --version</code> &amp;&amp; <code>pip3 --version</code></p>
           </div>
         </div>
@@ -111,19 +126,59 @@
         <!-- pip install — always visible -->
         <div class="py-pip-block">
           <span class="step-label">Then, in your Terminal or PowerShell:</span>
-          <code class="install-cmd"><span class="prompt">$</span> pip install lorai-workspace</code>
+          <div class="cmd-block">
+            <code class="install-cmd">pip install lorai-workspace</code>
+            <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+          </div>
           <span class="step-hint">Installs the Python client only &mdash; does not touch Docker, pull any image, or start anything</span>
         </div>
 
       </div>
     </div>
 
-    <div class="install-step">
+    <div class="install-step py-step">
       <span class="step-num">3</span>
       <div class="step-body">
-        <span class="step-label">In a Python file or Python shell — on your computer:</span>
-        <code class="install-cmd"><span class="kw">from</span> lorai_workspace <span class="kw">import</span> LorAI; <span class="fn">LorAI</span>().<span class="fn">chat</span>(<span class="str">"Hello"</span>)</code>
-        <span class="step-hint"><strong>LorAI()</strong> is where Docker gets involved &mdash; it pulls <code>gajapathiks/lorai-workspace:latest</code> from Docker Hub (~2 GB) and starts the container automatically. This only happens once; subsequent runs skip straight to your code.</span>
+        <span class="step-label">Run your Python code &mdash; two options:</span>
+
+        <div class="py-install-panel" style="display:block; margin-top:8px;">
+          <div class="os-tabs">
+            <button class="os-tab active" data-run="file" onclick="setRun('file')">Save as a .py file (recommended)</button>
+            <button class="os-tab" data-run="repl" onclick="setRun('repl')">Quick test in Python shell</button>
+          </div>
+
+          <div class="os-pane" id="run-file" style="display:flex">
+            <p class="os-opt">1. Create a file called <code>hello.py</code> and paste this inside:</p>
+            <div class="cmd-block">
+              <code class="install-cmd">from lorai_workspace import LorAI
+ai = LorAI()
+print(ai.chat("Hello!"))</code>
+              <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+            </div>
+            <p class="os-opt">2. In your Terminal or PowerShell, run:</p>
+            <div class="cmd-block">
+              <code class="install-cmd">python hello.py</code>
+              <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+            </div>
+            <div class="os-warn"><strong>Windows:</strong> use <code>python</code>. &nbsp;<strong>macOS/Linux:</strong> use <code>python3</code> if <code>python</code> doesn't work.</div>
+          </div>
+
+          <div class="os-pane" id="run-repl" style="display:none">
+            <p class="os-opt">1. In Terminal or PowerShell, start the Python shell:</p>
+            <div class="cmd-block">
+              <code class="install-cmd">python</code>
+              <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+            </div>
+            <p class="os-opt">2. You should see <code>&gt;&gt;&gt;</code> &mdash; you are now inside Python. Paste this:</p>
+            <div class="cmd-block">
+              <code class="install-cmd">from lorai_workspace import LorAI; LorAI().chat("Hello!")</code>
+              <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
+            </div>
+            <div class="os-warn"><strong>Common mistake:</strong> typing Python code directly in Terminal/CMD without starting Python first. Always look for <code>&gt;&gt;&gt;</code> before pasting Python code.</div>
+          </div>
+        </div>
+
+        <span class="step-hint" style="margin-top:6px;display:block"><strong>First run only:</strong> LorAI() pulls <code>gajapathiks/lorai-workspace:latest</code> from Docker Hub (~2 GB) and starts the container. Subsequent runs are instant.</span>
       </div>
     </div>
 
@@ -344,8 +399,28 @@ lorai-workspace version             <span class="cmt"># show version and port</s
     if (btn) btn.classList.add('active');
   }
 
+  function copyCmd(btn) {
+    var code = btn.previousElementSibling;
+    navigator.clipboard.writeText(code.textContent.trim()).then(function () {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function setRun(mode) {
+    ['file', 'repl'].forEach(function (m) {
+      var pane = document.getElementById('run-' + m);
+      var tab = document.querySelector('[data-run="' + m + '"]');
+      if (pane) pane.style.display = m === mode ? 'flex' : 'none';
+      if (tab) tab.classList.toggle('active', m === mode);
+    });
+  }
+
   window.setOS = setOS;
   window.setPyHas = setPyHas;
+  window.copyCmd = copyCmd;
+  window.setRun = setRun;
 
   document.addEventListener('DOMContentLoaded', function () {
     var savedOS = localStorage.getItem('lorai-os') || detectOS();
