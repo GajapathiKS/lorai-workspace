@@ -125,11 +125,12 @@
 
         <!-- pip install — always visible -->
         <div class="py-pip-block">
-          <span class="step-label">Then, in your Terminal or PowerShell:</span>
+          <span class="step-label">Then, install the SDK — in your Terminal or PowerShell (not inside Python):</span>
           <div class="cmd-block">
             <code class="install-cmd">pip install lorai-workspace</code>
             <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
           </div>
+          <div class="os-warn" style="margin-top:5px"><strong>Windows with multiple Python versions?</strong> Use <code>py -m pip install lorai-workspace</code> instead &mdash; this guarantees pip installs into the same Python you'll run.</div>
           <span class="step-hint">Installs the Python client only &mdash; does not touch Docker, pull any image, or start anything</span>
         </div>
 
@@ -164,17 +165,18 @@ print(ai.chat("Hello!"))</code>
           </div>
 
           <div class="os-pane" id="run-repl" style="display:none">
-            <p class="os-opt">1. In Terminal or PowerShell, start the Python shell:</p>
+            <p class="os-opt">1. Make sure <code>pip install lorai-workspace</code> has finished first, then start Python:</p>
             <div class="cmd-block">
               <code class="install-cmd">python</code>
               <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
             </div>
-            <p class="os-opt">2. You should see <code>&gt;&gt;&gt;</code> &mdash; you are now inside Python. Paste this:</p>
+            <p class="os-opt">2. You should see <code>&gt;&gt;&gt;</code> — you are now <em>inside</em> Python. Paste:</p>
             <div class="cmd-block">
               <code class="install-cmd">from lorai_workspace import LorAI; LorAI().chat("Hello!")</code>
               <button class="copy-btn" onclick="copyCmd(this)">Copy</button>
             </div>
-            <div class="os-warn"><strong>Common mistake:</strong> typing Python code directly in Terminal/CMD without starting Python first. Always look for <code>&gt;&gt;&gt;</code> before pasting Python code.</div>
+            <div class="os-warn"><strong>Got ModuleNotFoundError?</strong> Type <code>exit()</code> to leave Python, run <code>py -m pip install lorai-workspace</code> in PowerShell, then run <code>python</code> again.</div>
+            <div class="os-warn"><strong>Common mistake:</strong> typing Python code in Terminal/CMD without starting Python first. Always check for <code>&gt;&gt;&gt;</code> before pasting.</div>
           </div>
         </div>
 
