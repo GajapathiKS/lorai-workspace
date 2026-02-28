@@ -28,7 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .
           pip install pytest
-          pytest tests/ -v
+          PYTHONPATH=. pytest tests/ -v
 
   publish:
     name: Build & Publish to PyPI
@@ -45,9 +45,9 @@ jobs:
           python-version: "3.12"
 
       - name: Install build tools
-        run: pip install build twine
+        run: pip install "build" "twine"
 
-      - name: Extract version
+      - name: Verify version matches tag
         id: version
         working-directory: lorai-sdk
         run: |
@@ -60,22 +60,36 @@ jobs:
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
             TAG_VERSION="${GITHUB_REF_NAME#v}"
             if [ "$PYPROJECT_VERSION" != "$TAG_VERSION" ]; then
-              echo "::error::Version mismatch! pyproject.toml=$PYPROJECT_VERSION tag=$TAG_VERSION"
+              echo "::error::Version mismatch — pyproject.toml has $PYPROJECT_VERSION but tag is v$TAG_VERSION"
               exit 1
             fi
-            echo "Version verified against tag: $TAG_VERSION"
-          else
-            echo "No tag — using pyproject.toml version: $PYPROJECT_VERSION"
+            echo "Version $PYPROJECT_VERSION matches tag v$TAG_VERSION"
           fi
           echo "VERSION=$PYPROJECT_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build package
+      - name: Build wheel
         working-directory: lorai-sdk
-        run: python -m build
+        run: python -m build --wheel
+
+      - name: Verify wheel contents
+        working-directory: lorai-sdk
+        run: |
+          python -c "
+          import zipfile, sys, glob
+          wheels = glob.glob('dist/*.whl')
+          assert wheels, 'No wheel found'
+          with zipfile.ZipFile(wheels[0]) as z:
+              names = z.namelist()
+          assert any(n.startswith('lorai_workspace/') for n in names), \
+              f'lorai_workspace/ not in wheel: {names}'
+          print('Wheel OK:', wheels[0])
+          print('Contents:', [n for n in names if not 'dist-info' in n])
+          "
 
       - name: Publish to PyPI
         working-directory: lorai-sdk
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: twine upload --skip-existing dist/*
+          PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
+        run: twine upload --skip-existing dist/*.whl
