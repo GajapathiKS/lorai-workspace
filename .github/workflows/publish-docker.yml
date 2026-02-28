@@ -34,7 +34,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
           MINOR=$(echo "$VERSION" | cut -d. -f1-2)
-          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/lorai-desktop"
+          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/lorai-workspace"
           echo "TAGS=${IMAGE}:${VERSION},${IMAGE}:${MINOR},${IMAGE}:${MAJOR},${IMAGE}:latest" >> $GITHUB_OUTPUT
           echo "IMAGE=${IMAGE}" >> $GITHUB_OUTPUT
 
@@ -58,7 +58,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           labels: |
-            org.opencontainers.image.title=LorAI Desktop
+            org.opencontainers.image.title=LorAI Workspace
             org.opencontainers.image.description=AI-first operating environment — All of AI. One Command. Port 1842.
             org.opencontainers.image.version=${{ steps.meta.outputs.VERSION }}
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
