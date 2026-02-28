@@ -56,7 +56,6 @@ jobs:
           tags: ${{ steps.meta.outputs.TAGS }}
           platforms: linux/amd64
           cache-from: type=gha
-          cache-to: type=gha,mode=max
           labels: |
             org.opencontainers.image.title=LorAI Workspace
             org.opencontainers.image.description=AI-first operating environment — All of AI. One Command. Port 1842.
