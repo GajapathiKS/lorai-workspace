@@ -14,7 +14,7 @@ def test_port_is_1842():
 
 def test_version_is_set():
     import lorai_workspace
-    assert lorai_workspace.__version__ == "0.1.0"
+    assert lorai_workspace.__version__ == "0.1.1"
 
 
 # ------------------------------------------------------------------
@@ -180,7 +180,8 @@ def test_cli_version_command(capsys):
     from lorai_workspace.cli import main
     main(["version"])
     captured = capsys.readouterr()
-    assert "0.1.0" in captured.out
+    import lorai_workspace
+    assert lorai_workspace.__version__ in captured.out
     assert "1842" in captured.out
 
 

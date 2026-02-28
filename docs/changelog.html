@@ -52,13 +52,29 @@
 
 <h2>Changelog</h2>
 
-<p>All notable changes to LorAI Workspace Workspace are documented here. This project follows <a href="https://semver.org">Semantic Versioning</a>.</p>
+<p>All notable changes to LorAI Workspace are documented here. This project follows <a href="https://semver.org">Semantic Versioning</a>.</p>
 
 <!-- ============================================================ -->
-<!-- v0.1.0-beta -->
+<!-- v0.1.1 -->
 <!-- ============================================================ -->
 
-<h3 id="v010-beta">v0.1.0-beta <span class="badge badge-ready">Beta</span></h3>
+<h3 id="v011">v0.1.1 <span class="badge badge-ready">Latest</span></h3>
+<p class="release-date">February 2026 &mdash; Packaging fix</p>
+
+<h4>Bug fixes</h4>
+<ul>
+  <li><strong>Critical packaging fix</strong> &mdash; PyPI v0.1.0 wheel accidentally packaged files under <code>lorai/</code> (old directory name) instead of <code>lorai_workspace/</code>, causing <code>ModuleNotFoundError: No module named 'lorai_workspace'</code> on install. Fixed in v0.1.1.</li>
+  <li><strong>pyproject.toml</strong> &mdash; Pinned <code>setuptools&lt;77</code> to avoid METADATA 2.4 incompatibility with PyPI upload validator.</li>
+</ul>
+
+<h4>Upgrade</h4>
+<pre><code>pip install --upgrade lorai-workspace</code></pre>
+
+<!-- ============================================================ -->
+<!-- v0.1.0 -->
+<!-- ============================================================ -->
+
+<h3 id="v010">v0.1.0 <span class="badge badge-phase2">Superseded by v0.1.1</span></h3>
 <p class="release-date">February 2026 &mdash; Initial Public Beta</p>
 
 <div class="callout callout-info">
