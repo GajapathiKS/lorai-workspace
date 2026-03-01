@@ -54,7 +54,7 @@ def is_lorai_healthy(port: int = 1842) -> bool:
     try:
         resp = httpx.get(f"http://localhost:{port}/api/health", timeout=5)
         return resp.status_code == 200
-    except (httpx.ConnectError, httpx.TimeoutException):
+    except Exception:
         return False
 
 
