@@ -60,7 +60,6 @@ def is_lorai_healthy(port: int = 1842) -> bool:
 
 def pull_image() -> None:
     """Pull the LorAI Desktop Docker image."""
-    print("Pulling LorAI Docker image (this may take a while)...")
     subprocess.run(["docker", "pull", IMAGE], check=True)
 
 
@@ -78,8 +77,6 @@ def start_container(port: int = 1842, vnc_port: int = 6080, gpu: bool = False) -
     if gpu:
         cmd.extend(["--gpus", "all"])
     cmd.append(IMAGE)
-
-    print(f"Starting LorAI container on port {port}...")
     subprocess.run(cmd, check=True)
 
 
@@ -117,23 +114,29 @@ def ensure_running(port: int = 1842, gpu: bool = False) -> None:
             )
 
     if is_container_running() and is_lorai_healthy(port):
-        return
+        return  # already running — silent
 
-    # Stop stale container if exists
+    # Stop stale container if one exists but isn't healthy
     if is_container_running():
         stop_container()
 
-    if not is_image_pulled():
+    first_run = not is_image_pulled()
+    if first_run:
+        print(
+            "\nFirst run only: LorAI() is downloading the AI platform from Docker Hub\n"
+            f"  Image : {IMAGE} (~2 GB)\n"
+            "  This takes a few minutes once. Every run after this is instant.\n"
+        )
         pull_image()
 
+    print(f"Starting LorAI on port {port}...")
     start_container(port=port, gpu=gpu)
 
     # Wait for health
-    print("Waiting for LorAI to become ready...")
     deadline = time.time() + HEALTH_TIMEOUT
     while time.time() < deadline:
         if is_lorai_healthy(port):
-            print(f"LorAI Workspace is ready at http://localhost:{port}")
+            print(f"LorAI ready at http://localhost:{port}")
             return
         time.sleep(2)
 
