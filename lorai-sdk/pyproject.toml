@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lorai-workspace"
-version = "0.1.1"
+version = "0.1.2"
 description = "All of AI. One Command. Port 1842."
 readme = "README.md"
 license = {text = "MIT"}

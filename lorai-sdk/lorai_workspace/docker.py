@@ -7,6 +7,7 @@ LorAI Desktop Docker container.
 import os
 import shutil
 import subprocess
+import sys
 import time
 
 import httpx
@@ -19,6 +20,15 @@ HEALTH_TIMEOUT = 120  # seconds to wait for healthy state
 def is_docker_installed() -> bool:
     """Check if the docker CLI is available on PATH."""
     return shutil.which("docker") is not None
+
+
+def is_daemon_running() -> bool:
+    """Check if the Docker daemon is running and accepting connections."""
+    result = subprocess.run(
+        ["docker", "info"],
+        capture_output=True, text=True,
+    )
+    return result.returncode == 0
 
 
 def is_image_pulled() -> bool:
@@ -83,8 +93,28 @@ def ensure_running(port: int = 1842, gpu: bool = False) -> None:
     """Orchestrate: check -> pull -> start -> health check."""
     if not is_docker_installed():
         raise RuntimeError(
-            "Docker is not installed. Please install Docker first: https://docs.docker.com/get-docker/"
+            "Docker is not installed.\n"
+            "Download and install Docker Desktop: https://docs.docker.com/get-docker/"
         )
+
+    if not is_daemon_running():
+        if sys.platform == "win32":
+            raise RuntimeError(
+                "Docker Desktop is not running.\n"
+                "Open Docker Desktop from the Start menu, wait for it to finish starting "
+                "(whale icon in taskbar turns solid), then run your script again."
+            )
+        elif sys.platform == "darwin":
+            raise RuntimeError(
+                "Docker Desktop is not running.\n"
+                "Open Docker Desktop from Applications, wait for it to finish starting "
+                "(whale icon in menu bar turns solid), then run your script again."
+            )
+        else:
+            raise RuntimeError(
+                "Docker daemon is not running.\n"
+                "Start it with: sudo systemctl start docker"
+            )
 
     if is_container_running() and is_lorai_healthy(port):
         return
