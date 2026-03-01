@@ -14,7 +14,7 @@ def test_port_is_1842():
 
 def test_version_is_set():
     import lorai_workspace
-    assert lorai_workspace.__version__ == "0.1.1"
+    assert lorai_workspace.__version__ == "0.1.2"
 
 
 # ------------------------------------------------------------------
