@@ -151,8 +151,19 @@ sudo usermod -aG docker $USER  # log out and back in after this</code></pre>
   <strong>What pip install does vs what LorAI() does:</strong>
   <ul style="margin: 8px 0 0; padding-left: 20px;">
     <li><code>pip install lorai-workspace</code> &mdash; installs the Python client only. Does <strong>not</strong> pull Docker, does not start anything.</li>
-    <li><code>LorAI()</code> &mdash; this is the line that contacts Docker. On first run it pulls <code>gajapathiks/lorai-workspace:latest</code> from Docker Hub (~2 GB), starts the container, waits for it to be healthy, then returns. On subsequent runs the container is already up, so this is instant.</li>
+    <li><code>LorAI()</code> &mdash; this is the line that contacts Docker. Pulls the image on first run, starts the container, waits for it to be healthy, then returns.</li>
   </ul>
+</div>
+
+<div class="run-timing">
+  <div class="run-timing-row">
+    <span class="run-badge run-once">First run only</span>
+    <span>LorAI() downloads <code>gajapathiks/lorai-workspace:latest</code> from Docker Hub (~2 GB) and starts the container. Takes a few minutes. Your terminal will print a notice so you know what's happening.</span>
+  </div>
+  <div class="run-timing-row">
+    <span class="run-badge run-repeat">Every run after that</span>
+    <span>Image is already on your machine. Container starts in seconds &mdash; instantly ready.</span>
+  </div>
 </div>
 
 <div class="editor">

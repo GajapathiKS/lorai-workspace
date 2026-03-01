@@ -43,7 +43,7 @@
 
 <!-- Hero -->
 <section class="hero">
-  <p><span class="badge badge-ready">v0.1.1</span></p>
+  <p><span class="badge badge-ready">v0.1.2</span></p>
   <h1>All of AI. One Command.</h1>
   <p class="tagline">Free, private, local AI &mdash; chat, image gen, voice, RAG, agents &mdash; running on your machine at port <span class="port-badge">1842</span></p>
 
@@ -180,7 +180,16 @@ print(ai.chat("Hello!"))</code>
           </div>
         </div>
 
-        <span class="step-hint" style="margin-top:6px;display:block"><strong>First run only:</strong> LorAI() pulls <code>gajapathiks/lorai-workspace:latest</code> from Docker Hub (~2 GB) and starts the container. Subsequent runs are instant.</span>
+        <div class="run-timing">
+          <div class="run-timing-row">
+            <span class="run-badge run-once">First run only</span>
+            <span>LorAI() downloads <code>gajapathiks/lorai-workspace:latest</code> from Docker Hub (~2 GB) and starts the container. Takes a few minutes. Your terminal will show a progress notice.</span>
+          </div>
+          <div class="run-timing-row">
+            <span class="run-badge run-repeat">Every run after that</span>
+            <span>Image is already on your machine. Container starts in seconds &mdash; instantly ready.</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -233,12 +242,13 @@ text = ai.voice.<span class="fn">transcribe</span>(<span class="str">"meeting.mp
     </div>
     <pre><span class="out-dim">← triggered by LorAI() on line 4
 
-Pulling gajapathiks/lorai-workspace:latest
-  ... done  (2.1 GB, first run only)
-Starting container on port 1842 ...
-Waiting for Ollama ... ready
-Pulling phi3:mini ... done  (2.3 GB, first run only)
-LorAI Workspace ready ✓  http://localhost:1842
+<span class="out-label">First run only:</span> LorAI() is downloading the AI platform
+  Image : gajapathiks/lorai-workspace:latest (~2 GB)
+  This takes a few minutes once.
+  Every run after this is instant.
+
+Starting LorAI on port 1842...
+LorAI ready at http://localhost:1842
 </span>
 <span class="out-label">ai.chat →</span>
 <span class="out-text">"The capital of France is Paris."</span>
@@ -353,7 +363,7 @@ lorai-workspace version             <span class="cmt"># show version and port</s
 <!-- Beta Notice -->
 <h2>Beta Release</h2>
 <div class="callout callout-info">
-  <strong>v0.1.1</strong> &mdash; Core API is stable. Some features are still being refined.
+  <strong>v0.1.2</strong> &mdash; Core API is stable. Some features are still being refined.
   We're looking for early adopters to test and give feedback.
   &nbsp;<a href="changelog.html">View changelog &rarr;</a>
 </div>
@@ -368,7 +378,7 @@ lorai-workspace version             <span class="cmt"># show version and port</s
 </main>
 
 <footer>
-  LorAI Workspace v0.1.1 &mdash; MIT License &mdash;
+  LorAI Workspace v0.1.2 &mdash; MIT License &mdash;
   <a href="https://github.com/GajapathiKS/lorai-workspace">GitHub</a>
   &mdash; <a href="changelog.html">Changelog</a>
 </footer>

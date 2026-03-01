@@ -821,6 +821,43 @@ footer {
   padding: 14px 16px;
 }
 
+/* ============================================================
+   First-run / repeat-run timing box
+   ============================================================ */
+.run-timing {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 12px 0 4px;
+}
+
+.run-timing-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.run-timing-row + .run-timing-row {
+  border-top: 1px solid var(--border);
+}
+
+.run-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  margin-top: 2px;
+  letter-spacing: 0.2px;
+}
+
+.run-once   { background: rgba(210,153,34,0.15); color: var(--orange); border: 1px solid rgba(210,153,34,0.3); }
+.run-repeat { background: rgba(63,185,80,0.10);  color: var(--green);  border: 1px solid rgba(63,185,80,0.3); }
+
 /* Release date */
 .release-date {
   color: var(--text-muted);
